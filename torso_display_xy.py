@@ -3,7 +3,7 @@ import roslib
 import rospy
 import math
 import tf
-import geometry_msgs.
+import geometry_msgs
 import sys
     
 
