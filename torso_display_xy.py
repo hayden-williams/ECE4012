@@ -5,6 +5,7 @@ import math
 import tf
 import geometry_msgs
 import sys
+from std_msgs.msg import String
     
 
    
@@ -27,12 +28,12 @@ class torso_display_xy():
 
 
 
-      rate.sleep()
+      self.rate.sleep()
 
 
 def main(args):
   torso = torso_display_xy()
-  rospy.init_node('turtle_tf_listener')
+  #rospy.init_node('turtle_tf_listener')
   try:
 
     rospy.spin()
