@@ -19,7 +19,8 @@ if __name__ == '__main__':
       except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
           continue
 
-      print trans
+      print trans[1]
+      print "test"
 
 
 
