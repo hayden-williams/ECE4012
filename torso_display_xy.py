@@ -14,11 +14,13 @@ if __name__ == '__main__':
 
    rate = rospy.Rate(10.0)
    while not rospy.is_shutdown():
-       try:
-           (trans,rot) = listener.lookupTransform('/torso_2', '/openni_depth_frame', rospy.Time(0))
-       except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-           continue
+      try:
+          (trans,rot) = listener.lookupTransform('/torso_2', '/openni_depth_frame', rospy.Time(0))
+      except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+          continue
+
+      print trans
 
 
 
-       rate.sleep()
+      rate.sleep()
