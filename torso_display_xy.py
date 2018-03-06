@@ -67,7 +67,7 @@ class GoForward():
       
   def skeletonMarkers(self,data):
     print "Hello from skeletonMarkers"
-    vec = Marker.Point[3]
+    vec = Marker.point[3]
     vec2 = [2,3]
     rospy.loginfo("Size %f , Value %f. TestShape: %f"%(vec.shape, vec, vec2.shape))      
     
