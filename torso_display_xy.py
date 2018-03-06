@@ -69,7 +69,7 @@ class GoForward():
     print "Hello from skeletonMarkers"
     vec = Marker.points
     vec2 = [2,3]
-    rospy.loginfo("Size %f , Value %f. TestShape: %f"%(vec.shape, vec, vec2.shape))      
+    rospy.loginfo("Size %f , Value %f. TestShape: %f"%(len(vec), vec, len(vec2)))      
     
   def shutdown(self):
     # stop turtlebot
