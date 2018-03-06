@@ -59,7 +59,7 @@ class GoForward():
       print "Hello from while not rospy.is_shutdown"
       while self.exist < 1:
         try:
-          (trans,rot) = listener.lookupTransform('/openni_depth_frame', 'torso_%f', rospy.Time(0),%(self.num) )
+          (trans,rot) = listener.lookupTransform('/openni_depth_frame', 'torso_%f'%(self.num), rospy.Time(0) )
           self.exist = 1
         except:
           self.num = self.num + 1
