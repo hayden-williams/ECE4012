@@ -29,7 +29,7 @@ class GoForward():
     rospy.on_shutdown(self.shutdown)
 
     rospy.Subscriber("/skeleton_markers",Marker,self.skeletonMarkers)
-    # may need rospy.spin(); 
+    rospy.spin() 
 
     
     # Create a publisher which can "talk" to TurtleBot and tell it to move
