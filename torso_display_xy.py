@@ -10,7 +10,7 @@ import rospy
 import roslib
 from geometry_msgs.msg import Twist
 from visualization_msgs.msg import Marker
-from geometry_msgs.msg import Marker
+from geometry_msgs.msg
 class GoForward():
   stateMachine = 0
   counter = 0
