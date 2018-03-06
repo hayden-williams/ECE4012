@@ -63,7 +63,7 @@ class GoForward():
           self.exist = 1
         except:
           self.num = self.num + 1
-            continue
+          continue
       print trans
       self.cmd_vel.publish(move_cmd)
       # wait for 0.1 seconds (10 HZ) and publish again
