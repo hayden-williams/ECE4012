@@ -27,11 +27,6 @@ class GoForward():
 
     # What function to call when you ctrl + c    
     rospy.on_shutdown(self.shutdown)
-
-    rospy.Subscriber("/skeleton_markers",Marker,self.skeletonMarkers)
-    
-
-    
     # Create a publisher which can "talk" to TurtleBot and tell it to move
     # Tip: You may need to change cmd_vel_mux/input/navi to /cmd_vel if you're not using TurtleBot2
     self.cmd_vel = rospy.Publisher('cmd_vel_mux/input/navi', Twist, queue_size=10)
