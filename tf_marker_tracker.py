@@ -48,7 +48,6 @@ class GoForward():
 
     # Listenr for Joints
     listener = tf.TransformLister()
-    rospy.spin() 
 
 
 
