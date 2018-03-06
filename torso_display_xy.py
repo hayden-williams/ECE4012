@@ -24,7 +24,7 @@ class GoForward():
     # What function to call when you ctrl + c    
     rospy.on_shutdown(self.shutdown)
 
-    rospy.Subscriber("/skeleton_markers",SkeletonEvent,self.skeletonMarkers)
+    rospy.Subscriber("/skeleton_markers",Marker,self.skeletonMarkers)
     # may need rospy.spin(); 
 
     
@@ -47,6 +47,7 @@ class GoForward():
     while not rospy.is_shutdown():
     
       #rospy.loginfo("stateMachine %d."%(self.stateMachine))
+      print "Hello from while not rospy.is_shutdown"
       if (self.stateMachine == 0):
         move_cmd.linear.x = 0.0
       elif (self.stateMachine == 1):
@@ -65,7 +66,8 @@ class GoForward():
 
       
   def skeletonMarkers(self,data):
-    vec = SkeletonEvent.Point[3]
+    print "Hello from skeletonMarkers"
+    vec = Marker.Point[3]
     vec2 = [2,3]
     rospy.loginfo("Size %f , Value %f. TestShape: %f"%(vec.shape, vec, vec2.shape))      
     
