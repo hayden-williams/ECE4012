@@ -57,7 +57,7 @@ class GoForward():
     
       #rospy.loginfo("stateMachine %d."%(self.stateMachine))
       print "Hello from while not rospy.is_shutdown"
-      while self.exist < 1
+      while self.exist < 1:
         try:
           (trans,rot) = listener.lookupTransform('/openni_depth_frame', 'torso_%f', rospy.Time(0),%(self.num) )
           self.exist = 1
