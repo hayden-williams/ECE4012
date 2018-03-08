@@ -71,7 +71,7 @@ class GoForward():
 
 
       
-   
+    r.spin()
     
   def shutdown(self):
     # stop turtlebot
