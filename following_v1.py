@@ -37,12 +37,13 @@ if __name__ == '__main__':
 
       # Check if user is being tracked
       if it == 5: it = 0
-      x_old[it] = x
-      y_old[it] = y
+      x_old[it] = round(x,11)
+      #y_old[it] = y
       it+=1
       if len(set(x_old)) == 1:
         # user likely lost
         #tmpUserException.append(num)
+        print "Hello from len set x_old"
         num += 1
         if num == 11: num = 0
         move_cmd.linear.x = 0
