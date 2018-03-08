@@ -42,7 +42,7 @@ class GoForward():
     move_cmd.angular.z = 0
 
     # Listenr for Joints
-    listener = tf.TransformLister()
+    #listener = tf.TransformLister()
 
 
 
