@@ -81,7 +81,9 @@ class GoForward():
     rospy.sleep(1)
  
 if __name__ == '__main__':
+  test = GoForward()
   try:
-    GoForward()
+    #GoForward()
+    rospy.spin()
   except:
     rospy.loginfo("GoForward node terminated.")
