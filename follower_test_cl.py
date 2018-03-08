@@ -12,7 +12,7 @@
 as well as intergrating it with move.py and bark.py."""
 
 
-import roslib; roslib.load_manifest('follower_bark')
+import roslib
 import rospy
 import numpy as np
 import os
