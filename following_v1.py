@@ -31,7 +31,7 @@ if __name__ == '__main__':
       #move_cmd.linear.x = 0.2
       #cmd_vel.publish(move_cmd)
       # Movement code here
-      K_twist = 0.005
+      K_twist = 1
       K_dist = 1
       move_cmd.angular.z = K_twist*(-1)*y
 
