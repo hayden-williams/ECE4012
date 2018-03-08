@@ -9,6 +9,10 @@ from geometry_msgs.msg import Twist#, Pose
 if __name__ == '__main__':
 
   num = 0
+  it = 0
+  x_old = [0,0,0,0,1]
+  y_old = [0,0,0,0,1]
+  #tmpUserException = []
 
   rospy.init_node('listener_skeleton', anonymous=False)
   listener = tf.TransformListener()
@@ -30,18 +34,37 @@ if __name__ == '__main__':
       z = trans[2]
       #move_cmd.linear.x = 0.2
       #cmd_vel.publish(move_cmd)
-      # Movement code here
-      K_twist = 1
-      K_dist = 1
-      move_cmd.angular.z = K_twist*(1)*y
 
-      if x <= 2.0:
+      # Check if user is being tracked
+      if it == 5: it = 0
+      x_old[it] = x
+      y_old[it] = y
+      it+=1
+      if len(set(x_old)) == 1:
+        # user likely lost
+        #tmpUserException.append(num)
+        num += 1
+        if num == 11: num = 0
         move_cmd.linear.x = 0
-      elif x >= 6.0:
-        move_cmd.linear.x = 0
+        move_cmd.angular.z = 0
+        cmd_vel.publish(move_cmd)
       else:
-        move_cmd.linear.x = 0.1*K_dist
-      cmd_vel.publish(move_cmd)
+        # move
+        # Movement code here
+        K_twist = 1
+        K_dist = 1
+        move_cmd.angular.z = K_twist*(1)*y
+
+        if x <= 2.0:
+          move_cmd.linear.x = 0
+        elif x >= 6.0:
+          move_cmd.linear.x = 0
+        else:
+          move_cmd.linear.x = 0.1*K_dist
+        cmd_vel.publish(move_cmd)
+
+
+      
 
       print 'x is ' + str(x)
       print 'y is ' + str(y)
