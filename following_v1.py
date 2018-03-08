@@ -33,7 +33,7 @@ if __name__ == '__main__':
       # Movement code here
       K_twist = 1
       K_dist = 1
-      move_cmd.angular.z = K_twist*(-1)*y
+      move_cmd.angular.z = K_twist*(1)*y
 
       if x <= 2.0:
         move_cmd.linear.x = 0
