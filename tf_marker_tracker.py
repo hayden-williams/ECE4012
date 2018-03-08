@@ -53,17 +53,18 @@ class GoForward():
     
       #rospy.loginfo("stateMachine %d."%(self.stateMachine))
       print "Hello from while not rospy.is_shutdown"
-      while self.exist < 1:
-        try:
-          (trans,rot) = self.listener.lookupTransform('/openni_depth_frame', 'torso_%f'%(self.num), rospy.Time(0) )
-          self.exist = 1
-          print trans
-        except:
-          self.num = self.num + 1
-          if self.num == 10:
-            self.num = 1
-          print 'failed'
-          continue
+      torso = 'torso_' + str(self.num)
+      print torso
+      try:
+        (trans,rot) = self.listener.lookupTransform('/openni_depth_frame', torso, rospy.Time(0) )
+        self.exist = 1
+        print trans
+      except:
+        self.num = self.num + 1
+        if self.num == 10:
+          self.num = 1
+        print 'Looking for user'
+        continue
       self.cmd_vel.publish(move_cmd)
       # wait for 0.1 seconds (10 HZ) and publish again
       r.sleep()
