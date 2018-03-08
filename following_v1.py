@@ -59,7 +59,7 @@ if __name__ == '__main__':
         K_dist = 1
         move_cmd.angular.z = K_twist*(1)*y
 
-        if x <= 2.0:
+        if x <= 3.0:
           move_cmd.linear.x = 0
         elif x >= 6.0:
           move_cmd.linear.x = 0
