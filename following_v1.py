@@ -4,6 +4,8 @@ import tf
 import geometry_msgs.msg
 from geometry_msgs.msg import Twist#, Pose
 
+
+
 if __name__ == '__main__':
 
   num = 0
@@ -23,10 +25,22 @@ if __name__ == '__main__':
     print torso
     try:
       (trans,rot) = listener.lookupTransform('/openni_depth_frame', torso, rospy.Time(0) )
-      x = trans[0]
-      y = trans[1]
+      x = trans[0] #distance
+      y = trans[1] #Left/Right
       z = trans[2]
-      move_cmd.linear.x = 0.2
+      #move_cmd.linear.x = 0.2
+      #cmd_vel.publish(move_cmd)
+      # Movement code here
+      K_twist = 0.005
+      K_dist = 1
+      move_cmd.angular.z = K_twist*(-1)*y
+
+      if x <= 2.0:
+        move_cmd.linear.x = 0
+      elif x >= 6.0:
+        move_cmd.linear.x = 0
+      else:
+        move_cmd.linear.x = 0.1*K_dist
       cmd_vel.publish(move_cmd)
 
       print x
@@ -36,6 +50,8 @@ if __name__ == '__main__':
         num = 1
       print 'Looking for user'
       continue
+
+
 
     
 
