@@ -14,7 +14,7 @@ if __name__ == '__main__':
     except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
       continue
 
-    x = trnas[0]
+    x = trans[0]
     y = trans[1]
     z = trans[2]
     rate.sleep()
