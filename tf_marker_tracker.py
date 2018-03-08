@@ -16,7 +16,7 @@ class GoForward():
   stateMachine = 0
   counter = 0
   num = 0
-  exist = 0
+
 
 
   def __init__(self):
@@ -57,7 +57,7 @@ class GoForward():
       print torso
       try:
         (trans,rot) = self.listener.lookupTransform('/openni_depth_frame', torso, rospy.Time(0) )
-        self.exist = 1
+
         print trans
       except:
         self.num = self.num + 1
@@ -82,9 +82,8 @@ class GoForward():
     rospy.sleep(1)
  
 if __name__ == '__main__':
-  test = GoForward()
+
   try:
-    #GoForward()
-    rospy.spin()
+    GoForward()
   except:
     rospy.loginfo("GoForward node terminated.")
