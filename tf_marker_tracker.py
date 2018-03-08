@@ -17,8 +17,7 @@ class GoForward():
   counter = 0
   num = 0
   exist = 0
-  trans
-  rot
+
 
   def __init__(self):
     # initiliaze
@@ -56,7 +55,7 @@ class GoForward():
       print "Hello from while not rospy.is_shutdown"
       while self.exist < 1:
         try:
-          (self.trans,self.rot) = self.listener.lookupTransform('/openni_depth_frame', 'torso_%f'%(self.num), rospy.Time(0) )
+          (trans,rot) = self.listener.lookupTransform('/openni_depth_frame', 'torso_%f'%(self.num), rospy.Time(0) )
           self.exist = 1
         except:
           self.num = self.num + 1
@@ -64,7 +63,7 @@ class GoForward():
             self.num = 1
           print 'failed'
           continue
-      print self.trans
+      print trans
       self.cmd_vel.publish(move_cmd)
       # wait for 0.1 seconds (10 HZ) and publish again
       r.sleep()
