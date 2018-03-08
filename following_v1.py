@@ -10,6 +10,7 @@ if __name__ == '__main__':
 
   num = 0
   it = 0
+  waitIt = 0
   x_old = [0,0,0,0,1]
   y_old = [0,0,0,0,1]
   #tmpUserException = []
@@ -40,6 +41,7 @@ if __name__ == '__main__':
       x_old[it] = round(x,11)
       #y_old[it] = y
       it+=1
+      waitIt += 1
       if len(set(x_old)) == 1:
         # user likely lost
         #tmpUserException.append(num)
@@ -49,7 +51,8 @@ if __name__ == '__main__':
         move_cmd.linear.x = 0
         move_cmd.angular.z = 0
         cmd_vel.publish(move_cmd)
-      else:
+        waitIt = 0
+      elif waitIt > 5:
         # move
         # Movement code here
         K_twist = 1
@@ -63,7 +66,11 @@ if __name__ == '__main__':
         else:
           move_cmd.linear.x = 0.1*K_dist
         cmd_vel.publish(move_cmd)
-
+      else:
+        # Do nothing
+        move_cmd.linear.x = 0
+        move_cmd.angular.z = 0
+        cmd_vel.publish(move_cmd)
 
       
 
