@@ -8,7 +8,7 @@ if __name__ == '__main__':
   listener = tf.TransformListener()
 
   rate = rospy.Rate(10)
-  while not rospu.is_shutdown():
+  while not rospy.is_shutdown():
     try:
       (trans,rot) = listener.lookupTransform ('/openni_depth_frame', 'torso_2', rospy.Time(0))
     except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
