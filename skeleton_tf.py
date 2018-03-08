@@ -17,4 +17,5 @@ if __name__ == '__main__':
     x = trans[0]
     y = trans[1]
     z = trans[2]
+    print x
     rate.sleep()
