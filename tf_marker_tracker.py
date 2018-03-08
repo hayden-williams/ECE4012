@@ -58,6 +58,8 @@ class GoForward():
           self.exist = 1
         except:
           self.num = self.num + 1
+          if self.num = 10:
+            self.num = 1
           print 'failed'
           continue
       print trans
