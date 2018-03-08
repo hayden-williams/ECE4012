@@ -43,7 +43,8 @@ if __name__ == '__main__':
         move_cmd.linear.x = 0.1*K_dist
       cmd_vel.publish(move_cmd)
 
-      print x
+      print 'x is ' + str(x)
+      print 'y is ' + str(y)
     except:
       num = num + 1
       if num == 10:
