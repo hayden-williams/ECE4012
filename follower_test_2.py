@@ -92,6 +92,7 @@ class Follower():
             pt_x = point[0]
             pt_y = point[1]
             pt_z = point[2]
+            print pt_x
             
             # Keep only those points within our designated boundaries and sum them up
             if -pt_y > self.min_y and -pt_y < self.max_y and  pt_x < self.max_x and pt_x > self.min_x and pt_z < self.max_z:
@@ -125,6 +126,8 @@ class Follower():
                 move_cmd.angular.z = angular_speed
                         
         # Publish the movement command
+        print linear_speed
+
         self.cmd_vel_pub.publish(move_cmd)
 
         

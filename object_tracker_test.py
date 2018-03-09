@@ -156,6 +156,7 @@ class ObjectTracker():
             
         # Intialize the movement command
         self.move_cmd = Twist()
+        print msg
         
         # Rotate the robot only if the displacement of the target exceeds the threshold
         if abs(percent_offset_x) > self.x_threshold:
@@ -213,6 +214,7 @@ class ObjectTracker():
     def get_camera_info(self, msg):
         self.image_width = msg.width
         self.image_height = msg.height
+        print self.image_width
 
     def shutdown(self):
         rospy.loginfo("Stopping the robot...")
