@@ -113,7 +113,7 @@ class Follower():
             x /= n 
             y /= n 
             z /= n
-            print z
+            
                         
             # Check our movement thresholds
             if (abs(z - self.goal_z) > self.z_threshold) or (abs(x) > self.x_threshold):     
