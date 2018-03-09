@@ -20,7 +20,7 @@
     http://www.gnu.org/licenses/gpl.html
 """
 
-import roslib; roslib.load_manifest('rbx1_apps')
+import roslib
 import rospy
 from sensor_msgs.msg import Image, RegionOfInterest, CameraInfo
 from geometry_msgs.msg import Twist
@@ -51,13 +51,13 @@ class ObjectTracker():
         self.x_threshold = rospy.get_param("~x_threshold", 0.1)
         
         # The maximum distance a target can be from the robot for us to track
-        self.max_z = rospy.get_param("~max_z", 2.0)
+        self.max_z = rospy.get_param("~max_z", 3.0)
         
         # Initialize the global ROI
         self.roi = RegionOfInterest()
         
         # The goal distance (in meters) to keep between the robot and the person
-        self.goal_z = rospy.get_param("~goal_z", 0.6)
+        self.goal_z = rospy.get_param("~goal_z", 1)
         
         # How far away from the goal distance (in meters) before the robot reacts
         self.z_threshold = rospy.get_param("~z_threshold", 0.05)
