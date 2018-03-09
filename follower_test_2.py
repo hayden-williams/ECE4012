@@ -46,6 +46,7 @@ class Follower():
         self.min_y = rospy.get_param("~min_y", -0.3)
         self.max_y = rospy.get_param("~max_y", 0.5)
         self.max_z = rospy.get_param("~max_z", 1.2)
+        print self.min_x
         
         # The goal distance (in meters) to keep between the robot and the person
         self.goal_z = rospy.get_param("~goal_z", 0.6)
@@ -77,15 +78,18 @@ class Follower():
     
         # Publisher to control the robot's movement
         self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist)
+        print 'before sub'
 
         rospy.Subscriber('point_cloud', PointCloud2, self.set_cmd_vel)
         
         # Wait for the pointcloud topic to become available
+        print 'before wait'
         rospy.wait_for_message('point_cloud', PointCloud2)
         
     def set_cmd_vel(self, msg):
         # Initialize the centroid coordinates point count
         x = y = z = n = 0
+        print 'Hello from set_cmd_vel'
         
         # Read in the x, y, z coordinates of all points in the cloud
         for point in point_cloud2.read_points(msg, skip_nans=True):
