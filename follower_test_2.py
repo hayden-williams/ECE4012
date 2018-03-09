@@ -89,14 +89,14 @@ class Follower():
     def set_cmd_vel(self, msg):
         # Initialize the centroid coordinates point count
         x = y = z = n = 0
-        print 'Hello from set_cmd_vel'
+        
         
         # Read in the x, y, z coordinates of all points in the cloud
         for point in point_cloud2.read_points(msg, skip_nans=True):
             pt_x = point[0]
             pt_y = point[1]
             pt_z = point[2]
-            print pt_x
+            
             
             # Keep only those points within our designated boundaries and sum them up
             if -pt_y > self.min_y and -pt_y < self.max_y and  pt_x < self.max_x and pt_x > self.min_x and pt_z < self.max_z:
@@ -113,12 +113,14 @@ class Follower():
             x /= n 
             y /= n 
             z /= n
+            print z
                         
             # Check our movement thresholds
             if (abs(z - self.goal_z) > self.z_threshold) or (abs(x) > self.x_threshold):     
                 # Compute the linear and angular components of the movement
                 linear_speed = (z - self.goal_z) * self.z_scale
                 angular_speed = -x * self.x_scale
+               
                 
                 # Make sure we meet our min/max specifications
                 linear_speed = copysign(max(self.min_linear_speed, 
