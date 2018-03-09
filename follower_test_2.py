@@ -77,14 +77,14 @@ class Follower():
         self.min_linear_speed = rospy.get_param("~min_linear_speed", 0.1)
     
         # Publisher to control the robot's movement
-        self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist)
+        self.cmd_vel_pub = rospy.Publisher('cmd_vel_mux/input/navi', Twist, queue_size=10)
         print 'before sub'
 
-        rospy.Subscriber('point_cloud', PointCloud2, self.set_cmd_vel)
+        rospy.Subscriber('/camera/depth_registered/points', PointCloud2, self.set_cmd_vel)
         
         # Wait for the pointcloud topic to become available
         print 'before wait'
-        rospy.wait_for_message('point_cloud', PointCloud2)
+        rospy.wait_for_message('/camera/depth_registered/points', PointCloud2)
         
     def set_cmd_vel(self, msg):
         # Initialize the centroid coordinates point count
