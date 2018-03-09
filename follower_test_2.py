@@ -41,12 +41,12 @@ class Follower():
         # The dimensions (in meters) of the box in which we will search
         # for the person (blob). These are given in camera coordinates
         # where x is left/right,y is up/down and z is depth (forward/backward)
-        self.min_x = rospy.get_param("~min_x", -0.2)
-        self.max_x = rospy.get_param("~max_x", 0.2)
-        self.min_y = rospy.get_param("~min_y", -0.3)
+        self.min_x = rospy.get_param("~min_x", -0.5)
+        self.max_x = rospy.get_param("~max_x", 0.5)
+        self.min_y = rospy.get_param("~min_y", -0.5)
         self.max_y = rospy.get_param("~max_y", 0.5)
-        self.max_z = rospy.get_param("~max_z", 1.2)
-        print self.min_x
+        self.max_z = rospy.get_param("~max_z", 1.5)
+        
         
         # The goal distance (in meters) to keep between the robot and the person
         self.goal_z = rospy.get_param("~goal_z", 0.6)
@@ -130,7 +130,6 @@ class Follower():
                 move_cmd.angular.z = angular_speed
                         
         # Publish the movement command
-        print linear_speed
 
         self.cmd_vel_pub.publish(move_cmd)
 
