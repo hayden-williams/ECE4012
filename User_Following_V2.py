@@ -71,7 +71,7 @@ class image_converter:
 
 
 			M = cv2.moments(self.mask)
-			height, width, channels = image.shape #grey scale channel is 1, rgb is 3
+			#height, width, channels = image.shape #grey scale channel is 1, rgb is 3
 
 
 			if ( M['m00'] > 0):
@@ -80,8 +80,8 @@ class image_converter:
 				centerOfObject = (int(cx),int(cy))
 				#cv2.circle(image,centerOfObject,10,(0,255,0),-1)
 				#rospy.loginfo("in if statement in callback")
-				dx = cx - width/2 # +ve move left, -ve move right?
-				dy = cy - height/2
+				dx = cx - col/2 # +ve move left, -ve move right?
+				dy = cy - rows/2
 
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
 				self.move_cmd.angular.z = K*(-1)*dx
