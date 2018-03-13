@@ -50,14 +50,14 @@ class image_converter:
 			colFrac = np.int(np.round(.2*cC))
 			self.mask2 =  np.zeros((rows,col))
 			self.mask2[cR-rowFrac:cR+rowFrac,cC-colFrac:cC+colFrac] = 5
-			self.mask2 = np.uint8(self.mask2)
-			self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint8"),np.array(6,dtype = "uint8"))
+			#self.mask2 = np.uint8(self.mask2)
+			#self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint8"),np.array(6,dtype = "uint8"))
 			min_z= np.array(100, dtype = "uint8") #bgr
 			max_z= np.array(3000, dtype = "uint8")
 			self.mask = cv2.inRange(self.depth_image, min_z, max_z)
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
 			#image = cv2.bitwise_and(image,image, mask= self.mask2)
-			rospy.loginfo(str(self.mask))
+			rospy.loginfo(str(self.mask2))
 
 
 				#cv2.imshow('image',image)
