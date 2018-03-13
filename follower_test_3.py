@@ -133,8 +133,8 @@ class Follower():
                 angular_speed = copysign(max(self.min_angular_speed, 
                                              min(self.max_angular_speed, abs(angular_speed))), angular_speed)
     
-                move_cmd.linear.x = linear_speed
-                move_cmd.angular.z = angular_speed
+                #move_cmd.linear.x = linear_speed
+                #move_cmd.angular.z = angular_speed
                         
         # Publish the movement command
 
