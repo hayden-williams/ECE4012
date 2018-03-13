@@ -32,31 +32,31 @@ class image_converter:
 
 	def callback(self,data):
 		try:
+			print "Hello"
+			K = 0.005
+			Kx = 1
 
-				K = 0.005
-				Kx = 1
+			z_threshold = np.uint8(2)
 
-				z_threshold = np.uint8(2)
-
-				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
-				#cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-				#hsv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
-				rows = self.bridge.immsg_to_cv2(height, "passthrough")
-				col = self.bridge.immsg_to_cv2(width, "passthrough")
-				cR = np.int(np.round(rows/2))
-				cC = np.int(np.round(col/2))
-				rowFrac = np.int(np.round(.2*cR))
-				colFrac = np.int(np.round(.2*cC))
-				self.mask2 =  np.zeros((rows,col))
-				self.mask2[cR-rowFrac:cR+rowFrac,cC-colFrac:cC+colFrac] = 5
-				self.mask2 = np.uint8(self.mask2)
-				self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint8"),np.array(6,dtype = "uint8"))
-				min_z= np.array(100, dtype = "uint8") #bgr
-				max_z= np.array(3000, dtype = "uint8")
-				self.mask = cv2.inRange(self.depth_image, min_z, max_z)
-				image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
-				image = cv2.bitwise_and(image,image, mask= self.mask2)
-				rospy.loginfo("image is " + str(image))
+			self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
+			#cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+			#hsv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
+			rows = self.bridge.immsg_to_cv2(height, "passthrough")
+			col = self.bridge.immsg_to_cv2(width, "passthrough")
+			cR = np.int(np.round(rows/2))
+			cC = np.int(np.round(col/2))
+			rowFrac = np.int(np.round(.2*cR))
+			colFrac = np.int(np.round(.2*cC))
+			self.mask2 =  np.zeros((rows,col))
+			self.mask2[cR-rowFrac:cR+rowFrac,cC-colFrac:cC+colFrac] = 5
+			self.mask2 = np.uint8(self.mask2)
+			self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint8"),np.array(6,dtype = "uint8"))
+			min_z= np.array(100, dtype = "uint8") #bgr
+			max_z= np.array(3000, dtype = "uint8")
+			self.mask = cv2.inRange(self.depth_image, min_z, max_z)
+			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
+			image = cv2.bitwise_and(image,image, mask= self.mask2)
+			rospy.loginfo("image is " + str(image))
 
 
 				#cv2.imshow('image',image)
@@ -69,41 +69,40 @@ class image_converter:
 
 
 
-				M = cv2.moments(self.mask)
-				height, width, channels = image.shape #grey scale channel is 1, rgb is 3
+			M = cv2.moments(self.mask)
+			height, width, channels = image.shape #grey scale channel is 1, rgb is 3
 
 
-				if ( M['m00'] > 0):
-					cx = int(M['m10']/M['m00'])
-					cy = int(M['m01']/M['m00'])
-					centerOfObject = (int(cx),int(cy))
-					#cv2.circle(image,centerOfObject,10,(0,255,0),-1)
-					#rospy.loginfo("in if statement in callback")
-
-					dx = cx - width/2 # +ve move left, -ve move right?
-					dy = cy - height/2
+			if ( M['m00'] > 0):
+				cx = int(M['m10']/M['m00'])
+				cy = int(M['m01']/M['m00'])
+				centerOfObject = (int(cx),int(cy))
+				#cv2.circle(image,centerOfObject,10,(0,255,0),-1)
+				#rospy.loginfo("in if statement in callback")
+				dx = cx - width/2 # +ve move left, -ve move right?
+				dy = cy - height/2
 
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
-					self.move_cmd.angular.z = K*(-1)*dx
+				self.move_cmd.angular.z = K*(-1)*dx
 
 					#distance = self.depth_image(cx,cy)
 					#print self.depth_image[cx,cy]
 					#print "hello"
-					if self.depth_image[cx,cy] <= self.no_below:
-						self.move_cmd.linear.x = 0
-					elif self.depth_image[cx,cy] < self.min_stop:
-						self.move_cmd.linear.x = -0.1*Kx
-					elif self.depth_image[cx,cy] < self.max_stop:
-						self.move_cmd.linear.x = 0
-					elif self.depth_image[cx,cy] >= self.max_stop:
-						self.move_cmd.linear.x = 0.1*Kx
-					else:
-						self.move_cmd.linear.x = 0
+				if self.depth_image[cx,cy] <= self.no_below:
+					self.move_cmd.linear.x = 0
+				elif self.depth_image[cx,cy] < self.min_stop:
+					self.move_cmd.linear.x = -0.1*Kx
+				elif self.depth_image[cx,cy] < self.max_stop:
+					self.move_cmd.linear.x = 0
+				elif self.depth_image[cx,cy] >= self.max_stop:
+					self.move_cmd.linear.x = 0.1*Kx
+				else:
+					self.move_cmd.linear.x = 0
 				
 				#rospy.loginfo("in callback")
-				self.cmd_vel.publish(self.move_cmd)
+			self.cmd_vel.publish(self.move_cmd)
 
-				self.r.sleep()
+			self.r.sleep()
 				
 
 				#cv2.imshow('mask',mask)
