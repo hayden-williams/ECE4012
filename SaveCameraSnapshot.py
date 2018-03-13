@@ -9,7 +9,7 @@ from cv_bridge import CvBridge, CvBridgeError
 
 class image_converter:
 
-
+	numOfPic = 0
 	def __init__(self):
 		self.bridge = CvBridge()
 		self.image_sub = rospy.Subscriber("/camera/rgb/image_color",Image,self.callback)
@@ -18,8 +18,11 @@ class image_converter:
 		try:
 				cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
 				#cv2.imshow("color_camera_msg.jpg", cv_image)
-				cv2.imwrite('UserSnapshot.jpg',cv_image)
-				cv2.waitKey(1)
+				self.numOfPic +=1
+				if self.numOfPic == 11: self.numOfPic = 1
+				imgName = "UserSnapshot" + str(self.numOfPic) + ".jpg"
+				cv2.imwrite(imgName,cv_image)
+				cv2.waitKey(5000)
 				print "image saved!"
 
 		except CvBridgeError, e:
