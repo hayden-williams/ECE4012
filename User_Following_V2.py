@@ -56,8 +56,8 @@ class image_converter:
 			max_z= np.array(3000, dtype = "uint8")
 			self.mask = cv2.inRange(self.depth_image, min_z, max_z)
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
-			image = cv2.bitwise_and(image,image, mask= self.mask2)
-			rospy.loginfo(str(self.depth_image))
+			#image = cv2.bitwise_and(image,image, mask= self.mask2)
+			rospy.loginfo(str(self.mask))
 
 
 				#cv2.imshow('image',image)
@@ -85,7 +85,7 @@ class image_converter:
 				rospy.loginfo(dx)
 
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
-				self.move_cmd.angular.z = K*(-1)*dx
+				self.move_cmd.angular.z = K*(-0)*dx
 
 					#distance = self.depth_image(cx,cy)
 					#print self.depth_image[cx,cy]
@@ -93,11 +93,11 @@ class image_converter:
 				if self.depth_image[cx,cy] <= self.no_below:
 					self.move_cmd.linear.x = 0
 				elif self.depth_image[cx,cy] < self.min_stop:
-					self.move_cmd.linear.x = -0.1*Kx
+					self.move_cmd.linear.x = -0.0*Kx
 				elif self.depth_image[cx,cy] < self.max_stop:
 					self.move_cmd.linear.x = 0
 				elif self.depth_image[cx,cy] >= self.max_stop:
-					self.move_cmd.linear.x = 0.1*Kx
+					self.move_cmd.linear.x = 0.0*Kx
 				else:
 					self.move_cmd.linear.x = 0
 				
