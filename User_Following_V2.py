@@ -32,7 +32,7 @@ class image_converter:
 
 	def callback(self,data):
 		try:
-			print "Hello"
+			#print "Hello"
 			K = 0.005
 			Kx = 1
 
@@ -82,6 +82,7 @@ class image_converter:
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
 				dy = cy - rows/2
+				rospy.loginfo(dx)
 
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
 				self.move_cmd.angular.z = K*(-1)*dx
