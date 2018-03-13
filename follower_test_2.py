@@ -47,25 +47,25 @@ class Follower():
         self.min_x = rospy.get_param("~min_x", -0.3)
         self.max_x = rospy.get_param("~max_x", 0.3)
         self.min_y = rospy.get_param("~min_y", .3)
-        self.max_y = rospy.get_param("~max_y", .6)
+        self.max_y = rospy.get_param("~max_y", .8)
         self.max_z = rospy.get_param("~max_z", 3)
         
         
         # The goal distance (in meters) to keep between the robot and the person
-        self.goal_z = rospy.get_param("~goal_z", 1.5)
+        self.goal_z = rospy.get_param("~goal_z", .8)
         
         # How far away from the goal distance (in meters) before the robot reacts
-        self.z_threshold = rospy.get_param("~z_threshold", 0.05)
+        self.z_threshold = rospy.get_param("~z_threshold", 0.075)
         
         # How far away from being centered (x displacement) on the person
         # before the robot reacts
-        self.x_threshold = rospy.get_param("~x_threshold", 0.025)
+        self.x_threshold = rospy.get_param("~x_threshold", 0.03)
         
         # How much do we weight the goal distance (z) when making a movement
-        self.z_scale = rospy.get_param("~z_scale", .75)
+        self.z_scale = rospy.get_param("~z_scale", .4)
 
         # How much do we weight x-displacement of the person when making a movement        
-        self.x_scale = rospy.get_param("~x_scale", 1)
+        self.x_scale = rospy.get_param("~x_scale", .8)
         
         # The maximum rotation speed in radians per second
         self.max_angular_speed = rospy.get_param("~max_angular_speed", 1)
@@ -74,10 +74,10 @@ class Follower():
         self.min_angular_speed = rospy.get_param("~min_angular_speed", 0.0)
         
         # The max linear speed in meters per second
-        self.max_linear_speed = rospy.get_param("~max_linear_speed", 0.75)
+        self.max_linear_speed = rospy.get_param("~max_linear_speed", 0.6)
         
         # The minimum linear speed in meters per second
-        self.min_linear_speed = rospy.get_param("~min_linear_speed", 0.1)
+        self.min_linear_speed = rospy.get_param("~min_linear_speed", 0.0)
     
         # Publisher to control the robot's movement
         self.cmd_vel_pub = rospy.Publisher('cmd_vel_mux/input/navi', Twist, queue_size=10)
