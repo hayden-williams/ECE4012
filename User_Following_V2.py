@@ -1,4 +1,4 @@
-ros# Stephen Williams and Edgardo Marchand
+# Stephen Williams and Edgardo Marchand
 # Created 3 Dec 2017
 
 # Homework 13
