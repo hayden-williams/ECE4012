@@ -116,9 +116,7 @@ class Follower():
             x /= n 
             y /= n 
             z /= n
-            print 'x is ' + str(x)
-            print 'y is ' + str(y)
-            print 'z is ' + str(z)
+
             
                         
             # Check our movement thresholds
