@@ -22,7 +22,7 @@ class image_converter:
 	def __init__(self):
 		rospy.init_node('image_converter', anonymous=True)
 		self.bridge = CvBridge()
-		self.depth_sub = rospy.Subscriber("/camera/depth_registered/image_raw",Image,self.callback)
+		self.depth_sub = rospy.Subscriber("/camera/depth/image_raw",Image,self.callback)
 		#self.depth_sub = rospy.Subscriber("/camera/depth_registered/image_raw",Image,self.callback_depth)
 
 		self.cmd_vel = rospy.Publisher('cmd_vel_mux/input/navi', Twist, queue_size=10)
