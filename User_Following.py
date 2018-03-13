@@ -52,7 +52,7 @@ class Follower():
         
         
         # The goal distance (in meters) to keep between the robot and the person
-        self.goal_z = rospy.get_param("~goal_z", .6)
+        self.goal_z = rospy.get_param("~goal_z", 1)
         
         # How far away from the goal distance (in meters) before the robot reacts
         self.z_threshold = rospy.get_param("~z_threshold", 0.1)
