@@ -46,8 +46,8 @@ class Follower():
         # where x is left/right,y is up/down and z is depth (forward/backward)
         self.min_x = rospy.get_param("~min_x", -0.3)
         self.max_x = rospy.get_param("~max_x", 0.3)
-        self.min_y = rospy.get_param("~min_y", 1.0)
-        self.max_y = rospy.get_param("~max_y", 1.3)
+        self.min_y = rospy.get_param("~min_y", .3)
+        self.max_y = rospy.get_param("~max_y", .6)
         self.max_z = rospy.get_param("~max_z", 3)
         
         
