@@ -50,7 +50,7 @@ class image_converter:
 			colFrac = np.int(np.round(.2*cC))
 			self.mask2 =  np.zeros((rows,col))
 			#self.mask2[cR-rowFrac:cR+rowFrac,cC-colFrac:cC+colFrac] = 5
-			self.mask2[100,:] = 5
+			self.mask2[1,:] = 5
 			#self.mask2 = np.uint8(self.mask2)
 			#self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint8"),np.array(6,dtype = "uint8"))
 			min_z= np.array(100, dtype = "uint8") #bgr
