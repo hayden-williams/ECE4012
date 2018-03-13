@@ -46,9 +46,9 @@ class Follower():
         # where x is left/right,y is up/down and z is depth (forward/backward)
         self.min_x = rospy.get_param("~min_x", -0.2)
         self.max_x = rospy.get_param("~max_x", 0.2)
-        self.min_y = rospy.get_param("~min_y", .2)
-        self.max_y = rospy.get_param("~max_y", .6)
-        self.max_z = rospy.get_param("~max_z", 2)
+        self.min_y = rospy.get_param("~min_y", 0)
+        self.max_y = rospy.get_param("~max_y", .5)
+        self.max_z = rospy.get_param("~max_z", 2.5)
         
         
         # The goal distance (in meters) to keep between the robot and the person
@@ -65,7 +65,7 @@ class Follower():
         self.z_scale = rospy.get_param("~z_scale", .5)
 
         # How much do we weight x-displacement of the person when making a movement        
-        self.x_scale = rospy.get_param("~x_scale", 1)
+        self.x_scale = rospy.get_param("~x_scale", 2.5)
         
         # The maximum rotation speed in radians per second
         self.max_angular_speed = rospy.get_param("~max_angular_speed", 1)
