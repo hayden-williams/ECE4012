@@ -16,7 +16,7 @@ from geometry_msgs.msg import Twist
 class image_converter:
 	# detecting orange
 	max_stop = 1500 # above this go forward
-	min_stop = 800 # below this go backwards
+	min_stop = 500 # below this go backwards
 	no_below = 400 # stop if below this
 
 	def __init__(self):
@@ -56,6 +56,7 @@ class image_converter:
 				self.mask = cv2.inRange(self.depth_image, min_z, max_z)
 				image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
 				image = cv2.bitwise_and(image,image, mask= self.mask2)
+				rospy.loginfo("image is " + str(image))
 
 
 				#cv2.imshow('image',image)
@@ -70,6 +71,7 @@ class image_converter:
 
 				M = cv2.moments(self.mask)
 				height, width, channels = image.shape #grey scale channel is 1, rgb is 3
+
 
 				if ( M['m00'] > 0):
 					cx = int(M['m10']/M['m00'])
