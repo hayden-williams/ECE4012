@@ -23,7 +23,7 @@ class image_converter:
 				imgName = "UserSnapshot" + str(self.numOfPic) + ".jpg"
 				cv2.imwrite(imgName,cv_image)
 				cv2.waitKey(5000)
-				print "image saved!"
+				rospy.loginfo(imgName)
 
 		except CvBridgeError, e:
 			print e
