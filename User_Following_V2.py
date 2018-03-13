@@ -41,8 +41,9 @@ class image_converter:
 			self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
 			#cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
 			#hsv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
-			rows = self.bridge.imgmsg_to_cv2(height, "passthrough")
-			col = self.bridge.imgmsg_to_cv2(width, "passthrough")
+			rows, col, channels = self.depth_image.shape #grey scale channel is 1, rgb is 3
+			#rows = self.bridge.imgmsg_to_cv2(height, "passthrough")
+			#col = self.bridge.imgmsg_to_cv2(width, "passthrough")
 			cR = np.int(np.round(rows/2))
 			cC = np.int(np.round(col/2))
 			rowFrac = np.int(np.round(.2*cR))
