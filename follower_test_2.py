@@ -55,17 +55,17 @@ class Follower():
         self.goal_z = rospy.get_param("~goal_z", 1)
         
         # How far away from the goal distance (in meters) before the robot reacts
-        self.z_threshold = rospy.get_param("~z_threshold", 0.075)
+        self.z_threshold = rospy.get_param("~z_threshold", 0.025)
         
         # How far away from being centered (x displacement) on the person
         # before the robot reacts
-        self.x_threshold = rospy.get_param("~x_threshold", 0.075)
+        self.x_threshold = rospy.get_param("~x_threshold", 0.025)
         
         # How much do we weight the goal distance (z) when making a movement
-        self.z_scale = rospy.get_param("~z_scale", 1.0)
+        self.z_scale = rospy.get_param("~z_scale", .5)
 
         # How much do we weight x-displacement of the person when making a movement        
-        self.x_scale = rospy.get_param("~x_scale", 1.5)
+        self.x_scale = rospy.get_param("~x_scale", 1)
         
         # The maximum rotation speed in radians per second
         self.max_angular_speed = rospy.get_param("~max_angular_speed", 1)
