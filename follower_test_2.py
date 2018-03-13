@@ -44,28 +44,28 @@ class Follower():
         # The dimensions (in meters) of the box in which we will search
         # for the person (blob). These are given in camera coordinates
         # where x is left/right,y is up/down and z is depth (forward/backward)
-        self.min_x = rospy.get_param("~min_x", -0.3)
-        self.max_x = rospy.get_param("~max_x", 0.3)
-        self.min_y = rospy.get_param("~min_y", .3)
-        self.max_y = rospy.get_param("~max_y", .8)
-        self.max_z = rospy.get_param("~max_z", 3)
+        self.min_x = rospy.get_param("~min_x", -0.2)
+        self.max_x = rospy.get_param("~max_x", 0.2)
+        self.min_y = rospy.get_param("~min_y", .2)
+        self.max_y = rospy.get_param("~max_y", .6)
+        self.max_z = rospy.get_param("~max_z", 2)
         
         
         # The goal distance (in meters) to keep between the robot and the person
-        self.goal_z = rospy.get_param("~goal_z", .8)
+        self.goal_z = rospy.get_param("~goal_z", .6)
         
         # How far away from the goal distance (in meters) before the robot reacts
-        self.z_threshold = rospy.get_param("~z_threshold", 0.075)
+        self.z_threshold = rospy.get_param("~z_threshold", 0.1)
         
         # How far away from being centered (x displacement) on the person
         # before the robot reacts
-        self.x_threshold = rospy.get_param("~x_threshold", 0.03)
+        self.x_threshold = rospy.get_param("~x_threshold", 0.05)
         
         # How much do we weight the goal distance (z) when making a movement
-        self.z_scale = rospy.get_param("~z_scale", .4)
+        self.z_scale = rospy.get_param("~z_scale", .5)
 
         # How much do we weight x-displacement of the person when making a movement        
-        self.x_scale = rospy.get_param("~x_scale", .8)
+        self.x_scale = rospy.get_param("~x_scale", 1)
         
         # The maximum rotation speed in radians per second
         self.max_angular_speed = rospy.get_param("~max_angular_speed", 1)
@@ -74,7 +74,7 @@ class Follower():
         self.min_angular_speed = rospy.get_param("~min_angular_speed", 0.0)
         
         # The max linear speed in meters per second
-        self.max_linear_speed = rospy.get_param("~max_linear_speed", 0.6)
+        self.max_linear_speed = rospy.get_param("~max_linear_speed", 0.5)
         
         # The minimum linear speed in meters per second
         self.min_linear_speed = rospy.get_param("~min_linear_speed", 0.0)
