@@ -65,7 +65,7 @@ class Follower():
         self.z_scale = rospy.get_param("~z_scale", .5)
 
         # How much do we weight x-displacement of the person when making a movement        
-        self.x_scale = rospy.get_param("~x_scale", 2.5)
+        self.x_scale = rospy.get_param("~x_scale", 2)
         
         # The maximum rotation speed in radians per second
         self.max_angular_speed = rospy.get_param("~max_angular_speed", 1)
