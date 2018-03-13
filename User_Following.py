@@ -46,9 +46,9 @@ class Follower():
         # where x is left/right,y is up/down and z is depth (forward/backward)
         self.min_x = rospy.get_param("~min_x", -0.35)
         self.max_x = rospy.get_param("~max_x", 0.35)
-        self.min_y = rospy.get_param("~min_y", 0.2)
-        self.max_y = rospy.get_param("~max_y", 0.6)
-        self.max_z = rospy.get_param("~max_z", 2)
+        self.min_y = rospy.get_param("~min_y", 0.0)
+        self.max_y = rospy.get_param("~max_y", 0.8)
+        self.max_z = rospy.get_param("~max_z", 2.5)
         
         
         # The goal distance (in meters) to keep between the robot and the person
