@@ -46,8 +46,8 @@ class image_converter:
 			#col = self.bridge.imgmsg_to_cv2(width, "passthrough")
 			cR = np.int(np.round(rows/2))
 			cC = np.int(np.round(col/2))
-			rowFrac = np.int(np.round(.2*cR))
-			colFrac = np.int(np.round(.2*cC))
+			rowFrac = np.int(np.round(.25*cR))
+			colFrac = np.int(np.round(.25*cC))
 			self.mask2 =  np.zeros((rows,col))
 			self.mask2[cR-rowFrac:cR+rowFrac,cC-colFrac:cC+colFrac] = 5
 			#self.mask2[1,:] = 5
