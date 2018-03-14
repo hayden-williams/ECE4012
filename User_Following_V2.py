@@ -55,7 +55,7 @@ class image_converter:
 			self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint8"),np.array(6,dtype = "uint8"))
 			min_z= np.array(100, dtype = "uint8") #bgr
 			max_z= np.array(3000, dtype = "uint8")
-			self.mask = cv2.inRange(np.unit8(self.depth_image), np.array(100, dtype = "uint8"), np.array(3000,dtype="uint8"))
+			self.mask = cv2.inRange(np.uint8(self.depth_image), np.array(100, dtype = "uint8"), np.array(3000,dtype="uint8"))
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
 			#image = cv2.bitwise_and(image,image, mask= self.mask2)
 			rospy.loginfo(self.mask[cR,cC])
