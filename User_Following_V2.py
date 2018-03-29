@@ -113,9 +113,9 @@ class image_converter:
 				dy = cy - rows/2
 				#rospy.loginfo('dx is '+ str(dx))
 				depth = np.median(image)
-				rospy.loginfo(np.sum(image))
-				rospy.loginfo(image[cR,cC])
-				rospy.loginfo('median is '+ str(depth))
+				rospy.loginfo(image)
+				#rospy.loginfo(image[cR,cC])
+				#rospy.loginfo('median is '+ str(depth))
 
 				#Movement code to center object and keep desired distance
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
