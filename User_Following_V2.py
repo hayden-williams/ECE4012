@@ -91,11 +91,9 @@ class image_converter:
 
 			# Get moment/centroid of object
 			M = cv2.moments(self.mask3)
-			#rospy.loginfo('depth image center = ' + str(self.depth_image[cR,cC]))
+			rospy.loginfo('depth image center = ' + str(self.depth_image[cR,cC]))
 			#rospy.loginfo('depth image center = ' + str(np.uint8(self.depth_image[cR,cC])))
-			rospy.loginfo('min_z is ' + str(min_z))
-			rospy.loginfo('max_z is ' + str(max_z))
-			rospy.loginfo('mask sum is ' + str(np.sum(self.mask)))
+			#rospy.loginfo('mask sum is ' + str(np.sum(self.mask)))
 			#rospy.loginfo(np.sum(self.mask2))
 			#rospy.loginfo(np.sum(self.mask3))
 			#height, width, channels = image.shape #grey scale channel is 1, rgb is 3
@@ -120,7 +118,7 @@ class image_converter:
 					#distance = self.depth_image(cx,cy)
 					#print self.depth_image[cx,cy]
 					#print "hello"
-				rospy.loginfo(self.depth_image[cx,cy])
+				rospy.loginfo('object depth '= str(self.depth_image[cx,cy]))
 				if self.depth_image[cx,cy] <= self.invalid_thresh:
 					self.move_cmd.linear.x = 0
 					self.move_cmd.angular.z = K*(0)*dx
