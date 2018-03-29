@@ -39,7 +39,7 @@ class image_converter:
 			#print "Hello"
 			# Gain Values for movement
 			# Speed Gain
-			K = 0.005
+			K = 0.009
 			# Kx is for movment in x direction (LEFT AND RIGHT)
 			Kx = 1
 
@@ -61,7 +61,7 @@ class image_converter:
 			# How Large our field of view for our desired object i.e where we looking in the picture for our object
 			# Mask to remove any uneccesary information outside our looking area.
 			rowFrac = np.int(np.round(.25*cR))
-			colFrac = np.int(np.round(.35*cC))
+			colFrac = np.int(np.round(.4*cC))
 			#rospy.loginfo(rowFrac)
 			#rospy.loginfo(colFrac)
 			self.mask2 =  np.zeros((rows,col))
@@ -124,10 +124,10 @@ class image_converter:
 					self.move_cmd.angular.z = K*(0)*dx
 				elif self.depth_image[cx,cy] < self.desired_thresh:
 					self.move_cmd.linear.x = -0.0*Kx
-					self.move_cmd.angular.z = K*(0)*dx
+					self.move_cmd.angular.z = K*(1)*dx
 				elif self.depth_image[cx,cy] < self.desired_thresh:
 					self.move_cmd.linear.x = 0
-					self.move_cmd.angular.z = K*(0)*dx
+					self.move_cmd.angular.z = K*(1)*dx
 				elif self.depth_image[cx,cy] >= self.invalid_max:
 					self.move_cmd.linear.x = 0.0*Kx
 					self.move_cmd.angular.z = K*(0)*dx
