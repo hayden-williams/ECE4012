@@ -111,8 +111,10 @@ class image_converter:
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
 				dy = cy - rows/2
-				rospy.loginfo('dx is '+ str(dx))
+				#rospy.loginfo('dx is '+ str(dx))
 				depth = np.median(image)
+				rospy.loginfo(np.sum(image))
+				rospy.loginfo(image[cR,cC])
 				rospy.loginfo('median is '+ str(depth))
 
 				#Movement code to center object and keep desired distance
