@@ -93,9 +93,9 @@ class image_converter:
 
 			# Get moment/centroid of object
 			M = cv2.moments(self.mask3)
-			rospy.loginfo('depth image center = ' + str(self.depth_image[cR,cC]))
-			rospy.loginfo('depth image center = ' + str(np.uint8(self.depth_image[cR,cC])))
-			rospy.loginfo('min_z is ' + str(min_z))
+			#rospy.loginfo('depth image center = ' + str(self.depth_image[cR,cC]))
+			#rospy.loginfo('depth image center = ' + str(np.uint8(self.depth_image[cR,cC])))
+			#rospy.loginfo('min_z is ' + str(min_z))
 			rospy.loginfo('mask sum is ' + str(np.sum(self.mask)))
 			#rospy.loginfo(np.sum(self.mask2))
 			#rospy.loginfo(np.sum(self.mask3))
@@ -107,12 +107,12 @@ class image_converter:
 				cx = int(M['m10']/M['m00'])
 				cy = int(M['m01']/M['m00'])
 				centerOfObject = (int(cx),int(cy))
-				rospy.loginfo(centerOfObject)
+				rospy.loginfo('center of object is ' + str(centerOfObject))
 				#cv2.circle(image,centerOfObject,10,(0,255,0),-1)
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
 				dy = cy - rows/2
-				rospy.loginfo(dx)
+				#rospy.loginfo(dx)
 
 				#Movement code to center object and keep desired distance
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
@@ -127,10 +127,10 @@ class image_converter:
 					self.move_cmd.angular.z = K*(0)*dx
 				elif self.depth_image[cx,cy] < self.desired_thresh:
 					self.move_cmd.linear.x = -0.0*Kx
-					self.move_cmd.angular.z = K*(1)*dx
+					self.move_cmd.angular.z = K*(0)*dx
 				elif self.depth_image[cx,cy] < self.desired_thresh:
 					self.move_cmd.linear.x = 0
-					self.move_cmd.angular.z = K*(1)*dx
+					self.move_cmd.angular.z = K*(0)*dx
 				elif self.depth_image[cx,cy] >= self.invalid_max:
 					self.move_cmd.linear.x = 0.0*Kx
 					self.move_cmd.angular.z = K*(0)*dx
