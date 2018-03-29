@@ -113,7 +113,7 @@ class image_converter:
 				dy = cy - rows/2
 				#rospy.loginfo('dx is '+ str(dx))
 				depth = np.median(image)
-				rospy.loginfo(image)
+				rospy.loginfo(np.mean(image))
 				#rospy.loginfo(image[cR,cC])
 				#rospy.loginfo('median is '+ str(depth))
 
