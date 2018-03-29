@@ -115,11 +115,11 @@ class image_converter:
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
 				dy = cy - rows/2
-				#rospy.loginfo('dx is '+ str(dx))
+				rospy.loginfo('dx is '+ str(dx))
 				depth = np.median(image)
-				rospy.loginfo('mean is ' + str(np.mean(image)))
+				#rospy.loginfo('mean is ' + str(np.mean(image)))
 				#rospy.loginfo(image[cR,cC])
-				rospy.loginfo('median is '+ str(depth))
+				#rospy.loginfo('median is '+ str(depth))
 
 				#Movement code to center object and keep desired distance
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
@@ -129,16 +129,16 @@ class image_converter:
 					#print self.depth_image[cx,cy]
 					#print "hello"
 				#rospy.loginfo('object depth '+ str(self.depth_image[cx,cy]))
-				if self.depth_image[cx,cy] <= self.invalid_thresh:
+				if depth <= self.invalid_thresh:
 					self.move_cmd.linear.x = 0
 					self.move_cmd.angular.z = K*(0)*dx
-				elif self.depth_image[cx,cy] < self.desired_thresh:
+				elif depth < self.desired_thresh:
 					self.move_cmd.linear.x = -0.0*Kx
 					self.move_cmd.angular.z = K*(-1)*dx
-				elif self.depth_image[cx,cy] < self.desired_thresh:
+				elif depth < self.desired_thresh:
 					self.move_cmd.linear.x = 0
 					self.move_cmd.angular.z = K*(-1)*dx
-				elif self.depth_image[cx,cy] >= self.invalid_max:
+				elif depth >= self.invalid_max:
 					self.move_cmd.linear.x = 0.0*Kx
 					self.move_cmd.angular.z = K*(0)*dx
 				else:
