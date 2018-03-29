@@ -76,6 +76,7 @@ class image_converter:
 			self.mask = cv2.inRange(self.depth_image, min_z, max_z)
 			self.mask3 = cv2.bitwise_and(self.mask,self.mask, mask= self.mask2)
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask3)
+			image[image==0] = np.nan
 			#rospy.loginfo(self.depth_image[cR,cC])
 
 
@@ -113,9 +114,9 @@ class image_converter:
 				dy = cy - rows/2
 				#rospy.loginfo('dx is '+ str(dx))
 				depth = np.median(image)
-				rospy.loginfo(np.mean(image))
+				rospy.loginfo('mean is ' + str(np.mean(image)))
 				#rospy.loginfo(image[cR,cC])
-				#rospy.loginfo('median is '+ str(depth))
+				rospy.loginfo('median is '+ str(depth))
 
 				#Movement code to center object and keep desired distance
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
