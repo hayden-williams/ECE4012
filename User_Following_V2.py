@@ -93,7 +93,7 @@ class image_converter:
 
 			# Get moment/centroid of object
 			M = cv2.moments(self.mask3)
-			rospy.loginfo(M['m00'])
+			rospy.loginfo(np.sum(self.mask3))
 			#height, width, channels = image.shape #grey scale channel is 1, rgb is 3
 
 			# Calculate center of object and find error from center object
