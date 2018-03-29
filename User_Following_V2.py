@@ -104,7 +104,7 @@ class image_converter:
 
 				#Movement code to center object and keep desired distance
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
-				self.move_cmd.angular.z = K*(-1)*dx
+				self.move_cmd.angular.z = K*(1)*dx
 
 					#distance = self.depth_image(cx,cy)
 					#print self.depth_image[cx,cy]
