@@ -38,7 +38,7 @@ class image_converter:
 			#print "Hello"
 			# Gain Values for movement
 			# Speed Gain
-			K = 0.001
+			K = 0.0001
 			# Kx is for movment in x direction (LEFT AND RIGHT)
 			Kx = 1
 
@@ -68,8 +68,8 @@ class image_converter:
 			self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint8"),np.array(6,dtype = "uint8"))
 
 			# Mask to get values of specific box in z direction only interested in our object/person
-			min_z= np.array(100, dtype = "uint8") #bgr
-			max_z= np.array(500, dtype = "uint8")
+			min_z= np.array(400, dtype = "uint8") #bgr
+			max_z= np.array(1000, dtype = "uint8")
 			self.mask = cv2.inRange(np.uint8(self.depth_image), np.array(100, dtype = "uint8"), np.array(3000,dtype="uint8"))
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
 			image = cv2.bitwise_and(image,image, mask= self.mask2)
