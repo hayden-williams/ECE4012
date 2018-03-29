@@ -56,6 +56,7 @@ class image_converter:
 			# Find Center of Image
 			cR = np.int(np.round(rows/2))
 			cC = np.int(np.round(col/2))
+			rospy.loginfo('Center row is ' cR 'Center Column is ' cC)
 
 			# How Large our field of view for our desired object i.e where we looking in the picture for our object
 			# Mask to remove any uneccesary information outside our looking area.
@@ -100,16 +101,16 @@ class image_converter:
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
 				dy = cy - rows/2
-				rospy.loginfo(dx)
+				#rospy.loginfo(dx)
 
 				#Movement code to center object and keep desired distance
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
-				self.move_cmd.angular.z = K*(1)*dx
+				self.move_cmd.angular.z = K*(0)*dx
 
 					#distance = self.depth_image(cx,cy)
 					#print self.depth_image[cx,cy]
 					#print "hello"
-				rospy.loginfo(self.depth_image[cx,cy])
+				#rospy.loginfo(self.depth_image[cx,cy])
 				if self.depth_image[cx,cy] <= self.no_below:
 					self.move_cmd.linear.x = 0
 				elif self.depth_image[cx,cy] < self.min_stop:
