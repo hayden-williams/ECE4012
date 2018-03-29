@@ -15,7 +15,7 @@ from geometry_msgs.msg import Twist
 
 class image_converter:
 	# Distance in mm
-	max_stop = 1000 # above this go forward
+	max_stop = 1200 # above this go forward
 	min_stop = 500 # below this go backwards
 	no_below = 400 # stop if below this
 
@@ -59,8 +59,8 @@ class image_converter:
 
 			# How Large our field of view for our desired object i.e where we looking in the picture for our object
 			# Mask to remove any uneccesary information outside our looking area.
-			rowFrac = np.int(np.round(.20*cR))
-			colFrac = np.int(np.round(.20*cC))
+			rowFrac = np.int(np.round(.25*cR))
+			colFrac = np.int(np.round(.25*cC))
 			self.mask2 =  np.zeros((rows,col))
 			self.mask2[cR-rowFrac:cR+rowFrac,cC-colFrac:cC+colFrac] = 5
 			#self.mask2[1,:] = 5
@@ -69,7 +69,7 @@ class image_converter:
 
 			# Mask to get values of specific box in z direction only interested in our object/person
 			min_z= np.array(400, dtype = "uint8") #bgr
-			max_z= np.array(1000, dtype = "uint8")
+			max_z= np.array(1200, dtype = "uint8")
 			self.mask = cv2.inRange(np.uint8(self.depth_image), np.array(100, dtype = "uint8"), np.array(3000,dtype="uint8"))
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
 			image = cv2.bitwise_and(image,image, mask= self.mask2)
