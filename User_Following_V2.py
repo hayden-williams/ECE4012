@@ -38,7 +38,7 @@ class image_converter:
 			#print "Hello"
 			# Gain Values for movement
 			# Speed Gain
-			K = 0.005
+			K = 0.05
 			# Kx is for movment in x direction (LEFT AND RIGHT)
 			Kx = 1
 
@@ -100,7 +100,7 @@ class image_converter:
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
 				dy = cy - rows/2
-				rospy.loginfo(dx)
+				#rospy.loginfo(dx)
 
 				#Movement code to center object and keep desired distance
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
@@ -109,14 +109,15 @@ class image_converter:
 					#distance = self.depth_image(cx,cy)
 					#print self.depth_image[cx,cy]
 					#print "hello"
+				rospy.loginfo(self.depth_image[cx,cy])
 				if self.depth_image[cx,cy] <= self.no_below:
 					self.move_cmd.linear.x = 0
 				elif self.depth_image[cx,cy] < self.min_stop:
-					self.move_cmd.linear.x = -0.1*Kx
+					self.move_cmd.linear.x = -0.0*Kx
 				elif self.depth_image[cx,cy] < self.max_stop:
 					self.move_cmd.linear.x = 0
 				elif self.depth_image[cx,cy] >= self.max_stop:
-					self.move_cmd.linear.x = 0.1*Kx
+					self.move_cmd.linear.x = 0.0*Kx
 				else:
 					self.move_cmd.linear.x = 0
 				
