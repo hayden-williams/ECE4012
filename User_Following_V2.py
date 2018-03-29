@@ -43,8 +43,6 @@ class image_converter:
 			# Kx is for movment in x direction (LEFT AND RIGHT)
 			Kx = 1
 
-			# How far we looking for object in depth image (2 meters)
-			z_threshold = np.uint8(2)
 
 			# Get Image and find size of image
 			self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
@@ -69,12 +67,12 @@ class image_converter:
 			self.mask2 =  np.zeros((rows,col))
 			self.mask2[cR-rowFrac:cR+rowFrac,cC-colFrac:cC+colFrac] = 5
 			#self.mask2[1,:] = 5
-			self.mask2 = np.uint8(self.mask2)
-			self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint8"),np.array(6,dtype = "uint8"))
+			self.mask2 = np.uint16(self.mask2)
+			self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint16"),np.array(6,dtype = "uint16"))
 
 			# Mask to get values of specific box in z direction only interested in our object/person
-			min_z= np.array(500, dtype = "uint8") #bgr
-			max_z= np.array(2000, dtype = "uint8")
+			min_z= np.array(500, dtype = "uint16") #bgr
+			max_z= np.array(2000, dtype = "uint16")
 			self.mask = cv2.inRange(self.depth_image, min_z, max_z)
 			self.mask3 = cv2.bitwise_and(self.mask,self.mask, mask= self.mask2)
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask3)
@@ -96,7 +94,7 @@ class image_converter:
 			#rospy.loginfo('depth image center = ' + str(self.depth_image[cR,cC]))
 			#rospy.loginfo('depth image center = ' + str(np.uint8(self.depth_image[cR,cC])))
 			rospy.loginfo('min_z is ' + str(min_z))
-			rospy.loginfo('min_z is ' + str(max_z))
+			rospy.loginfo('max_z is ' + str(max_z))
 			rospy.loginfo('mask sum is ' + str(np.sum(self.mask)))
 			#rospy.loginfo(np.sum(self.mask2))
 			#rospy.loginfo(np.sum(self.mask3))
