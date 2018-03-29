@@ -15,7 +15,7 @@ from geometry_msgs.msg import Twist
 
 class image_converter:
 	# Distance in mm
-	max_stop = 1500 # above this go forward
+	max_stop = 1000 # above this go forward
 	min_stop = 500 # below this go backwards
 	no_below = 400 # stop if below this
 
@@ -38,7 +38,7 @@ class image_converter:
 			#print "Hello"
 			# Gain Values for movement
 			# Speed Gain
-			K = 0.005
+			K = 0.01
 			# Kx is for movment in x direction (LEFT AND RIGHT)
 			Kx = 1
 
@@ -100,7 +100,7 @@ class image_converter:
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
 				dy = cy - rows/2
-				#rospy.loginfo(dx)
+				rospy.loginfo(dx)
 
 				#Movement code to center object and keep desired distance
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
