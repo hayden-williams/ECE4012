@@ -56,7 +56,8 @@ class image_converter:
 			# Find Center of Image
 			cR = np.int(np.round(rows/2))
 			cC = np.int(np.round(col/2))
-			rospy.loginfo('Center row is ' cR 'Center Column is ' cC)
+			rospy.loginfo(cR)
+			rospy.loginfo(cC)
 
 			# How Large our field of view for our desired object i.e where we looking in the picture for our object
 			# Mask to remove any uneccesary information outside our looking area.
