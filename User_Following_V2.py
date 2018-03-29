@@ -61,10 +61,10 @@ class image_converter:
 
 			# How Large our field of view for our desired object i.e where we looking in the picture for our object
 			# Mask to remove any uneccesary information outside our looking area.
-			rowFrac = np.int(np.round(.25*cR))
-			colFrac = np.int(np.round(.25*cC))
-			rospy.loginfo(rowFrac)
-			rospy.loginfo(colFrac)
+			rowFrac = np.int(np.round(.35*cR))
+			colFrac = np.int(np.round(.35*cC))
+			#rospy.loginfo(rowFrac)
+			#rospy.loginfo(colFrac)
 			self.mask2 =  np.zeros((rows,col))
 			self.mask2[cR-rowFrac:cR+rowFrac,cC-colFrac:cC+colFrac] = 5
 			#self.mask2[1,:] = 5
@@ -92,6 +92,7 @@ class image_converter:
 
 			# Get moment/centroid of object
 			M = cv2.moments(self.mask)
+			rospy.loginfo(M['m00'])
 			#height, width, channels = image.shape #grey scale channel is 1, rgb is 3
 
 			# Calculate center of object and find error from center object
@@ -100,6 +101,7 @@ class image_converter:
 				cx = int(M['m10']/M['m00'])
 				cy = int(M['m01']/M['m00'])
 				centerOfObject = (int(cx),int(cy))
+				#rospy.loginfo(centerOfObject)
 				#cv2.circle(image,centerOfObject,10,(0,255,0),-1)
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
