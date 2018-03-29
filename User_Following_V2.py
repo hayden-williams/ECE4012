@@ -105,11 +105,13 @@ class image_converter:
 				cy = int(M['m01']/M['m00'])
 				centerOfObject = (int(cx),int(cy))
 				rospy.loginfo('center of object is ' + str(centerOfObject))
+				rospy.loginfo(' cx is ' + str(cx))
+
 				#cv2.circle(image,centerOfObject,10,(0,255,0),-1)
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
 				dy = cy - rows/2
-				#rospy.loginfo(dx)
+				rospy.loginfo('dx is '+ str(dx))
 
 				#Movement code to center object and keep desired distance
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
