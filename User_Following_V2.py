@@ -112,11 +112,11 @@ class image_converter:
 				if self.depth_image[cx,cy] <= self.no_below:
 					self.move_cmd.linear.x = 0
 				elif self.depth_image[cx,cy] < self.min_stop:
-					self.move_cmd.linear.x = -0.5*Kx
+					self.move_cmd.linear.x = -0.1*Kx
 				elif self.depth_image[cx,cy] < self.max_stop:
 					self.move_cmd.linear.x = 0
 				elif self.depth_image[cx,cy] >= self.max_stop:
-					self.move_cmd.linear.x = 0.5*Kx
+					self.move_cmd.linear.x = 0.1*Kx
 				else:
 					self.move_cmd.linear.x = 0
 				
