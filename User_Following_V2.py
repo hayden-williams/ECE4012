@@ -60,12 +60,12 @@ class image_converter:
 
 			# How Large our field of view for our desired object i.e where we looking in the picture for our object
 			# Mask to remove any uneccesary information outside our looking area.
-			rowFrac = np.int(np.round(.35*cR))
+			rowFrac = np.int(np.round(.25*cR))
 			colFrac = np.int(np.round(.35*cC))
 			#rospy.loginfo(rowFrac)
 			#rospy.loginfo(colFrac)
 			self.mask2 =  np.zeros((rows,col))
-			self.mask2[cR:cR+(2*rowFrac),cC-colFrac:cC+colFrac] = 5
+			self.mask2[cR+rowFrac:cR+(2*rowFrac),cC-colFrac:cC+colFrac] = 5
 			#self.mask2[1,:] = 5
 			self.mask2 = np.uint16(self.mask2)
 			self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint16"),np.array(6,dtype = "uint16"))
