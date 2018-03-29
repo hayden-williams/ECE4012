@@ -93,6 +93,7 @@ class image_converter:
 
 			# Get moment/centroid of object
 			M = cv2.moments(self.mask3)
+			rospy.loginfo('depth image center = ' + str(self.depth_image[cR,cC]))
 			rospy.loginfo('depth image center = ' + str(np.uint8(self.depth_image[cR,cC])))
 			rospy.loginfo('min_z is ' + str(min_z))
 			rospy.loginfo('mask sum is ' + str(np.sum(self.mask)))
