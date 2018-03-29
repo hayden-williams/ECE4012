@@ -59,8 +59,8 @@ class image_converter:
 
 			# How Large our field of view for our desired object i.e where we looking in the picture for our object
 			# Mask to remove any uneccesary information outside our looking area.
-			rowFrac = np.int(np.round(.25*cR))
-			colFrac = np.int(np.round(.25*cC))
+			rowFrac = np.int(np.round(.20*cR))
+			colFrac = np.int(np.round(.20*cC))
 			self.mask2 =  np.zeros((rows,col))
 			self.mask2[cR-rowFrac:cR+rowFrac,cC-colFrac:cC+colFrac] = 5
 			#self.mask2[1,:] = 5
