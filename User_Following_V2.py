@@ -94,6 +94,7 @@ class image_converter:
 			# Get moment/centroid of object
 			M = cv2.moments(self.mask3)
 			rospy.loginfo(np.sum(np.uint8(self.depth_image[cR,cC])))
+			rospy.loginfo(min_z)
 			rospy.loginfo(np.sum(self.mask))
 			#rospy.loginfo(np.sum(self.mask2))
 			#rospy.loginfo(np.sum(self.mask3))
