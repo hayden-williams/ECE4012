@@ -76,8 +76,7 @@ class image_converter:
 			max_z= np.array(210, dtype = "uint8")
 			self.mask = cv2.inRange(np.uint8(self.depth_image), min_z, max_z)
 			self.mask3 = cv2.bitwise_and(self.mask,self.mask, mask= self.mask2)
-			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
-			image = cv2.bitwise_and(image,image, mask= self.mask2)
+			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask3)
 			#rospy.loginfo(self.mask[cR,cC])
 
 
@@ -93,9 +92,9 @@ class image_converter:
 
 			# Get moment/centroid of object
 			M = cv2.moments(self.mask3)
-			rospy.loginfo(np.sum(self.mask))
-			rospy.loginfo(np.sum(self.mask2))
-			rospy.loginfo(np.sum(self.mask3))
+			#rospy.loginfo(np.sum(self.mask))
+			#rospy.loginfo(np.sum(self.mask2))
+			#rospy.loginfo(np.sum(self.mask3))
 			#height, width, channels = image.shape #grey scale channel is 1, rgb is 3
 
 			# Calculate center of object and find error from center object
@@ -104,7 +103,7 @@ class image_converter:
 				cx = int(M['m10']/M['m00'])
 				cy = int(M['m01']/M['m00'])
 				centerOfObject = (int(cx),int(cy))
-				#rospy.loginfo(centerOfObject)
+				rospy.loginfo(centerOfObject)
 				#cv2.circle(image,centerOfObject,10,(0,255,0),-1)
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
