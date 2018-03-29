@@ -103,7 +103,7 @@ class image_converter:
 				cx = int(M['m10']/M['m00'])
 				cy = int(M['m01']/M['m00'])
 				centerOfObject = (int(cx),int(cy))
-				#rospy.loginfo(centerOfObject)
+				rospy.loginfo(centerOfObject)
 				#cv2.circle(image,centerOfObject,10,(0,255,0),-1)
 				#rospy.loginfo("in if statement in callback")
 				dx = cx - col/2 # +ve move left, -ve move right?
