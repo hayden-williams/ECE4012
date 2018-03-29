@@ -38,7 +38,7 @@ class image_converter:
 			#print "Hello"
 			# Gain Values for movement
 			# Speed Gain
-			K = 0.01
+			K = 0.025
 			# Kx is for movment in x direction (LEFT AND RIGHT)
 			Kx = 1
 
