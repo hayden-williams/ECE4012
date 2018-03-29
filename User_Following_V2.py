@@ -78,7 +78,7 @@ class image_converter:
 			self.mask = cv2.inRange(np.uint8(self.depth_image), min_z, max_z)
 			self.mask3 = cv2.bitwise_and(self.mask,self.mask, mask= self.mask2)
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask3)
-			rospy.loginfo(self.depth_image[cR,cC])
+			#rospy.loginfo(self.depth_image[cR,cC])
 
 
 				#cv2.imshow('image',image)
@@ -93,10 +93,10 @@ class image_converter:
 
 			# Get moment/centroid of object
 			M = cv2.moments(self.mask3)
-			rospy.loginfo(np.sum(self.depth_image))
+			rospy.loginfo(np.sum(np.uint8(self.depth_image)))
 			rospy.loginfo(np.sum(self.mask))
-			rospy.loginfo(np.sum(self.mask2))
-			rospy.loginfo(np.sum(self.mask3))
+			#rospy.loginfo(np.sum(self.mask2))
+			#rospy.loginfo(np.sum(self.mask3))
 			#height, width, channels = image.shape #grey scale channel is 1, rgb is 3
 
 			# Calculate center of object and find error from center object
