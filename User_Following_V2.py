@@ -69,7 +69,7 @@ class image_converter:
 
 			# Mask to get values of specific box in z direction only interested in our object/person
 			min_z= np.array(100, dtype = "uint8") #bgr
-			max_z= np.array(3000, dtype = "uint8")
+			max_z= np.array(1000, dtype = "uint8")
 			self.mask = cv2.inRange(np.uint8(self.depth_image), np.array(100, dtype = "uint8"), np.array(3000,dtype="uint8"))
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
 			image = cv2.bitwise_and(image,image, mask= self.mask2)
