@@ -118,7 +118,7 @@ class image_converter:
 					#distance = self.depth_image(cx,cy)
 					#print self.depth_image[cx,cy]
 					#print "hello"
-				#rospy.loginfo(self.depth_image[cx,cy])
+				rospy.loginfo(self.depth_image[cx,cy])
 				if self.depth_image[cx,cy] <= self.invalid_thresh:
 					self.move_cmd.linear.x = 0
 					self.move_cmd.angular.z = K*(0)*dx
