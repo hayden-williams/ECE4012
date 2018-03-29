@@ -15,9 +15,10 @@ from geometry_msgs.msg import Twist
 
 class image_converter:
 	# Distance in mm
-	max_stop = 1200 # above this go forward
-	min_stop = 500 # below this go backwards
-	no_below = 400 # stop if below this
+	invalid_thresh = 300
+	desired_thresh = 1500
+	invalid_max = 2000
+
 
 	def __init__(self):
 		rospy.init_node('image_converter', anonymous=True)
@@ -38,7 +39,7 @@ class image_converter:
 			#print "Hello"
 			# Gain Values for movement
 			# Speed Gain
-			K = 0.0001
+			K = 0.005
 			# Kx is for movment in x direction (LEFT AND RIGHT)
 			Kx = 1
 
@@ -72,8 +73,8 @@ class image_converter:
 			self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint8"),np.array(6,dtype = "uint8"))
 
 			# Mask to get values of specific box in z direction only interested in our object/person
-			min_z= np.array(200, dtype = "uint8") #bgr
-			max_z= np.array(210, dtype = "uint8")
+			min_z= np.array(500, dtype = "uint8") #bgr
+			max_z= np.array(2000, dtype = "uint8")
 			self.mask = cv2.inRange(np.uint8(self.depth_image), min_z, max_z)
 			self.mask3 = cv2.bitwise_and(self.mask,self.mask, mask= self.mask2)
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask3)
@@ -112,22 +113,27 @@ class image_converter:
 
 				#Movement code to center object and keep desired distance
 					#self.move_cmd.linear.x = 0.0015*(-1)*dy
-				self.move_cmd.angular.z = K*(0)*dx
+
 
 					#distance = self.depth_image(cx,cy)
 					#print self.depth_image[cx,cy]
 					#print "hello"
 				#rospy.loginfo(self.depth_image[cx,cy])
-				if self.depth_image[cx,cy] <= self.no_below:
+				if self.depth_image[cx,cy] <= self.invalid_thresh:
 					self.move_cmd.linear.x = 0
-				elif self.depth_image[cx,cy] < self.min_stop:
+					self.move_cmd.angular.z = K*(0)*dx
+				elif self.depth_image[cx,cy] < self.desired_thresh:
 					self.move_cmd.linear.x = -0.0*Kx
-				elif self.depth_image[cx,cy] < self.max_stop:
+					self.move_cmd.angular.z = K*(1)*dx
+				elif self.depth_image[cx,cy] < self.desired_thresh:
 					self.move_cmd.linear.x = 0
-				elif self.depth_image[cx,cy] >= self.max_stop:
+					self.move_cmd.angular.z = K*(1)*dx
+				elif self.depth_image[cx,cy] >= self.invalid_max:
 					self.move_cmd.linear.x = 0.0*Kx
+					self.move_cmd.angular.z = K*(0)*dx
 				else:
 					self.move_cmd.linear.x = 0
+					self.move_cmd.angular.z = K*(0)*dx
 				
 				#rospy.loginfo("in callback")
 			self.cmd_vel.publish(self.move_cmd)
