@@ -75,6 +75,7 @@ class image_converter:
 			min_z= np.array(400, dtype = "uint8") #bgr
 			max_z= np.array(1200, dtype = "uint8")
 			self.mask = cv2.inRange(np.uint8(self.depth_image), np.array(100, dtype = "uint8"), np.array(3000,dtype="uint8"))
+			self.mask3 = cv2.bitwise_and(self.mask,self.mask, mask= self.mask2)
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask)
 			image = cv2.bitwise_and(image,image, mask= self.mask2)
 			#rospy.loginfo(self.mask[cR,cC])
@@ -91,7 +92,7 @@ class image_converter:
 
 
 			# Get moment/centroid of object
-			M = cv2.moments(image)
+			M = cv2.moments(self.mask3)
 			rospy.loginfo(M['m00'])
 			#height, width, channels = image.shape #grey scale channel is 1, rgb is 3
 
