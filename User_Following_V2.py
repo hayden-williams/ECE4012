@@ -76,6 +76,7 @@ class image_converter:
 			self.mask = cv2.inRange(self.depth_image, min_z, max_z)
 			self.mask3 = cv2.bitwise_and(self.mask,self.mask, mask= self.mask2)
 			image = cv2.bitwise_and(self.depth_image,self.depth_image, mask= self.mask3)
+			image = image.astype(float)
 			image[image==0] = np.nan
 			#rospy.loginfo(self.depth_image[cR,cC])
 
