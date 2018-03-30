@@ -42,9 +42,9 @@ class image_converter:
 			#print "Hello"
 			# Gain Values for movement
 			# X gain rotation
-			K = 0.005
+			K = 0.004
 			# Kx is for movment in z direction forward backwards
-			Kx = .0005
+			Kx = .00085
 
 
 			# Get Image and find size of image
