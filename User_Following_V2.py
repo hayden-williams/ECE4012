@@ -133,13 +133,13 @@ class image_converter:
 					self.move_cmd.linear.x = 0
 					self.move_cmd.angular.z = K*(0)*dx
 				elif depth < self.desired_thresh:
-					self.move_cmd.linear.x = -0.0*Kx
+					self.move_cmd.linear.x = 0*Kx
 					self.move_cmd.angular.z = K*(-1)*dx
 				elif depth < self.invalid_max:
-					self.move_cmd.linear.x = 0
+					self.move_cmd.linear.x = K*.2
 					self.move_cmd.angular.z = K*(-1)*dx
 				elif depth >= self.invalid_max:
-					self.move_cmd.linear.x = 0.0*Kx
+					self.move_cmd.linear.x = 0
 					self.move_cmd.angular.z = K*(0)*dx
 				else:
 					self.move_cmd.linear.x = 0
