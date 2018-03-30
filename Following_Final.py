@@ -102,7 +102,7 @@ class image_converter:
 			if (M['m00'] == 0):
 				rospy.loginfo('Not tracking ')
 				self.move_cmd.linear.x = 0
-				#self.move_cmd.angular.z = K*(0)*dx
+				self.move_cmd.angular.z = 0
 
 			#Centroid found:
 			if ( M['m00'] > 0):
