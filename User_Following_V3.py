@@ -108,6 +108,8 @@ class image_converter:
 			# Calculate center of object and find error from center object
 			if (M['m00'] == 0):
 				rospy.loginfo('Not tracking ')
+				self.move_cmd.linear.x = 0
+				self.move_cmd.angular.z = K*(0)*dx
 
 			if ( M['m00'] > 0):
 				cx = int(M['m10']/M['m00'])
