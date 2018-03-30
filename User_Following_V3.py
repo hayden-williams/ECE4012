@@ -43,8 +43,8 @@ class image_converter:
 			# Gain Values for movement
 			# X gain rotation
 			K = 0.005
-			# Kx is for movment in z direction (LEFT AND RIGHT)
-			Kx = .001
+			# Kx is for movment in z direction forward backwards
+			Kx = .0005
 
 
 			# Get Image and find size of image
