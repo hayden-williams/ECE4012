@@ -126,7 +126,7 @@ class image_converter:
 				#rospy.loginfo(image[cR,cC])
 				rospy.loginfo('depth is '+ str(depth))
 				#dz range can go from 1100
-				dz = depth - desired_thresh
+				dz = depth - self.desired_thresh
 
 
 				#Movement code to center object and keep desired distance
