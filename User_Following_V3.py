@@ -16,7 +16,9 @@ from geometry_msgs.msg import Twist
 class image_converter:
 	# Distance in mm
 	invalid_thresh = 300
-	desired_thresh = 1500
+	desired_thresh = 1000
+	desired_lowBound = 950
+	desired_upBound = 1050
 	invalid_max = 2000
 	max_speed = 1
 
@@ -39,9 +41,9 @@ class image_converter:
 		try:
 			#print "Hello"
 			# Gain Values for movement
-			# Speed Gain
+			# X gain rotation
 			K = 0.005
-			# Kx is for movment in x direction (LEFT AND RIGHT)
+			# Kx is for movment in z direction (LEFT AND RIGHT)
 			Kx = .001
 
 
@@ -104,7 +106,7 @@ class image_converter:
 			#height, width, channels = image.shape #grey scale channel is 1, rgb is 3
 
 			# Calculate center of object and find error from center object
-			if (M['m00'] = 0):
+			if (M['m00'] == 0):
 				rospy.loginfo('Not tracking ')
 
 			if ( M['m00'] > 0):
@@ -135,15 +137,31 @@ class image_converter:
 					#print self.depth_image[cx,cy]
 					#print "hello"
 				#rospy.loginfo('object depth '+ str(self.depth_image[cx,cy]))
+				#Ignore very low depth values
 				if depth <= self.invalid_thresh:
 					self.move_cmd.linear.x = 0
 					self.move_cmd.angular.z = K*(0)*dx
-				elif depth < self.desired_thresh:
+				#If below low bound but higher than invalid then move backwards?
+				elif depth < self.desired_lowBound:
+					if (abs(Kx*dz) < self.max_speed):
+						self.move_cmd.linear.x = Kx*dz
+					else:
+						self.move_cmd.linear.x = -self.max_speed
+
+					self.move_cmd.angular.z = K*(-1)*dx
+				#If below upper bound but higher than low bound dont move forward but do rotate
+				elif depth < self.desired_upBound:
 					self.move_cmd.linear.x = 0*Kx
 					self.move_cmd.angular.z = K*(-1)*dx
+				#If below the invalid thresh then move forward
 				elif depth < self.invalid_max:
-					self.move_cmd.linear.x = Kx*.2
+					if (Kx*dz < self.max_speed):
+						self.move_cmd.linear.x = Kx*dz
+					else:
+						self.move_cmd.linear.x = -self.max_speed
+
 					self.move_cmd.angular.z = K*(-1)*dx
+				#If above threshold do nothing
 				elif depth >= self.invalid_max:
 					self.move_cmd.linear.x = 0
 					self.move_cmd.angular.z = K*(0)*dx
