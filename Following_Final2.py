@@ -76,7 +76,7 @@ class image_converter:
 
 			#Masks the quadrant it is interested on (default = upper center)
 			self.mask2 =  np.zeros((rows,col))
-			self.mask2[cR-rowFrac:cR-(2*rowFrac),cC-colFrac:cC+colFrac] = 5
+			self.mask2[cR-(2*rowFrac):cR-rowFrac,cC-colFrac:cC+colFrac] = 5
 			self.mask2 = np.uint16(self.mask2)
 			self.mask2 = cv2.inRange(self.mask2,np.array(4,dtype = "uint16"),np.array(6,dtype = "uint16"))
 
