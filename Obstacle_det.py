@@ -66,11 +66,15 @@ class image_converter:
 			#Combination of masks
 			self.mask3 = cv2.bitwise_and(self.mask,self.mask, mask= self.mask2)
 
+			min_zCorn= np.array(100, dtype = "uint16") #bgr
+			max_zCorn= np.array(1000, dtype = "uint16")
+			self.maskCorner = cv2.inRange(self.depth_image, min_zCorn, max_zCorn)
+
 			self.maskZone1 = np.zeros((rows,col))
 			self.maskZone1[0:rows,0:np.round(col/6)] = 5
 			self.maskZone1 = np.uint16(self.maskZone1)
 			self.maskZone1 = cv2.inRange(self.maskZone1,np.array(4,dtype = "uint16"),np.array(6,dtype = "uint16"))
-			self.Zone1 = cv2.bitwise_and(self.mask3,self.mask3, mask= self.maskZone1)
+			self.Zone1 = cv2.bitwise_and(self.maskCorner,self.maskCorner, mask= self.maskZone1)
 
 			self.maskZone2 = np.zeros((rows,col))
 			self.maskZone2[0:rows,np.round(col/6)+1:np.round(col/3)] = 5
@@ -100,7 +104,7 @@ class image_converter:
 			self.maskZone6[0:rows,cC+np.round(col/3)+1:col] = 5
 			self.maskZone6 = np.uint16(self.maskZone6)
 			self.maskZone6 = cv2.inRange(self.maskZone6,np.array(4,dtype = "uint16"),np.array(6,dtype = "uint16"))
-			self.Zone6 = cv2.bitwise_and(self.mask3,self.mask3, mask= self.maskZone6)
+			self.Zone6 = cv2.bitwise_and(self.maskCorner,self.maskCorner, mask= self.maskZone6)
 
 			sumZone1 = np.sum(self.Zone1 / 255)
 			rospy.loginfo("sum of Zone1 is " + str(sumZone1))
