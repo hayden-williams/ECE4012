@@ -26,7 +26,7 @@ class obstacle_detect():
 
 
 	def __init__(self):
-		rospy.init_node('image_converter', anonymous=True)
+		rospy.init_node('obstacle_detect', anonymous=True)
 		# Initialize bridge
 		self.bridge = CvBridge()
 		# Subscribe to depth sensor and get raw image
