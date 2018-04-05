@@ -120,7 +120,7 @@ class obstacle_detect():
 			#rospy.loginfo("sum of Zone6 is " + str(sumZone6))
 
 			self.ZoneList = numpy.array([sumZone1, sumZone2, sumZone3, sumZone4, sumZone5, sumZone6])
-			rospy.loginfo("Zone List is +" str(self.ZoneList))
+			rospy.loginfo("Zone List is "+ str(self.ZoneList))
 
 
 
