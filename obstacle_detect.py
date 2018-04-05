@@ -35,6 +35,8 @@ class obstacle_detect():
 		# Publish to navigation to move robot
 
 		self.r = rospy.Rate(10)
+	def __call__(self):
+		return (self.ZoneList)
 
 	def callback(self,data):
 		try:
