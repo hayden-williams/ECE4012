@@ -26,6 +26,7 @@ class GoStraight():
 	def __init__(self):
 		# initiliaze
 		rospy.init_node('GoStraight', anonymous=False)
+		obs = obstacle_detect()
 
 		# tell user how to stop TurtleBot
 		rospy.loginfo("To stop TurtleBot CTRL + C")
@@ -58,7 +59,7 @@ class GoStraight():
 		# as long as you haven't ctrl + c keeping doing...
 		while not rospy.is_shutdown():
 		
-			rospy.loginfo("obstacle " + str(obstacle_detect.ZoneList))
+			rospy.loginfo("obstacle " + str(obs.ZoneList))
 			if self.desired == 10:
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
@@ -103,6 +104,6 @@ class GoStraight():
 if __name__ == '__main__':
 	try:
 		GoStraight()
-		obstacle_detect()
+
 	except:
 		rospy.loginfo("GoStraight node terminated.")
