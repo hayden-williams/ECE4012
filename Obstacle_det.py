@@ -60,7 +60,7 @@ class image_converter:
 
 
 			min_z= np.array(100, dtype = "uint16") #bgr
-			max_z= np.array(500, dtype = "uint16")
+			max_z= np.array(700, dtype = "uint16")
 			self.mask2 = cv2.inRange(self.depth_image, min_z, max_z)
 			
 			#Combination of masks
