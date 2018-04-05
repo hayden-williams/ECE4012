@@ -137,7 +137,7 @@ class obstacle_detect():
 
 
 
-	
+"""	
 def main(args):
 	od = obstacle_detect()
 	#rospy.init_node('image_converter', anonymous=True)
@@ -149,3 +149,4 @@ def main(args):
 
 if __name__ == '__main__':
 		main(sys.argv)
+"""
