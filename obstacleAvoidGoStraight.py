@@ -58,7 +58,7 @@ class GoStraight():
 		# as long as you haven't ctrl + c keeping doing...
 		while not rospy.is_shutdown():
 		
-			rospy.loginfo("obstacle " + str(obstacle_detect().ZoneList))
+			rospy.loginfo("obstacle " + str(obstacle_detect.ZoneList))
 			if self.desired == 10:
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
