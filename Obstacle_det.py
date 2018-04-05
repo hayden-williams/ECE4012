@@ -18,6 +18,8 @@ class image_converter:
 	#Threshold for detecting object in a zone
 	#Zones go from left to right on image 
 	# Distance in mm
+	z_thresh = 1000
+	z_threshCorner = z_thresh
 
 
 
@@ -60,14 +62,14 @@ class image_converter:
 
 
 			min_z= np.array(100, dtype = "uint16") #bgr
-			max_z= np.array(700, dtype = "uint16")
+			max_z= np.array(self.z_thresh, dtype = "uint16")
 			self.mask2 = cv2.inRange(self.depth_image, min_z, max_z)
 			
 			#Combination of masks
 			self.mask3 = cv2.bitwise_and(self.mask,self.mask, mask= self.mask2)
 
 			min_zCorn= np.array(100, dtype = "uint16") #bgr
-			max_zCorn= np.array(800, dtype = "uint16")
+			max_zCorn= np.array(self.z_threshCorner, dtype = "uint16")
 			self.maskCorner = cv2.inRange(self.depth_image, min_zCorn, max_zCorn)
 
 			self.maskZone1 = np.zeros((rows,col))
