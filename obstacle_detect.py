@@ -149,5 +149,5 @@ def main(args):
 		"""
 
 if __name__ == '__main__':
-		rospu.init_node('obstacle_detect', anonymous=False)
+		rospy.init_node('obstacle_detect', anonymous=False)
 		detect = obstacle_detect()
