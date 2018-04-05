@@ -14,12 +14,13 @@ from cv_bridge import CvBridge, CvBridgeError
 import numpy as np 
 from geometry_msgs.msg import Twist
 
-class image_converter:
+class obstacle_detect():
 	#Threshold for detecting object in a zone
 	#Zones go from left to right on image 
 	# Distance in mm
 	z_thresh = 1000
 	z_threshCorner = z_thresh
+	ZoneList = [0,0,0,0,0,0]
 
 
 
@@ -32,9 +33,6 @@ class image_converter:
 		self.depth_sub = rospy.Subscriber("/camera/depth/image_raw",Image,self.callback)
 		#self.depth_sub = rospy.Subscriber("/camera/depth_registered/image_raw",Image,self.callback_depth)
 		# Publish to navigation to move robot
-		self.cmd_vel = rospy.Publisher('cmd_vel_mux/input/navi', Twist, queue_size=10)
-		# Initialize Twist that will be published to cmd_vel
-		self.move_cmd = Twist()
 
 		self.r = rospy.Rate(10)
 
@@ -109,29 +107,26 @@ class image_converter:
 			self.Zone6 = cv2.bitwise_and(self.maskCorner,self.maskCorner, mask= self.maskZone6)
 
 			sumZone1 = np.sum(self.Zone1 / 255)
-			rospy.loginfo("sum of Zone1 is " + str(sumZone1))
+			#rospy.loginfo("sum of Zone1 is " + str(sumZone1))
 			sumZone2 = np.sum(self.Zone2 / 255)
-			rospy.loginfo("sum of Zone2 is " + str(sumZone2))
+			#rospy.loginfo("sum of Zone2 is " + str(sumZone2))
 			sumZone3 = np.sum(self.Zone3 / 255)
-			rospy.loginfo("sum of Zone3 is " + str(sumZone3))
+			#rospy.loginfo("sum of Zone3 is " + str(sumZone3))
 			sumZone4 = np.sum(self.Zone4 / 255)
-			rospy.loginfo("sum of Zone4 is " + str(sumZone4))
+			#rospy.loginfo("sum of Zone4 is " + str(sumZone4))
 			sumZone5 = np.sum(self.Zone5 / 255)
-			rospy.loginfo("sum of Zone5 is " + str(sumZone5))
+			#rospy.loginfo("sum of Zone5 is " + str(sumZone5))
 			sumZone6 = np.sum(self.Zone6 / 255)
-			rospy.loginfo("sum of Zone6 is " + str(sumZone6))
+			#rospy.loginfo("sum of Zone6 is " + str(sumZone6))
 
-			self.move_cmd.linear.x = 0
-			self.move_cmd.angular.z = 0
-
-
+			self.ZoneList = [sumZone1 sumZone2 sumZone3 sumZone4 sumZone5 sumZone6]
+			rospy.loginfo("Zone List is +" str(self.ZoneList))
 
 
 
 
 				
 
-			self.cmd_vel.publish(self.move_cmd)
 
 			self.r.sleep()
 
@@ -144,7 +139,7 @@ class image_converter:
 
 	
 def main(args):
-	ic = image_converter()
+	od = obstacle_detect()
 	#rospy.init_node('image_converter', anonymous=True)
 	try:
 
