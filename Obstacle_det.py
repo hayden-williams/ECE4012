@@ -20,7 +20,7 @@ class obstacle_detect():
 	# Distance in mm
 	z_thresh = 1000
 	z_threshCorner = z_thresh
-	ZoneList = [0,0,0,0,0,0]
+	ZoneList = numpy.array([0,0,0,0,0,0])
 
 
 
@@ -119,7 +119,7 @@ class obstacle_detect():
 			sumZone6 = np.sum(self.Zone6 / 255)
 			#rospy.loginfo("sum of Zone6 is " + str(sumZone6))
 
-			self.ZoneList = [sumZone1 sumZone2 sumZone3 sumZone4 sumZone5 sumZone6]
+			self.ZoneList = numpy.array([sumZone1 sumZone2 sumZone3 sumZone4 sumZone5 sumZone6])
 			rospy.loginfo("Zone List is +" str(self.ZoneList))
 
 
