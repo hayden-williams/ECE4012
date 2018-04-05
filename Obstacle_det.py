@@ -67,7 +67,7 @@ class image_converter:
 			self.mask3 = cv2.bitwise_and(self.mask,self.mask, mask= self.mask2)
 
 			min_zCorn= np.array(100, dtype = "uint16") #bgr
-			max_zCorn= np.array(1000, dtype = "uint16")
+			max_zCorn= np.array(800, dtype = "uint16")
 			self.maskCorner = cv2.inRange(self.depth_image, min_zCorn, max_zCorn)
 
 			self.maskZone1 = np.zeros((rows,col))
