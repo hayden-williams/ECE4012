@@ -21,7 +21,7 @@ class GoStraight():
 	desired = 10 # should never naturally be 10, this was to give bot time to get correct error
 	thetaError = 0
 	kTurn = 5
-	obstacle = obstacle_detect()
+	#obstacle = obstacle_detect()
 
 	def __init__(self):
 		# initiliaze
@@ -58,7 +58,7 @@ class GoStraight():
 		# as long as you haven't ctrl + c keeping doing...
 		while not rospy.is_shutdown():
 		
-			rospy.loginfo("obstacle " + str(self.obstacle.ZoneList))
+			rospy.loginfo("obstacle " + str(obstacle_detect.obstacle_instance.ZoneList))
 			if self.desired == 10:
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
