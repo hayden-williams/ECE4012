@@ -103,5 +103,6 @@ class GoStraight():
 if __name__ == '__main__':
 	try:
 		GoStraight()
+		obstacle_detect()
 	except:
 		rospy.loginfo("GoStraight node terminated.")
