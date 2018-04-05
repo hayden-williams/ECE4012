@@ -136,7 +136,6 @@ class obstacle_detect():
 		except CvBridgeError, e:
 			print e
 
-obstacle_instance = obstacle_detect()
 
 
 """	
