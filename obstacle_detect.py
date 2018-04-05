@@ -137,7 +137,7 @@ class obstacle_detect():
 			print e
 
 
-
+"""
 def main(args):
 	od = obstacle_detect()
 	#rospy.init_node('image_converter', anonymous=True)
@@ -146,6 +146,8 @@ def main(args):
 		rospy.spin()
 	except KeyboardInterrupt:
 		print "Shutting down"
+		"""
 
 if __name__ == '__main__':
-		main(sys.argv)
+		rospu.init_node('obstacle_detect', anonymous=False)
+		detect = obstacle_detect():
