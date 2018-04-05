@@ -77,8 +77,9 @@ class turninplace_userinput():
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
 			elif fabs(self.thetaError) < 0.05:
-				move_cmd.angular.z = 0
+				move_cmd.angular.z = self.kTurn*self.thetaError
 				move_cmd.linear.x = 0.2
+				self.moveCount = self.moveCount + 1
 			elif fabs(self.thetaError) > 0.1:
 				move_cmd.angular.z = self.kTurn*self.thetaError
 				move_cmd.linear.x = 0.0
@@ -90,7 +91,7 @@ class turninplace_userinput():
 			# publish the velocity
 			self.cmd_vel.publish(move_cmd)
 
-			if self.count >= 100 and self.moveCount >= 50:
+			if self.count >= 100 and self.moveCount >= 10:
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
 				self.cmd_vel.publish(move_cmd)
