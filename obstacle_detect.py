@@ -56,7 +56,7 @@ class obstacle_detect():
 
 
 			self.mask =  np.zeros((rows,col))
-			self.mask[cR-rows*.25:rows,cC-colFrac:cC+colFrac] = 5
+			self.mask[cR-rows*.25:rows,0:col] = 5
 			self.mask = np.uint16(self.mask)
 			self.mask = cv2.inRange(self.mask,np.array(4,dtype = "uint16"),np.array(6,dtype = "uint16"))
 
