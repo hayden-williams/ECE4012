@@ -94,6 +94,7 @@ class GoStraight():
 						self.move_cmd.angular.z = .1
 						self.move_cmd.linear.x = .2
 						self.cmd_vel.publish(move_cmd)
+						self.r.sleep()
 					self.move_cmd.angular.z =self.kTurn*self.thetaError
 					self.move_cmd.linear.x = .2
 					self.cmd_vel.publish(move_cmd)
