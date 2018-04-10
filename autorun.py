@@ -91,10 +91,13 @@ class GoStraight():
 			else:
 				if (self.ZoneList[0] == 0 & self.ZoneList[1] == 0 & self.ZoneList[2] == 0 & self.ZoneList[3] != 0):
 					# Soft Left turn
-					#stuff
+					self.SoftLeftTurn()
+					
+
 				elif (self.ZoneList[0] != 0 & self.ZoneList[1] == 0 & self.ZoneList[2] == 0 & self.ZoneList[3] == 0):
 					#soft right turn
-					#stuff
+					self.SoftRightTurn()
+					
 				elif (self.ZoneList[0] != 0 & self.ZoneList[3] != 0):
 					#Decide how to tackle this with Hayden
 				elif (self.ZoneList[0] == 0 & self.ZoneList[1] != 0 & self.ZoneList[2] != 0 & self.ZoneList[3] == 0):
@@ -218,6 +221,28 @@ class GoStraight():
 
 		except CvBridgeError, e:
 			print e
+
+	def SoftLeftTurn(self):
+		while (self.ZoneList[3] != 0):
+			self.move_cmd.angular.z = .1
+			self.move_cmd.linear.x = .2
+			self.cmd_vel.publish(move_cmd)
+		self.move_cmd.angular.z =self.kTurn*self.thetaError
+		self.move_cmd.linear.x = .2
+		self.cmd_vel.publish(move_cmd)
+
+	def SoftRightTurn(self):
+		while (self.ZoneList[3] != 0):
+			self.move_cmd.angular.z = -.1
+			self.move_cmd.linear.x = .2
+			self.cmd_vel.publish(move_cmd)
+		self.move_cmd.angular.z =self.kTurn*self.thetaError
+		self.move_cmd.linear.x = .2
+		self.cmd_vel.publish(move_cmd)
+
+
+
+
 
 	def shutdown(self):
 		# stop turtlebot
