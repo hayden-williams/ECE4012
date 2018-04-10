@@ -80,12 +80,17 @@ class GoStraight():
 		while not rospy.is_shutdown():
 		
 			rospy.loginfo("obstacle " + str(self.ZoneList))
-			if self.desired == 10:
-				move_cmd.linear.x = 0.0
-				move_cmd.angular.z = 0
+			if (np.sum(self.ZoneList) == 0):
+
+				if self.desired == 10:
+					move_cmd.linear.x = 0.0
+					move_cmd.angular.z = 0
+				else:
+					move_cmd.linear.x = 0.2
+					move_cmd.angular.z = self.kTurn*self.thetaError
 			else:
-				move_cmd.linear.x = 0.2
-				move_cmd.angular.z = self.kTurn*self.thetaError
+				if (self.ZoneList[3] != 0 ):
+					self.SoftLeftTurn()
 			# publish the velocity
 			self.cmd_vel.publish(move_cmd)
 			# wait for 0.1 seconds (10 HZ) and publish again
@@ -204,6 +209,15 @@ class GoStraight():
 		self.cmd_vel.publish(Twist())
 		# sleep just makes sure TurtleBot receives the stop command prior to shutting down the script
 		rospy.sleep(1)
+
+def SoftLeftTurn(self):
+	while (self.ZoneList[3] != 0):
+		self.move_cmd.angular.z = .1
+		self.move_cmd.linear.x = .2
+		self.cmd_vel.publish(move_cmd)
+	self.move_cmd.angular.z =self.kTurn*self.thetaError
+	self.move_cmd.linear.x = .2
+	self.cmd_vel.publish(move_cmd)
  
 if __name__ == '__main__':
 	try:
