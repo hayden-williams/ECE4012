@@ -79,7 +79,7 @@ class GoStraight():
 		
 		# as long as you haven't ctrl + c keeping doing...
 		while not rospy.is_shutdown():
-			if (np.abs(self.thetaError) < 0.5):
+			if (np.absolute(self.thetaError) < 0.5):
 				self.count = 0
 		
 			rospy.loginfo("obstacle " + str(self.ZoneList))
@@ -124,7 +124,7 @@ class GoStraight():
 						move_cmd.angular.z = 0
 						self.cmd_vel.publish(move_cmd)
 						self.r.sleep()
-						while (np.sum(self.ZoneList) != 0):
+						while (np.sum(self.ZoneList) != 0 or np.absolute(self.thetaError) < 1.57):
 							move_cmd.angular.z = 0.5
 							self.cmd_vel.publish(move_cmd)
 							self.r.sleep()
@@ -133,7 +133,7 @@ class GoStraight():
 						move_cmd.angular.z = 0
 						self.cmd_vel.publish(move_cmd)
 						self.r.sleep()
-						while (np.sum(self.ZoneList)!=0):
+						while (np.sum(self.ZoneList)!=0 or np.absolute(self.thetaError) < 1.57):
 							move_cmd.angular.z = -0.5
 							self.cmd_vel.publish(move_cmd)
 							self.r.sleep()
