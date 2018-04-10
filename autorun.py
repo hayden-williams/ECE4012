@@ -253,9 +253,6 @@ class GoStraight():
 		self.cmd_vel.publish(move_cmd)
 
 """
-
-
-
 	def shutdown(self):
 		# stop turtlebot
 		rospy.loginfo("Stop TurtleBot")
