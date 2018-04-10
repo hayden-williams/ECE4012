@@ -91,12 +91,24 @@ class GoStraight():
 			else:
 				if (self.ZoneList[0] == 0 & self.ZoneList[1] == 0 & self.ZoneList[2] == 0 & self.ZoneList[3] != 0):
 					# Soft Left turn
-					self.SoftLeftTurn()
+					while (self.ZoneList[3] != 0):
+						self.move_cmd.angular.z = .1
+						self.move_cmd.linear.x = .2
+						self.cmd_vel.publish(move_cmd)
+					self.move_cmd.angular.z =self.kTurn*self.thetaError
+					self.move_cmd.linear.x = .2
+					self.cmd_vel.publish(move_cmd)
 					
 
 				elif (self.ZoneList[0] != 0 & self.ZoneList[1] == 0 & self.ZoneList[2] == 0 & self.ZoneList[3] == 0):
 					#soft right turn
-					self.SoftRightTurn()
+					while (self.ZoneList[3] != 0):
+						self.move_cmd.angular.z = -.1
+						self.move_cmd.linear.x = .2
+						self.cmd_vel.publish(move_cmd)
+					self.move_cmd.angular.z =self.kTurn*self.thetaError
+					self.move_cmd.linear.x = .2
+					self.cmd_vel.publish(move_cmd)
 
 				#elif (self.ZoneList[0] != 0 & self.ZoneList[3] != 0):
 					#Decide how to tackle this with Hayden
@@ -208,7 +220,7 @@ class GoStraight():
 
 
 			self.ZoneList = np.array([sumZone1, sumZone2, sumZone3, sumZone4])
-			rospy.loginfo("Zone List is "+ str(self.ZoneList))
+			#rospy.loginfo("Zone List is "+ str(self.ZoneList))
 
 
 
@@ -221,7 +233,7 @@ class GoStraight():
 
 		except CvBridgeError, e:
 			print e
-
+"""
 	def SoftLeftTurn(self):
 		while (self.ZoneList[3] != 0):
 			self.move_cmd.angular.z = .1
@@ -240,7 +252,7 @@ class GoStraight():
 		self.move_cmd.linear.x = .2
 		self.cmd_vel.publish(move_cmd)
 
-
+"""
 
 
 
