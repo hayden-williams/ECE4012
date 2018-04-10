@@ -91,11 +91,30 @@ class GoStraight():
 			else:
 				if (self.ZoneList[0] == 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] != 0):
 					#rospy.loginfo("inside else")
+					#soft left
 					move_cmd.linear.x = 0.1
 					move_cmd.angular.z = 0.5
-				else:
-					move_cmd.linear.x = 0.2
-					move_cmd.angular.z = self.kTurn*self.thetaError
+				elif (self.ZoneList[0] != 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] == 0):
+					#soft right
+					move_cmd.linear.x = 0.1
+					move_cmd.angular.z = -0.5
+				elif (self.ZoneList[0] == 0 and self.ZoneList[1] != 0 and self.ZoneList[2] != 0 and self.ZoneList[3] == 0):
+					if (self.ZoneList[1] > self.ZoneList[2]):
+						#Hard Right
+						move_cmd.linear.x = 0.1
+						move_cmd.angular.z = -0.75
+					else:
+						move_cmd.linear.x = 0.1
+						move_cmd.angular.z = 0.7
+						#Hard Leff
+				elif((self.ZoneList[0]==0 and self.ZoneList[2] !=0) or (self.ZoneList[0] == 0 and self.ZoneList[1] !=0 and self.ZoneList[3] != 0)):
+					move_cmd.linear.x = 0.1
+					move_cmd.angular.z = 0.7
+				# Hard Left
+				elif((self.ZoneList[1] != 0 and self.ZoneList[3] ==0) or (self.ZoneList[0] != 0 and self.ZoneList[2] != 0 and self.ZoneList[3] == 0)):
+					move_cmd.linear.x = 0.1
+					move_cmd.angular.z = -0.75
+
 
 
 
