@@ -114,6 +114,9 @@ class GoStraight():
 				elif((self.ZoneList[1] != 0 and self.ZoneList[3] ==0) or (self.ZoneList[0] != 0 and self.ZoneList[2] != 0 and self.ZoneList[3] == 0)):
 					move_cmd.linear.x = 0.1
 					move_cmd.angular.z = -0.75
+				else:
+					move_cmd.linear.x = 0.0
+					move_cmd.angular.z = 0
 
 
 
