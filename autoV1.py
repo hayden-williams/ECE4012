@@ -26,7 +26,7 @@ from cmath import *
 class GoStraight():
 	desired = 10 # should never naturally be 10, this was to give bot time to get correct error
 	thetaError = 0
-	kTurn = 5
+	kTurn = 0.5
 	#obstacle = obstacle_detect()
 
 	#Threshold for detecting object in a zone
