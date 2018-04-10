@@ -95,8 +95,9 @@ class turninplace_userinput():
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
 				self.cmd_vel.publish(move_cmd)
-				rospy.loginfo("Angle currently is %f. Input desiredAngle: "%(self.desiredAngle))
-				self.desiredAngle = float(input())
+				degreeDesiredAngle = self.desiredAngle*180/pi
+				rospy.loginfo("Angle currently is %f. Input desiredAngle: "%(degreeDesiredAngle))
+				self.desiredAngle = float(input())*pi/180 # input degree convert to rad
 				self.count =0
 				self.moveCount = 0
 
