@@ -35,6 +35,7 @@ class GoStraight():
 	z_thresh = 1000
 	z_threshCorner = z_thresh
 	ZoneList = np.array([0,0,0,0,0,0])
+	count = 0
 
 	def __init__(self):
 		# initiliaze
@@ -78,6 +79,8 @@ class GoStraight():
 		
 		# as long as you haven't ctrl + c keeping doing...
 		while not rospy.is_shutdown():
+			if (np.abs(self.thetaError) < 0.5):
+				self.count = 0
 		
 			rospy.loginfo("obstacle " + str(self.ZoneList))
 			if (np.sum(self.ZoneList) == 0):
@@ -115,8 +118,32 @@ class GoStraight():
 					move_cmd.linear.x = 0.1
 					move_cmd.angular.z = -0.75
 				else:
-					move_cmd.linear.x = 0.0
-					move_cmd.angular.z = 0
+					self.count = self.count + 1
+					if self.count == 1 :
+						move_cmd.linear.x = 0.0
+						move_cmd.angular.z = 0
+						self.cmd_vel.publish(move_cmd)
+						self.r.sleep()
+						while (np.sum(self.ZoneList) != 0):
+							move_cmd.angular.z = 0.5
+							self.cmd_vel.publish(move_cmd)
+							self.r.sleep()
+					elif self.count == 2 :
+						move_cmd.linear.x = 0.0
+						move_cmd.angular.z = 0
+						self.cmd_vel.publish(move_cmd)
+						self.r.sleep()
+						while (np.sum(self.ZoneList)!=0):
+							move_cmd.angular.z = -0.5
+							self.cmd_vel.publish(move_cmd)
+							self.r.sleep()
+					else:
+						rospy.loginfo("I cant make it around! Help Mommy")
+						move_cmd.linear.x = 0.0
+						move_cmd.angular.z = 0
+						self.cmd_vel.publish(move_cmd)
+
+
 
 
 
