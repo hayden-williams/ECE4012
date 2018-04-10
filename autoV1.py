@@ -91,17 +91,11 @@ class GoStraight():
 			else:
 				rospy.loginfo("inside else")
 				if (self.ZoneList[3] != 0 ):
-					rospy.loginfo("inside if")
-					while (self.ZoneList[3] != 0):
-						rospy.loginfo("inside while")
-						self.move_cmd.angular.z = .1
-						self.move_cmd.linear.x = .2
-						self.cmd_vel.publish(move_cmd)
-						self.r.sleep()
-					rospy.loginfo("outside while")
-					self.move_cmd.angular.z =self.kTurn*self.thetaError
+					rospy.loginfo("inside while")
+					self.move_cmd.angular.z = .1
 					self.move_cmd.linear.x = .2
 					self.cmd_vel.publish(move_cmd)
+
 			# publish the velocity
 			self.cmd_vel.publish(move_cmd)
 			# wait for 0.1 seconds (10 HZ) and publish again
