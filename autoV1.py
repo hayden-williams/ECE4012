@@ -90,9 +90,12 @@ class GoStraight():
 					move_cmd.angular.z = self.kTurn*self.thetaError
 			else:
 				if (self.ZoneList[0] == 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] != 0):
-					rospy.loginfo("inside else")
+					#rospy.loginfo("inside else")
 					move_cmd.linear.x = 0.1
-					move_cmd.angular.z = 1
+					move_cmd.angular.z = 0.5
+				else:
+					move_cmd.linear.x = 0.2
+					move_cmd.angular.z = self.kTurn*self.thetaError
 
 
 
