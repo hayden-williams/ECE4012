@@ -97,17 +97,17 @@ class GoStraight():
 				elif (self.ZoneList[0] != 0 & self.ZoneList[1] == 0 & self.ZoneList[2] == 0 & self.ZoneList[3] == 0):
 					#soft right turn
 					self.SoftRightTurn()
-					
-				elif (self.ZoneList[0] != 0 & self.ZoneList[3] != 0):
+
+				#elif (self.ZoneList[0] != 0 & self.ZoneList[3] != 0):
 					#Decide how to tackle this with Hayden
-				elif (self.ZoneList[0] == 0 & self.ZoneList[1] != 0 & self.ZoneList[2] != 0 & self.ZoneList[3] == 0):
-					if (self.ZoneList[1] > self.ZoneList[2]):
-						#Hard Right
-					else:
-						#Hard Left
-				elif((self.ZoneList[0]==0 & self.ZoneList[2] !=0) | (self.ZoneList[0] == 0 & self.ZoneList[1] !=0 & self.ZoneList[3] != 0)):
-					# Hard Left
-				elif((self.ZoneList[1] != 0 & self.ZoneList[3] ==0)|(self.ZoneList[0] != 0 & self.ZoneList[2] != 0 & self.ZoneList[3] == 0)):
+				#elif (self.ZoneList[0] == 0 & self.ZoneList[1] != 0 & self.ZoneList[2] != 0 & self.ZoneList[3] == 0):
+				#	if (self.ZoneList[1] > self.ZoneList[2]):
+				#		#Hard Right
+				#	else:
+				#		#Hard Left
+				#elif((self.ZoneList[0]==0 & self.ZoneList[2] !=0) | (self.ZoneList[0] == 0 & self.ZoneList[1] !=0 & self.ZoneList[3] != 0)):
+				#	# Hard Left
+				#elif((self.ZoneList[1] != 0 & self.ZoneList[3] ==0)|(self.ZoneList[0] != 0 & self.ZoneList[2] != 0 & self.ZoneList[3] == 0)):
 					# Hard Right
 
 					
