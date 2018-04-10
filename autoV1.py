@@ -91,7 +91,7 @@ class GoStraight():
 			else:
 				rospy.loginfo("inside else")
 				move_cmd.linear.x = 0.0
-				move_cmd.angular.z = 0
+				move_cmd.angular.z = 0.1
 
 
 			# publish the velocity
