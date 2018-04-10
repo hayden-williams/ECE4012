@@ -79,6 +79,7 @@ class GoStraight():
 		
 		# as long as you haven't ctrl + c keeping doing...
 		while not rospy.is_shutdown():
+			rospy.loginfo(np.absolute(self.thetaError))
 			if (np.absolute(self.thetaError) < 0.5):
 				self.count = 0
 		
