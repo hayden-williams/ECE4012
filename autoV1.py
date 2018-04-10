@@ -89,9 +89,10 @@ class GoStraight():
 					move_cmd.linear.x = 0.2
 					move_cmd.angular.z = self.kTurn*self.thetaError
 			else:
-				rospy.loginfo("inside else")
-				move_cmd.linear.x = 0.1
-				move_cmd.angular.z = 1
+				if (self.ZoneList[3] != 0):
+					rospy.loginfo("inside else")
+					move_cmd.linear.x = 0.1
+					move_cmd.angular.z = 1
 
 
 			# publish the velocity
