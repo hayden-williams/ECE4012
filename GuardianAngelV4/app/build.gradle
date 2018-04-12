@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+
+    // indoor atlas API keys
+    def apiKey = project.properties['indoorAtlasApiKey'] ?: "api-key-not-set";
+    def apiSecret = project.properties['indoorAtlasApiSecret'] ?: "api-secret-not-set";
+    def googleMapsApiKey = project.properties['googleMapsApiKey'] ?: "google-api-key-not-set";
+
+    defaultConfig {
+        applicationId "com.example.guardianangelv4"
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // avoid getting errors from malformed string resources if secret contains '%' chars
+        resValue "string", "indooratlas_api_key", apiKey
+        resValue "string", "indooratlas_api_secret", apiSecret.replaceAll("%", "\\\\u0025")
+        resValue "string", "google_maps_key", googleMapsApiKey
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    implementation 'com.android.volley:volley:1.1.0'
+
+    implementation "com.indooratlas.android:indooratlas-android-sdk:2.7.0-beta-848@aar"
+    implementation 'com.indooratlas.android:indooratlas-android-wayfinding:2.7.0-beta-9'
+
+    implementation 'com.google.android.gms:play-services-maps:11.8.0'
+
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
+}
+
+repositories {
+    //jcenter()
+    //mavenCentral()
+    maven {
+        url "http://indooratlas-ltd.bintray.com/mvn-public"
+    }
+    maven {
+        url "http://indooratlas-ltd.bintray.com/mvn-public-alpha"
+    }
+    maven {
+        url "http://indooratlas-ltd.bintray.com/mvn-public-beta"
+    }
+}
+
