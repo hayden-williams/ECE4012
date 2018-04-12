@@ -82,32 +82,42 @@ class selfNavigation():
 			emergency = r['emergency']
 			end = r['ended'] # user ended trip
 			arrived = r['arrived']
-			home = r['gotHome'] # rover home
+			home = r['gotHome'] # rover is home
+			goToUser = r['goToUser']
 
-			# do error corrections
-			if self.direction != 1000:
-				self.thetaError = self.direction - self.bearing # +ve = turn right, -ve = turn left 
+			if goToUser:
+				# put navigation code here
+				# do error corrections
+				if self.direction != 1000:
+					self.thetaError = self.direction - self.bearing # +ve = turn right, -ve = turn left 
 
 
-			if self.direction == 1000 or self.length == 0:
+				if self.direction == 1000 or self.length == 0:
+					move_cmd.linear.x = 0.0
+					move_cmd.angular.z = 0
+				elif fabs(self.thetaError) < 0.05:
+					move_cmd.angular.z = self.kTurn*self.thetaError
+					move_cmd.linear.x = 0.2
+				elif fabs(self.thetaError) > 0.1:
+					move_cmd.angular.z = self.kTurn*self.thetaError
+					move_cmd.linear.x = 0.0
+				else:
+					move_cmd.angular.z = self.kTurn*self.thetaError
+					move_cmd.linear.x = 0.0
+
+				# publish the velocity
+				self.cmd_vel.publish(move_cmd)
+
+
+				# wait for 0.1 seconds (10 HZ) and publish again
+				r.sleep()
+			else:
+				# do nothing
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
-			elif fabs(self.thetaError) < 0.05:
-				move_cmd.angular.z = self.kTurn*self.thetaError
-				move_cmd.linear.x = 0.2
-			elif fabs(self.thetaError) > 0.1:
-				move_cmd.angular.z = self.kTurn*self.thetaError
-				move_cmd.linear.x = 0.0
-			else:
-				move_cmd.angular.z = self.kTurn*self.thetaError
-				move_cmd.linear.x = 0.0
+				self.cmd_vel.publish(move_cmd)
 
-			# publish the velocity
-			self.cmd_vel.publish(move_cmd)
-
-
-			# wait for 0.1 seconds (10 HZ) and publish again
-			r.sleep()
+			
 
 
 	def shutdown(self):
