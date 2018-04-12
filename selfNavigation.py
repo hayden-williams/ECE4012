@@ -74,7 +74,7 @@ class selfNavigation():
 
 			# get info from server
 			r = requests.get('http://128.61.13.194:3000/rover').json()
-			#print(r)
+			print(r)
 
 			self.direction = r['direction']
 			self.length = r['length']
@@ -85,7 +85,7 @@ class selfNavigation():
 			home = r['gotHome'] # rover is home
 			goToUser = r['goToUser']
 
-			if goToUser==1:
+			if goToUser:
 				# put navigation code here
 				# do error corrections
 				if self.direction != 1000:
