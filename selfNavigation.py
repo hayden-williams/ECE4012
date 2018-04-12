@@ -30,16 +30,8 @@ import json
 #import tf
 
 class turninplace_userinput():
-	zeroAngle = 10 # should never naturally be 10, this was to give bot time to get correct error
 	thetaError = 0
 	kTurn = 1.5*pi/180
-	#desiredAngle = -1-1*1j # use complex math, 90+45 clockwise
-	#desiredAngle = 0-1*1j # use complex math, 90 clockwise
-	#desiredAngle = 0+1*1j # use complex math, 90 counterclockwise
-	# change desiredAngle from complex to just requesting radians
-	desiredAngle = 0.0
-	count = 0
-	moveCount = 0
 
 	direction = 1000
 	bearing = 1000
@@ -93,67 +85,30 @@ class turninplace_userinput():
 			home = r['gotHome'] # rover home
 
 			# do error corrections
-			if self.direction == 1000:
-				#self.zeroAngle = (qw + qz*1j)**2
-				# at this point, zeroAngle is our 0
-				#self.zeroAngle = self.zeroAngle*(cos(self.desiredAngle)+sin(self.desiredAngle)*1j)
-			else:
-				#Angle = self.direction*(cos(self.desiredAngle)+sin(self.desiredAngle)*1j)
-				#error = Angle/(current**2)
-				#self.thetaError = phase(error) # radians from 0, -pi to pi
+			if self.direction != 1000:
 				self.thetaError = self.direction - self.bearing # +ve = turn right, -ve = turn left 
 
 
-
-
-			self.count = self.count + 1
 			if self.direction == 1000 || self.length == 0:
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
 			elif fabs(self.thetaError) < 0.05:
 				move_cmd.angular.z = self.kTurn*self.thetaError
 				move_cmd.linear.x = 0.2
-				self.moveCount = self.moveCount + 1
 			elif fabs(self.thetaError) > 0.1:
 				move_cmd.angular.z = self.kTurn*self.thetaError
 				move_cmd.linear.x = 0.0
 			else:
 				move_cmd.angular.z = self.kTurn*self.thetaError
 				move_cmd.linear.x = 0.0
-				#self.moveCount = self.moveCount + 1
 
 			# publish the velocity
 			self.cmd_vel.publish(move_cmd)
 
-			#if self.count >= 100 and self.moveCount >= 10:
-				#move_cmd.linear.x = 0.0
-				#move_cmd.angular.z = 0
-				#self.cmd_vel.publish(move_cmd)
-				#degreeDesiredAngle = self.desiredAngle*180/pi
-				#rospy.loginfo("Angle currently is %f. Input desiredAngle: "%(degreeDesiredAngle))
-				#self.desiredAngle = float(input())*pi/180 # input degree convert to rad
-				#self.count =0
-				#self.moveCount = 0
 
 			# wait for 0.1 seconds (10 HZ) and publish again
 			r.sleep()
-			
 
-	def Orientation(self,data):
-		qz = data.pose.pose.orientation.z
-		qw = data.pose.pose.orientation.w
-		current = qw + qz*1j
-		if self.zeroAngle == 10:
-			self.zeroAngle = (qw + qz*1j)**2
-			# at this point, zeroAngle is our 0
-			#self.zeroAngle = self.zeroAngle*(cos(self.desiredAngle)+sin(self.desiredAngle)*1j)
-		else:
-			Angle = self.zeroAngle*(cos(self.desiredAngle)+sin(self.desiredAngle)*1j)
-			error = Angle/(current**2)
-			self.thetaError = phase(error) # radians from 0, -pi to pi
-
-		
-		#rospy.loginfo("theta = %f"%(self.thetaError))
 
 	def shutdown(self):
 		# stop turtlebot
