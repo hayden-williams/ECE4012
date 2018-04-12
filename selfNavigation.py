@@ -85,9 +85,10 @@ class selfNavigation():
 			home = r['gotHome'] # rover is home
 			goToUser = r['goToUser']
 
-			if goToUser:
+			if goToUser==1:
 				# put navigation code here
 				# do error corrections
+				print('entered goToUser')
 				if self.direction != 1000:
 					self.thetaError = self.direction - self.bearing # +ve = turn right, -ve = turn left 
 
