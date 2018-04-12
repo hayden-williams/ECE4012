@@ -89,7 +89,7 @@ class selfNavigation():
 				self.thetaError = self.direction - self.bearing # +ve = turn right, -ve = turn left 
 
 
-			if self.direction == 1000 || self.length == 0:
+			if self.direction == 1000 or self.length == 0:
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
 			elif fabs(self.thetaError) < 0.05:
