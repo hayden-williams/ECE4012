@@ -23,13 +23,16 @@ from geometry_msgs.msg import Twist#, Pose
 from nav_msgs.msg import Odometry
 from cmath import *
 from math import fabs
+import requests
+import time
+import json
 #from tf2_msgs.msg import TFMessage
 #import tf
 
 class turninplace_userinput():
 	zeroAngle = 10 # should never naturally be 10, this was to give bot time to get correct error
 	thetaError = 0
-	kTurn = 1.5
+	kTurn = 1.5*pi/180
 	#desiredAngle = -1-1*1j # use complex math, 90+45 clockwise
 	#desiredAngle = 0-1*1j # use complex math, 90 clockwise
 	#desiredAngle = 0+1*1j # use complex math, 90 counterclockwise
@@ -37,6 +40,11 @@ class turninplace_userinput():
 	desiredAngle = 0.0
 	count = 0
 	moveCount = 0
+
+	direction = 1000
+	bearing = 1000
+	length = 0
+
 	def __init__(self):
 		# initiliaze
 		rospy.init_node('turninplace_userinput', anonymous=False)
@@ -49,7 +57,7 @@ class turninplace_userinput():
 
 		#rospy.Subscriber("/mobile_base/events/bumper",BumperEvent,self.BumperEventCallback)
 		#rospy.Subscriber("/mobile_base/events/wheel_drop",WheelDropEvent,self.WheelDropEventCallback)
-		rospy.Subscriber('odom',Odometry,self.Orientation)
+		#rospy.Subscriber('odom',Odometry,self.Orientation)
 
 		# may need rospy.spin(); 
 
@@ -72,8 +80,34 @@ class turninplace_userinput():
 		# as long as you haven't ctrl + c keeping doing...
 		while not rospy.is_shutdown():
 
+			# get info from server
+			r = requests.get('http://128.61.13.194:3000/rover').json()
+			#print(r)
+
+			self.direction = r['direction']
+			self.length = r['length']
+			self.bearing = r['bearing']
+			emergency = r['emergency']
+			end = r['ended'] # user ended trip
+			arrived = r['arrived']
+			home = r['gotHome'] # rover home
+
+			# do error corrections
+			if self.direction == 1000:
+				#self.zeroAngle = (qw + qz*1j)**2
+				# at this point, zeroAngle is our 0
+				#self.zeroAngle = self.zeroAngle*(cos(self.desiredAngle)+sin(self.desiredAngle)*1j)
+			else:
+				#Angle = self.direction*(cos(self.desiredAngle)+sin(self.desiredAngle)*1j)
+				#error = Angle/(current**2)
+				#self.thetaError = phase(error) # radians from 0, -pi to pi
+				self.thetaError = self.direction - self.bearing # +ve = turn right, -ve = turn left 
+
+
+
+
 			self.count = self.count + 1
-			if self.zeroAngle == 10:
+			if self.direction == 1000 || self.length == 0:
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
 			elif fabs(self.thetaError) < 0.05:
@@ -85,21 +119,21 @@ class turninplace_userinput():
 				move_cmd.linear.x = 0.0
 			else:
 				move_cmd.angular.z = self.kTurn*self.thetaError
-				move_cmd.linear.x = 0.2
-				self.moveCount = self.moveCount + 1
+				move_cmd.linear.x = 0.0
+				#self.moveCount = self.moveCount + 1
 
 			# publish the velocity
 			self.cmd_vel.publish(move_cmd)
 
-			if self.count >= 100 and self.moveCount >= 10:
-				move_cmd.linear.x = 0.0
-				move_cmd.angular.z = 0
-				self.cmd_vel.publish(move_cmd)
-				degreeDesiredAngle = self.desiredAngle*180/pi
-				rospy.loginfo("Angle currently is %f. Input desiredAngle: "%(degreeDesiredAngle))
-				self.desiredAngle = float(input())*pi/180 # input degree convert to rad
-				self.count =0
-				self.moveCount = 0
+			#if self.count >= 100 and self.moveCount >= 10:
+				#move_cmd.linear.x = 0.0
+				#move_cmd.angular.z = 0
+				#self.cmd_vel.publish(move_cmd)
+				#degreeDesiredAngle = self.desiredAngle*180/pi
+				#rospy.loginfo("Angle currently is %f. Input desiredAngle: "%(degreeDesiredAngle))
+				#self.desiredAngle = float(input())*pi/180 # input degree convert to rad
+				#self.count =0
+				#self.moveCount = 0
 
 			# wait for 0.1 seconds (10 HZ) and publish again
 			r.sleep()
