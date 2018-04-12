@@ -1,6 +1,6 @@
 # Authors: Stephen Hayden Williams and Edgardo Marchand
 # Date Created: 5 April 2018
-# Date Revised: 5 April 2018
+# Date Revised: 12 April 2018
 
 # This code should handel the basic self-navigation of the rover to the user
 # Recieves rover bearing, direction and distance and travels to that location
@@ -9,13 +9,13 @@
 
 # Initial code taken from our previous code: turninplace_userinput.py
 # Issues needed fixing: 
-#    code currently updates desiredAngle after reaching the correct angel -> change to update continuously
-#    code needs to go forward straight in the direction of desiredAngle
+#    <none>
 
 # On TurtleBot:
 # roslaunch turtlebot_bringup minimal.launch
+# roslaunch openni_launch openni.launch
 # On work station:
-# python turninplace.py
+# python selfNavigation.py
 
 import rospy
 import roslib
@@ -29,7 +29,7 @@ import json
 #from tf2_msgs.msg import TFMessage
 #import tf
 
-class turninplace_userinput():
+class selfNavigation():
 	thetaError = 0
 	kTurn = 1.5*pi/180
 
@@ -39,7 +39,7 @@ class turninplace_userinput():
 
 	def __init__(self):
 		# initiliaze
-		rospy.init_node('turninplace_userinput', anonymous=False)
+		rospy.init_node('selfNavigation', anonymous=False)
 
 		# tell user how to stop TurtleBot
 		rospy.loginfo("To stop TurtleBot CTRL + C")
@@ -120,6 +120,6 @@ class turninplace_userinput():
  
 if __name__ == '__main__':
 	try:
-		turninplace_userinput()
+		selfNavigation()
 	except:
-		rospy.loginfo("turninplace node terminated.")
+		rospy.loginfo("selfNavigation node terminated.")
