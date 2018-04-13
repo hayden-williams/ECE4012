@@ -100,15 +100,15 @@ class selfNavigation():
 					move_cmd.angular.z = 0
 				elif fabs(self.thetaError) < 0.05:
 					print('error < 0.05')
-					move_cmd.angular.z = self.kTurn*self.thetaError
+					move_cmd.angular.z = -self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.2
 				elif fabs(self.thetaError) > 0.05:
 					print('error>0.05')
-					move_cmd.angular.z = self.kTurn*self.thetaError
+					move_cmd.angular.z = -self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.0
 				else:
 					print('else')
-					move_cmd.angular.z = self.kTurn*self.thetaError
+					move_cmd.angular.z = -self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.0
 
 				# publish the velocity
