@@ -91,24 +91,28 @@ class selfNavigation():
 				print('entered goToUser')
 				if self.direction != 1000:
 					print('calc error')
-					self.thetaError = self.direction - self.bearing # +ve = turn right, -ve = turn left 
+					if (self.bearing>180):
+						self.bearing = self.bearing - 360
+					if self.direction > 180:
+						self.direction = self.direction - 360
+					self.thetaError = (-1)*(self.direction - self.bearing) # -ve = turn right, +ve = turn left 
 
 
 				if (self.direction == 1000 or self.length == 0.0):
 					print('len = 0, dir = 1000')
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = 0
-				elif fabs(self.thetaError) < 0.05:
+				elif fabs(self.thetaError) < 0.1:
 					print('error < 0.05')
-					move_cmd.angular.z = -self.kTurn*self.thetaError
+					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.2
-				elif fabs(self.thetaError) > 0.05:
+				elif fabs(self.thetaError) > 0.1:
 					print('error>0.05')
-					move_cmd.angular.z = -self.kTurn*self.thetaError
+					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.0
 				else:
 					print('else')
-					move_cmd.angular.z = -self.kTurn*self.thetaError
+					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.0
 
 				# publish the velocity
