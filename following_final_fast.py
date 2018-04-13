@@ -34,7 +34,7 @@ class following_final2():
 	desired_lowBound = 950
 	desired_upBound = 1050
 	invalid_max = 2000
-	max_speed = 1
+	max_speed = 2
 
 
 	def __init__(self):
