@@ -102,11 +102,11 @@ class selfNavigation():
 					print('len = 0, dir = 1000')
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = 0
-				elif fabs(self.thetaError) < 0.1:
+				elif fabs(self.thetaError) < 3:
 					print('error < 0.05')
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.2
-				elif fabs(self.thetaError) > 0.1:
+				elif fabs(self.thetaError) > 3:
 					print('error>0.05')
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.0
@@ -121,7 +121,7 @@ class selfNavigation():
 
 
 				# wait for 0.1 seconds (10 HZ) and publish again
-				r.sleep()
+				#r.sleep()
 			else:
 				# do nothing
 				print('do nothing')
