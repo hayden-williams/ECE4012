@@ -73,7 +73,7 @@ class selfNavigation():
 		while not rospy.is_shutdown():
 
 			# get info from server
-			r = requests.get('http://128.61.13.194:3000/rover').json()
+			r = requests.get('http://128.61.7.199:3000/rover').json()
 			print(r)
 
 			self.direction = r['direction']
