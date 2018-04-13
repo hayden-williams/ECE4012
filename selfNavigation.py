@@ -112,11 +112,12 @@ class selfNavigation():
 					move_cmd.linear.x = 0.0
 
 				# publish the velocity
+				print('publish')
 				self.cmd_vel.publish(move_cmd)
 
 
 				# wait for 0.1 seconds (10 HZ) and publish again
-				r.sleep()
+				#r.sleep()
 			else:
 				# do nothing
 				print('do nothing')
