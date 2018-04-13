@@ -108,7 +108,11 @@ class selfNavigation():
 					move_cmd.linear.x = 0.2
 				elif fabs(self.thetaError) > 3:
 					print('error>0.05')
-					move_cmd.angular.z = self.kTurn*self.thetaError
+					if self.thetaError >= 0:
+						val = 1
+					else:
+						val = -1
+					move_cmd.angular.z = val*0.1#self.kTurn*self.thetaError/10
 					move_cmd.linear.x = 0.0
 				else:
 					print('else')
