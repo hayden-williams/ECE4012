@@ -77,7 +77,7 @@ class selfNavigation():
 			print(r)
 
 			self.direction = r['direction']
-			self.length = r['len']
+			self.length = r['length']
 			self.bearing = r['bearing']
 			emergency = r['emergency']
 			end = r['ended'] # user ended trip
