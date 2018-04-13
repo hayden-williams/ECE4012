@@ -95,7 +95,7 @@ class selfNavigation():
 						self.bearing = self.bearing - 360
 					if self.direction > 180:
 						self.direction = self.direction - 360
-					self.thetaError = (-1)*(self.direction - self.bearing) # -ve = turn right, +ve = turn left 
+					self.thetaError = (1)*(self.direction - self.bearing) # -ve = turn right, +ve = turn left 
 
 
 				if (self.direction == 1000 or self.length == 0.0):
