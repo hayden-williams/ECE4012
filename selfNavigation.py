@@ -90,19 +90,24 @@ class selfNavigation():
 				# do error corrections
 				print('entered goToUser')
 				if self.direction != 1000:
+					print('calc error')
 					self.thetaError = self.direction - self.bearing # +ve = turn right, -ve = turn left 
 
 
 				if (self.direction == 1000 or self.length == 0):
+					print('len = 0, dir = 1000')
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = 0
 				elif fabs(self.thetaError) < 0.05:
+					print('error < 0.05')
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.2
-				elif fabs(self.thetaError) > 0.1:
+				elif fabs(self.thetaError) > 0.05:
+					print('error>0.05')
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.0
 				else:
+					print('else')
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.0
 
@@ -114,6 +119,7 @@ class selfNavigation():
 				r.sleep()
 			else:
 				# do nothing
+				print('do nothing')
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
 				self.cmd_vel.publish(move_cmd)
