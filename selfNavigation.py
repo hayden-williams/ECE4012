@@ -112,7 +112,7 @@ class selfNavigation():
 						val = 1
 					else:
 						val = -1
-					move_cmd.angular.z = val*0.2 #self.kTurn*self.thetaError/10
+					move_cmd.angular.z = val*0.5 #self.kTurn*self.thetaError/10
 					move_cmd.linear.x = 0.0
 				else:
 					print('else')
