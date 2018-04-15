@@ -100,17 +100,17 @@ class selfNavigation():
 			# get info from server
 			if self.countQuery%1000 == 0:
 				#only check server occationally
-				r = requests.get('http://128.61.7.199:3000/rover').json()
-				rospy.loginfo(r)
+				re = requests.get('http://128.61.7.199:3000/rover').json()
+				rospy.loginfo(re)
 
-				self.direction = r['direction'] # in degrees
-				self.length = r['len']
-				self.bearing = r['bearing']
-				emergency = r['emergency']
-				end = r['ended'] # user ended trip
-				arrived = r['arrived']
-				home = r['gotHome'] # rover is home
-				goToUser = r['goToUser']
+				self.direction = re['direction'] # in degrees
+				self.length = re['len']
+				self.bearing = re['bearing']
+				emergency = re['emergency']
+				end = re['ended'] # user ended trip
+				arrived = re['arrived']
+				home = re['gotHome'] # rover is home
+				goToUser = re['goToUser']
 
 
 			self.countQuery = self.countQuery + 1
