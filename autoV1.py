@@ -36,7 +36,9 @@ class GoStraight():
 	z_threshCorner = z_thresh
 	ZoneList = np.array([0,0,0,0,0,0])
 	count = 0
-
+	x = 0
+	y = 0
+	magnitude = 0
 	def __init__(self):
 		# initiliaze
 		rospy.init_node('GoStraight', anonymous=False)
@@ -79,11 +81,11 @@ class GoStraight():
 		
 		# as long as you haven't ctrl + c keeping doing...
 		while not rospy.is_shutdown():
-			rospy.loginfo(np.absolute(self.thetaError))
+			#rospy.loginfo(np.absolute(self.thetaError))
 			if (np.absolute(self.thetaError) < 0.25):
 				self.count = 0
 		
-			rospy.loginfo("obstacle " + str(self.ZoneList))
+			#rospy.loginfo("obstacle " + str(self.ZoneList))
 			if (np.sum(self.ZoneList) == 0):
 
 				if self.desired == 10:
@@ -160,6 +162,8 @@ class GoStraight():
 		current = qw + qz*1j
 		if self.desired == 10:
 			self.desired = (qw + qz*1j)**2
+			self.xstart = data.pose.pose.position.x
+			self.ystart = data.pose.pose.position.y
 		else:
 			error = self.desired/(current**2)
 			self.thetaError = phase(error)
@@ -175,6 +179,10 @@ class GoStraight():
 		#yaw = euler[2]
 		
 		#rospy.loginfo("theta = %f"%(self.thetaError))
+		self.x = data.pose.pose.position.x -  self.xstart
+		self.y = data.pose.pose.position.y - self.ystart
+		self.magnitude = sqrt(self.x **2 + self.y **2)
+		rospy.loginfo(self.magnitude)
 
 	def callback(self,data):
 		try:
