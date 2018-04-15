@@ -62,6 +62,14 @@ class selfNavigation():
 	path = 0
 	x = 0
 	y = 0
+
+	# Distance in mm
+	invalid_thresh = 300
+	desired_thresh = 1000
+	desired_lowBound = 950
+	desired_upBound = 1050
+	invalid_max = 2000
+	max_speed = 1
 	
 
 	def __init__(self):
