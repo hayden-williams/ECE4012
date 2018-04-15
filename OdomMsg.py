@@ -74,7 +74,7 @@ class GoStraight():
 					move_cmd.angular.z = self.kTurn*self.thetaError
 				else:
 					rospy.loginfo("hello from else")
-					self.desired = self.desired + cmath.pi/2 
+					self.desired = self.desired + 1.57
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					self.xstart = self.x + self.xstart
