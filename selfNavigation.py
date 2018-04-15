@@ -240,6 +240,7 @@ class selfNavigation():
 			elif self.arrived == 1:
 				# DO NOTHING
 				# The following code is in callback
+				rospy.loginfo("arrived = 1 yay")
 			else:
 				# do nothing
 				rospy.loginfo('do nothing')
