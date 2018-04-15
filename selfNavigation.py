@@ -97,7 +97,7 @@ class selfNavigation():
 				goToUser = r['goToUser']
 
 
-			self.count = self.count + 1
+				self.count = self.count + 1
 
 			if goToUser==1:
 				# put navigation code here
