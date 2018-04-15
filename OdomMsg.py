@@ -71,6 +71,7 @@ class GoStraight():
 			else:
 				rospy.loginfo("x is " + str(np.absolute(self.x)))
 				rospy.loginfo("y is " + str(np.absolute(self.y)))
+				rospy.loginfo("mag is " + str(self.magnitude))
 				if (self.magnitude < self.distance):
 					move_cmd.linear.x = 0.2
 					move_cmd.angular.z = self.kTurn*self.thetaError
