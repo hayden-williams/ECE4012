@@ -74,7 +74,7 @@ class GoStraight():
 		current = qw + qz*1j
 		if self.desired == 10:
 			self.desired = (qw + qz*1j)**2
-			self.xstart == data.pose.pose.position.x
+			self.xstart = data.pose.pose.position.x
 			self.ystart = data.pose.pose.position.y
 		else:
 			error = self.desired/(current**2)
