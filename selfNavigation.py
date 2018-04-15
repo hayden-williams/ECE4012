@@ -143,7 +143,8 @@ class selfNavigation():
 					rospy.loginfo(self.magnitude)
 					rospy.loginfo(self.length)
 					rospy.loginfo(self.direction)
-					if (self.direction[self.path] == 1000 or self.length[self.path] == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
+					rospy.loginfo(self.path)
+					if (self.direction[self.path] == 1000 or self.length[self.path] == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0 or self.path == 5):
 						rospy.loginfo('len = 0, dir = 1000')
 						move_cmd.linear.x = 0.0
 						move_cmd.angular.z = 0
