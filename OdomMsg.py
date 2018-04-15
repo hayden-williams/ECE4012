@@ -106,8 +106,8 @@ class GoStraight():
 		self.x = data.pose.pose.position.x -  self.xstart
 		self.y = data.pose.pose.position.y - self.ystart
 		
-		rospy.loginfo("x is " + str(x))
-		rospy.loginfo("y is " + str(y))
+		rospy.loginfo("x is " + str(self.x))
+		rospy.loginfo("y is " + str(self.y))
 
 
 	def shutdown(self):
