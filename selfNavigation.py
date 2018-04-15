@@ -57,6 +57,9 @@ class selfNavigation():
 	ZoneList = np.array([0,0,0,0,0,0])
 	count = 0
 
+	path = 0
+	x = 0
+	y = 0
 	
 
 	def __init__(self):
@@ -122,7 +125,7 @@ class selfNavigation():
 				# do error corrections
 				rospy.loginfo('entered goToUser')
 				
-				self.desiredAngle = (360-self.direction[0])*3.14159265359/180 # input degree convert to rad
+				self.desiredAngle = (360-self.direction[self.path])*3.14159265359/180 # input degree convert to rad
 				# using odometry for bearing
 				# IndoorAtlus East is 90, Odometry West is 90, Need to account for this
 				
@@ -140,18 +143,27 @@ class selfNavigation():
 					rospy.loginfo(self.magnitude)
 					rospy.loginfo(self.length)
 					rospy.loginfo(self.direction)
-					if (self.direction[0] == 1000 or self.length[0] == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
+					if (self.direction[self.path] == 1000 or self.length[self.path] == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
 						rospy.loginfo('len = 0, dir = 1000')
 						move_cmd.linear.x = 0.0
 						move_cmd.angular.z = 0
-					elif (fabs(self.thetaError) < 1 and self.magnitude < self.length[0]):
+					elif (fabs(self.thetaError) < 1 and self.magnitude < self.length[self.path]):
 						rospy.loginfo('error < 0.05')
 						move_cmd.angular.z = self.kTurn*self.thetaError
 						move_cmd.linear.x = 0.2
-					elif fabs(self.thetaError) > 1:
+					elif (fabs(self.thetaError) > 1 and self.magnitude < self.length[self.path]):
 						rospy.loginfo('error>0.05')
 						move_cmd.angular.z = self.kTurn*self.thetaError
 						move_cmd.linear.x = 0.0
+					elif (self.magnitude >= self.length[self.path]):
+						rospy.loginfo('error>0.05')
+						move_cmd.angular.z = 0.0
+						move_cmd.linear.x = 0.0
+						self.path = self.path + 1
+						self.xstart = self.x + self.xstart
+						self.ystart = self.y + self.ystart
+						self.magnitude = 0
+
 					else:
 						rospy.loginfo('else')
 						move_cmd.angular.z = self.kTurn*self.thetaError
@@ -240,8 +252,8 @@ class selfNavigation():
 			error = Angle/(current**2)
 			self.thetaError = phase(error) # radians from 0, -pi to pi	
 
-		x = data.pose.pose.position.x - self.xstart
-		y = data.pose.pose.position.y - self.ystart
+		self.x = data.pose.pose.position.x - self.xstart
+		self.y = data.pose.pose.position.y - self.ystart
 		self.magnitude = sqrt(x**2 + y**2)
 
 	def callback(self,data):
