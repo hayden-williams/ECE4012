@@ -82,7 +82,7 @@ class selfNavigation():
 
 			# get info from server
 			r = requests.get('http://128.61.7.199:3000/rover').json()
-			print(r)
+			rospy.loginfo(r)
 
 			self.direction = r['direction'] # in degrees
 			self.length = r['len']
@@ -96,7 +96,7 @@ class selfNavigation():
 			if goToUser==1:
 				# put navigation code here
 				# do error corrections
-				print('entered goToUser')
+				rospy.loginfo('entered goToUser')
 				
 				self.desiredAngle = (360-self.direction)*3.14159265359/180 # input degree convert to rad
 				# using odometry for bearing
@@ -112,28 +112,28 @@ class selfNavigation():
 				"""
 
 
-				print("after desiredAngle")
-				print(self.magnitude)
-				print(self.length)
+				rospy.loginfo("after desiredAngle")
+				rospy.loginfo(self.magnitude)
+				rospy.loginfo(self.length)
 				if (self.direction == 1000 or self.length == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
-					print('len = 0, dir = 1000')
+					rospy.loginfo('len = 0, dir = 1000')
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = 0
 				elif (fabs(self.thetaError) < 1 and self.magnitude < self.length):
-					print('error < 0.05')
+					rospy.loginfo('error < 0.05')
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.2
 				elif fabs(self.thetaError) > 1:
-					print('error>0.05')
+					rospy.loginfo('error>0.05')
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.0
 				else:
-					print('else')
+					rospy.loginfo('else')
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.0
 
 				# publish the velocity
-				print('publish')
+				rospy.loginfo('publish')
 				self.cmd_vel.publish(move_cmd)
 
 
@@ -141,7 +141,7 @@ class selfNavigation():
 				#r.sleep()
 			else:
 				# do nothing
-				print('do nothing')
+				rospy.loginfo('do nothing')
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
 				self.cmd_vel.publish(move_cmd)
