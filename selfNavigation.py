@@ -57,7 +57,7 @@ class selfNavigation():
 	ZoneList = np.array([0,0,0,0,0,0])
 	count = 0
 
-	r = rospy.Rate(20)
+	
 
 	def __init__(self):
 		# initiliaze
