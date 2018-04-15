@@ -13,6 +13,8 @@ import roslib
 from geometry_msgs.msg import Twist#, Pose
 from nav_msgs.msg import Odometry
 from cmath import *
+import numpy as np
+from math import *
 #from tf2_msgs.msg import TFMessage
 #import tf
 
@@ -22,6 +24,8 @@ class GoStraight():
 	kTurn = 5
 	xstart = 0
 	ystart = 0
+	distance = 37
+	turnAngle = 90
 	def __init__(self):
 		# initiliaze
 		rospy.init_node('GoStraight', anonymous=False)
@@ -61,8 +65,15 @@ class GoStraight():
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
 			else:
+				if (np.absolute(self.x) < self.distance or np.absolute(self.y)<self.distance):
 				move_cmd.linear.x = 0.2
 				move_cmd.angular.z = self.kTurn*self.thetaError
+				else:
+					self.desired = self.desired + cmath.pi/2 
+					move_cmd.linear.x = 0.0
+					move_cmd.angular.z = self.kTurn*self.thetaError
+					self.xstart = self.x
+					self.ystart = self.y
 			# publish the velocity
 			self.cmd_vel.publish(move_cmd)
 			# wait for 0.1 seconds (10 HZ) and publish again
@@ -90,8 +101,8 @@ class GoStraight():
 		#euler = self.tf.transformations.euler_from_quaternion(quaternion)
 		#yaw = euler[2]
 		#rospy.loginfo("theta = %f"%(self.thetaError))
-		x = data.pose.pose.position.x -  self.xstart
-		y = data.pose.pose.position.y - self.ystart
+		self.x = data.pose.pose.position.x -  self.xstart
+		self.y = data.pose.pose.position.y - self.ystart
 		
 		rospy.loginfo("x is " + str(x))
 		rospy.loginfo("y is " + str(y))
