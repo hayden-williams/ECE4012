@@ -77,8 +77,9 @@ class GoStraight():
 					self.desired = self.desired - 1.57
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = self.kTurn*self.thetaError
-					self.xstart = self.x + self.xstart
-					self.ystart = self.y + self.ystart
+					if (self.thetaError < .25):
+						self.xstart = self.x + self.xstart
+						self.ystart = self.y + self.ystart
 			# publish the velocity
 			self.cmd_vel.publish(move_cmd)
 			# wait for 0.1 seconds (10 HZ) and publish again
