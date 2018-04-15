@@ -67,6 +67,8 @@ class GoStraight():
 				move_cmd.linear.x = 0.0
 				move_cmd.angular.z = 0
 			else:
+				rospy.loginfo("x is " + str(np.absolute(self.x)))
+				rospy.loginfo("y is " + str(np.absolute(self.y)))
 				if (np.absolute(self.x) < self.distance or np.absolute(self.y)<self.distance):
 					move_cmd.linear.x = 0.2
 					move_cmd.angular.z = self.kTurn*self.thetaError
@@ -106,8 +108,7 @@ class GoStraight():
 		self.x = data.pose.pose.position.x -  self.xstart
 		self.y = data.pose.pose.position.y - self.ystart
 		
-		rospy.loginfo("x is " + str(self.x))
-		rospy.loginfo("y is " + str(self.y))
+		
 
 
 	def shutdown(self):
