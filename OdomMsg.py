@@ -66,8 +66,8 @@ class GoStraight():
 				move_cmd.angular.z = 0
 			else:
 				if (np.absolute(self.x) < self.distance or np.absolute(self.y)<self.distance):
-				move_cmd.linear.x = 0.2
-				move_cmd.angular.z = self.kTurn*self.thetaError
+					move_cmd.linear.x = 0.2
+					move_cmd.angular.z = self.kTurn*self.thetaError
 				else:
 					self.desired = self.desired + cmath.pi/2 
 					move_cmd.linear.x = 0.0
