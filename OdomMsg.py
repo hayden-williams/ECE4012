@@ -22,7 +22,7 @@ from math import *
 class GoStraight():
 	desired = 10
 	thetaError = 0
-	kTurn = 1
+	kTurn = 3
 	xstart = 0
 	ystart = 0
 	distance = 2
