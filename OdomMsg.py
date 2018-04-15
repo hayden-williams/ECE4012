@@ -26,6 +26,8 @@ class GoStraight():
 	ystart = 0
 	distance = 37
 	turnAngle = 90
+	x = 0
+	y = 0
 	def __init__(self):
 		# initiliaze
 		rospy.init_node('GoStraight', anonymous=False)
