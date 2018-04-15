@@ -146,6 +146,8 @@ class selfNavigation():
 					rospy.loginfo(self.length)
 					rospy.loginfo(self.direction)
 					rospy.loginfo(self.path)
+					rospy.loginfo(self.goToUser)
+					rospy.loginfo(self.arrived)
 					if (self.direction[self.path] == 1000 or self.length[self.path] == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0 or self.path == 5):
 						rospy.loginfo('len = 0, dir = 1000')
 						move_cmd.linear.x = 0.0
@@ -172,7 +174,7 @@ class selfNavigation():
 
 					else:
 						rospy.loginfo('else')
-						move_cmd.angular.z = self.kTurn*self.thetaError
+						move_cmd.angular.z = 0.0
 						move_cmd.linear.x = 0.0
 
 
