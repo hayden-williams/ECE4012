@@ -36,6 +36,7 @@ class selfNavigation():
 	direction = 1000
 	bearing = 1000
 	length = 0
+	count = 0
 
 	odomBearing = 0
 	zeroAngle = 1000
@@ -81,17 +82,22 @@ class selfNavigation():
 		while not rospy.is_shutdown():
 
 			# get info from server
-			r = requests.get('http://128.61.7.199:3000/rover').json()
-			rospy.loginfo(r)
+			if self.count%20 == 0:
+				#only check server occationally
+				r = requests.get('http://128.61.7.199:3000/rover').json()
+				rospy.loginfo(r)
 
-			self.direction = r['direction'] # in degrees
-			self.length = r['len']
-			self.bearing = r['bearing']
-			emergency = r['emergency']
-			end = r['ended'] # user ended trip
-			arrived = r['arrived']
-			home = r['gotHome'] # rover is home
-			goToUser = r['goToUser']
+				self.direction = r['direction'] # in degrees
+				self.length = r['len']
+				self.bearing = r['bearing']
+				emergency = r['emergency']
+				end = r['ended'] # user ended trip
+				arrived = r['arrived']
+				home = r['gotHome'] # rover is home
+				goToUser = r['goToUser']
+
+
+			self.count = self.count + 1
 
 			if goToUser==1:
 				# put navigation code here
