@@ -15,6 +15,7 @@ from nav_msgs.msg import Odometry
 from cmath import *
 import numpy as np
 from math import *
+
 #from tf2_msgs.msg import TFMessage
 #import tf
 
@@ -28,6 +29,7 @@ class GoStraight():
 	turnAngle = 90
 	x = 0
 	y = 0
+	magnitude = 0
 	def __init__(self):
 		# initiliaze
 		rospy.init_node('GoStraight', anonymous=False)
@@ -69,7 +71,7 @@ class GoStraight():
 			else:
 				rospy.loginfo("x is " + str(np.absolute(self.x)))
 				rospy.loginfo("y is " + str(np.absolute(self.y)))
-				if (np.absolute(self.x) < self.distance and np.absolute(self.y)<self.distance):
+				if (self.magnitude < self.distance):
 					move_cmd.linear.x = 0.2
 					move_cmd.angular.z = self.kTurn*self.thetaError
 				else:
@@ -77,10 +79,6 @@ class GoStraight():
 					self.desired = self.desired - 1.57
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = self.kTurn*self.thetaError
-					rospy.loginfo(np.absolute(self.thetaError))
-					if (np.absolute(self.thetaError) < .1):
-						self.xstart = self.x + self.xstart
-						self.ystart = self.y + self.ystart
 			# publish the velocity
 			self.cmd_vel.publish(move_cmd)
 			# wait for 0.1 seconds (10 HZ) and publish again
@@ -110,6 +108,7 @@ class GoStraight():
 		#rospy.loginfo("theta = %f"%(self.thetaError))
 		self.x = data.pose.pose.position.x -  self.xstart
 		self.y = data.pose.pose.position.y - self.ystart
+		self.magnitude = sqrt(self.x **2 + self.y **2)
 		
 		
 
