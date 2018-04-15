@@ -21,7 +21,7 @@ from math import *
 class GoStraight():
 	desired = 10
 	thetaError = 0
-	kTurn = 5
+	kTurn = 1
 	xstart = 0
 	ystart = 0
 	distance = 2
@@ -74,7 +74,7 @@ class GoStraight():
 					move_cmd.angular.z = self.kTurn*self.thetaError
 				else:
 					rospy.loginfo("hello from else")
-					self.desired = self.desired + 1.57
+					self.desired = self.desired - 1.57
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					self.xstart = self.x + self.xstart
