@@ -255,7 +255,7 @@ class selfNavigation():
 
 		self.x = data.pose.pose.position.x - self.xstart
 		self.y = data.pose.pose.position.y - self.ystart
-		self.magnitude = sqrt(x**2 + y**2)
+		self.magnitude = sqrt(self.x**2 + self.y**2)
 
 	def callback(self,data):
 		try:
