@@ -82,7 +82,7 @@ class selfNavigation():
 		while not rospy.is_shutdown():
 
 			# get info from server
-			if self.count%20 == 0:
+			if self.count == 0:
 				#only check server occationally
 				r = requests.get('http://128.61.7.199:3000/rover').json()
 				rospy.loginfo(r)
