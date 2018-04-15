@@ -31,11 +31,19 @@ import json
 
 class selfNavigation():
 	thetaError = 0
-	kTurn = 1.5*pi/180
+	kTurn = 1.5
 
 	direction = 1000
 	bearing = 1000
 	length = 0
+
+	odomBearing = 0
+	zeroAngle = 1000
+	desiredAngle = 0
+
+	xstart = 0
+	ystart = 0
+	magnitude = 0
 
 	def __init__(self):
 		# initiliaze
@@ -49,7 +57,7 @@ class selfNavigation():
 
 		#rospy.Subscriber("/mobile_base/events/bumper",BumperEvent,self.BumperEventCallback)
 		#rospy.Subscriber("/mobile_base/events/wheel_drop",WheelDropEvent,self.WheelDropEventCallback)
-		#rospy.Subscriber('odom',Odometry,self.Orientation)
+		rospy.Subscriber('odom',Odometry,self.Orientation)
 
 		# may need rospy.spin(); 
 
@@ -76,7 +84,7 @@ class selfNavigation():
 			r = requests.get('http://128.61.7.199:3000/rover').json()
 			print(r)
 
-			self.direction = r['direction']
+			self.direction = r['direction'] # in degrees
 			self.length = r['len']
 			self.bearing = r['bearing']
 			emergency = r['emergency']
@@ -89,30 +97,33 @@ class selfNavigation():
 				# put navigation code here
 				# do error corrections
 				print('entered goToUser')
+				
+				self.desiredAngle = (360-self.direction)*pi/180 # input degree convert to rad
+				# using odometry for bearing
+				# IndoorAtlus East is 90, Odometry West is 90, Need to account for this
+				"""
 				if self.direction != 1000:
 					print('calc error')
 					if (self.bearing>180):
 						self.bearing = self.bearing - 360
 					if self.direction > 180:
 						self.direction = self.direction - 360
-					self.thetaError = (-1)*(self.direction - self.bearing) # -ve = turn right, +ve = turn left 
+					#self.thetaError = (-1)*(self.direction - self.bearing) # -ve = turn right, +ve = turn left 
+				"""
 
 
-				if (self.direction == 1000 or self.length == 0.0):
+
+				if (self.direction == 1000 or self.length == 0.0 or self.zeroAngle == 1000):
 					print('len = 0, dir = 1000')
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = 0
-				elif fabs(self.thetaError) < 3:
+				elif fabs(self.thetaError) < 1 and self.magnitude < self.length:
 					print('error < 0.05')
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.2
-				elif fabs(self.thetaError) > 3:
+				elif fabs(self.thetaError) > 1:
 					print('error>0.05')
-					if self.thetaError >= 0:
-						val = 1
-					else:
-						val = -1
-					move_cmd.angular.z = val*0.5 #self.kTurn*self.thetaError/10
+					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.0
 				else:
 					print('else')
@@ -133,7 +144,24 @@ class selfNavigation():
 				move_cmd.angular.z = 0
 				self.cmd_vel.publish(move_cmd)
 
-			
+	def Orientation(self,data):
+		qz = data.pose.pose.orientation.z
+		qw = data.pose.pose.orientation.w
+		current = qw + qz*1j
+		if self.zeroAngle == 1000:
+			self.zeroAngle = (qw + qz*1j)**2
+			self.xstart = data.pose.pose.position.x
+			self.ystart = data.pose.pose.position.y 
+			# at this point, zeroAngle is our 0
+			#self.zeroAngle = self.zeroAngle*(cos(self.desiredAngle)+sin(self.desiredAngle)*1j)
+		else:
+			Angle = self.zeroAngle*(cos(self.desiredAngle)+sin(self.desiredAngle)*1j)
+			error = Angle/(current**2)
+			self.thetaError = phase(error) # radians from 0, -pi to pi	
+
+		x = data.pose.pose.position.x - self.xstart
+		y = data.pose.pose.position.y - self.ystart
+		self.magnitude = sqrt(x**2 + y**2)
 
 
 	def shutdown(self):
