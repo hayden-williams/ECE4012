@@ -113,11 +113,13 @@ class selfNavigation():
 
 
 				print("after desiredAngle")
-				if self.direction == 1000 or self.length == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0:
+				print(self.magnitude)
+				print(self.length)
+				if (self.direction == 1000 or self.length == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
 					print('len = 0, dir = 1000')
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = 0
-				elif fabs(self.thetaError) < 1 and self.magnitude < self.length:
+				elif (fabs(self.thetaError) < 1 and self.magnitude < self.length):
 					print('error < 0.05')
 					move_cmd.angular.z = self.kTurn*self.thetaError
 					move_cmd.linear.x = 0.2
