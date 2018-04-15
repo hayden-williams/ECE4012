@@ -24,7 +24,7 @@ class GoStraight():
 	kTurn = 5
 	xstart = 0
 	ystart = 0
-	distance = 37
+	distance = 2
 	turnAngle = 90
 	x = 0
 	y = 0
