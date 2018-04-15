@@ -77,7 +77,7 @@ class GoStraight():
 					self.desired = self.desired - 1.57
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = self.kTurn*self.thetaError
-					rospu.loginfo(np.absolute(self.thetaError))
+					rospy.loginfo(np.absolute(self.thetaError))
 					if (np.absolute(self.thetaError) < .1):
 						self.xstart = self.x + self.xstart
 						self.ystart = self.y + self.ystart
