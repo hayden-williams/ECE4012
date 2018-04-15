@@ -20,6 +20,8 @@ class GoStraight():
 	desired = 10
 	thetaError = 0
 	kTurn = 5
+	xstart = 0
+	ystart = 0
 	def __init__(self):
 		# initiliaze
 		rospy.init_node('GoStraight', anonymous=False)
@@ -72,6 +74,8 @@ class GoStraight():
 		current = qw + qz*1j
 		if self.desired == 10:
 			self.desired = (qw + qz*1j)**2
+			self.xstart == data.pose.pose.position.x
+			self.ystart = data.pose.pose.position.y
 		else:
 			error = self.desired/(current**2)
 			self.thetaError = phase(error)
@@ -86,12 +90,12 @@ class GoStraight():
 		#euler = self.tf.transformations.euler_from_quaternion(quaternion)
 		#yaw = euler[2]
 		#rospy.loginfo("theta = %f"%(self.thetaError))
-		x = data.pose.pose.position.x
-		y = data.pose.pose.position.y
-		z = data.pose.pose.position.z
+		x = data.pose.pose.position.x -  self.xstart
+		y = data.pose.pose.position.y - self.ystart
+		
 		rospy.loginfo("x is " + str(x))
 		rospy.loginfo("y is " + str(y))
-		rospy.loginfo("z is " + str(z))
+
 
 	def shutdown(self):
 		# stop turtlebot
