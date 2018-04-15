@@ -73,11 +73,12 @@ class GoStraight():
 					move_cmd.linear.x = 0.2
 					move_cmd.angular.z = self.kTurn*self.thetaError
 				else:
+					rospy.loginfo("hello from else")
 					self.desired = self.desired + cmath.pi/2 
 					move_cmd.linear.x = 0.0
 					move_cmd.angular.z = self.kTurn*self.thetaError
-					self.xstart = self.x
-					self.ystart = self.y
+					self.xstart = self.x + self.xstart
+					self.ystart = self.y + self.ystart
 			# publish the velocity
 			self.cmd_vel.publish(move_cmd)
 			# wait for 0.1 seconds (10 HZ) and publish again
