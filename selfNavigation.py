@@ -134,7 +134,7 @@ class selfNavigation():
 			if self.countQuery%1000 == 0:
 				#only check server occationally
 				re = requests.get('http://128.61.7.199:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
-				rospy.loginfo(re)
+				#rospy.loginfo(re)
 
 				self.direction = re['direction'] # in degrees
 				self.length = re['len']
@@ -161,52 +161,54 @@ class selfNavigation():
 				
 				
 
-				rospy.loginfo(np.absolute(self.thetaError))
+				#rospy.loginfo(np.absolute(self.thetaError))
 				if (np.absolute(self.thetaError) < 0.25):
 					self.count = 0
 			
-				rospy.loginfo("obstacle " + str(self.ZoneList))
+				#rospy.loginfo("obstacle " + str(self.ZoneList))
 				if (np.sum(self.ZoneList) == 0):
 
 					#no obstacle, move code goes here
-					rospy.loginfo("after desiredAngle")
-					rospy.loginfo(self.magnitude)
-					rospy.loginfo(self.length)
-					rospy.loginfo(self.direction)
-					rospy.loginfo(self.path)
-					rospy.loginfo(self.goToUser)
-					rospy.loginfo(self.arrived)
+					#rospy.loginfo("after desiredAngle")
+					#rospy.loginfo(self.magnitude)
+					#rospy.loginfo(self.length)
+					#rospy.loginfo(self.direction)
+					#rospy.loginfo(self.path)
+					#rospy.loginfo(self.goToUser)
+					#rospy.loginfo(self.arrived)
 					if (self.direction[self.path] == 1000 or self.length[self.path] == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
-						rospy.loginfo('len = 0, dir = 1000')
+						#rospy.loginfo('len = 0, dir = 1000')
 						self.move_cmd.linear.x = 0.0
 						self.move_cmd.angular.z = 0
 					elif (fabs(self.thetaError) < 1 and self.magnitude < self.length[self.path] and self.path < 5):
-						rospy.loginfo('error < 0.05')
+						#rospy.loginfo('error < 0.05')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.2
 					elif (fabs(self.thetaError) > 1 and self.magnitude < self.length[self.path] and self.path < 5):
-						rospy.loginfo('error>0.05')
+						#rospy.loginfo('error>0.05')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.0
 					elif (self.magnitude >= self.length[self.path] and self.path < 5):
-						rospy.loginfo('mag>length')
+						#rospy.loginfo('mag>length')
 						self.move_cmd.angular.z = 0.0
 						self.move_cmd.linear.x = 0.0
 						# didItMakeIt function begins IF NEEDED
 
 						# didItMakeIt function ends
 						self.path = self.path + 1
+						rospy.loginfo(self.path)
 						self.xstart = self.x + self.xstart
 						self.ystart = self.y + self.ystart
 						self.magnitude = 0
 
 					else:
-						rospy.loginfo('else')
+						rospy.loginfo('roverAtUser')
 						self.move_cmd.angular.z = 0.0
 						self.move_cmd.linear.x = 0.0
 						self.roverAtUser = 1
 						if goHome == 1:
 							# Tell Server rover is home
+							rospy.loginfo('roverAtUser and at home location')
 							tellServer = requests.post('http://128.61.7.199:3000/home', {'gotHome': 1})  #<----------------SERVER IP ADDRESS HERE-------
 
 
@@ -271,7 +273,7 @@ class selfNavigation():
 
 
 				# publish the velocity
-				rospy.loginfo('publish')
+				#rospy.loginfo('publish')
 				self.cmd_vel.publish(self.move_cmd)
 
 
@@ -280,7 +282,7 @@ class selfNavigation():
 			elif self.arrived == 1:
 				# DO NOTHING
 				# The following code is in callback
-				rospy.loginfo("arrived = 1 yay")
+				rospy.loginfo("arrived to user")
 			elif self.emergency == 1:
 				# say emergency, do nothing except send pics
 				rospy.loginfo('emergency')
@@ -296,6 +298,7 @@ class selfNavigation():
 				rospy.sleep(2)
 			elif endAndWait == 1:
 				# user's trip ended, wait for user to tell the rover where it is
+				rospy.loginfo('endAndWait')
 				self.move_cmd.linear.x = 0.0
 				self.move_cmd.angular.z = 0
 				self.cmd_vel.publish(self.move_cmd)
@@ -328,7 +331,7 @@ class selfNavigation():
 	def callback(self,data):
 		try:
 			
-			if self.goToUser == 1:
+			if self.goToUser == 1 or self.goHome == 1:
 
 				# Get Image and find size of image
 				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
