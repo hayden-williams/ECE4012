@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
 
 	counter = counter + 1
-	while(counter<1000):
+	while(counter<10):
 		soundhandle.say('Emergency')
 		rospy.sleep(2)
 		counter = counter + 1
