@@ -18,13 +18,13 @@ if __name__ == '__main__':
 	rospy.init_node('emergency', anonymous=False)
 	rate = rospy.Rate(10)
 
-	self.soundhandle = SoundClient()
+	soundhandle = SoundClient()
 	rospy.sleep(2)
 
 
 	counter = counter + 1
 	
-	self.soundhandle.say('Emergency')
+	soundhandle.say('Emergency')
 		
 	soundCounter = soundCounter + 1
 
