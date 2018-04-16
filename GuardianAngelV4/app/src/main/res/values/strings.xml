@@ -11,5 +11,5 @@
     <string name="trip_info">You are currently on your trip with Guardian Angel! Press End Trip to send your Guardian Angel back to its hub. Press emergency to contact the police due to an incident.</string>
     <string name="end_trip">End Trip</string>
     <string name="emergency">Emergency</string>
-    <string name="end">Thank you for using Guardian Angel! Your trip has ended. Please click on the map below to confirm you drop-off location.</string>
+    <string name="end">Thank you for using Guardian Angel! Your trip has ended. Please click on the map below to confirm your drop-off location.</string>
 </resources>

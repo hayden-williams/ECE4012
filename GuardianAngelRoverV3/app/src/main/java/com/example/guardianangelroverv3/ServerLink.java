@@ -235,6 +235,9 @@ public class ServerLink {
                                 rover_lat = response.getDouble(LAT);
                                 rover_lon = response.getDouble(LON);
                                 Log.d(TAG, "Successfully parsed response, lat is " + other_lat + " and lon is " + other_lon);
+                                IndoorAtlas.getInstance().lat = rover_lat;
+                                IndoorAtlas.getInstance().lon = rover_lon;
+                                ((MainActivity)(CurrentActivity.getInstance().getCurrentActivity())).updateMap();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

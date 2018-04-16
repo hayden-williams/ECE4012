@@ -73,8 +73,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private IARoutingLeg[] mCurrentRoute;
 
     // TODO: set home_lat and home_lon
-    private double home_lat = 1;
-    private double home_lon = 1;
+    private double home_lat = 33.77575697;
+    private double home_lon = -84.39689554;
 
     private static final float HUE_IABLUE = 200.0f;
 
@@ -190,16 +190,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         current_state = STATE_ARRIVED;
                         // don't need to do anything?
                     }
-                    if (myserver.ended) {
+                    if (myserver.ended && current_state != STATE_REST_HOME) {
                         Log.d(TAG, "ended");
                         current_state = STATE_ENDED;
                         // send rover back home using location specified by user
-                        atlas.lat = myserver.rover_lat;
+                        myserver.other_lat = home_lat;
+                        myserver.other_lon = home_lon;
+                        myserver.user_name = "HOME";
+                        myserver.getRequestRoverCoords();
+                        /*atlas.lat = myserver.rover_lat;
                         atlas.lon = myserver.rover_lon;
                         myserver.other_lat = home_lat;
                         myserver.other_lon = home_lon;
                         myserver.user_name = "HOME";
-                        updateMap();
+                        updateMap();*/
+                        current_state = STATE_REST_HOME;
                     }
                 }
                 handler.postDelayed(this, 5000);
@@ -273,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d("Map", "Updating map");
 
         mLocation = new LatLng(atlas.getLat(), atlas.getLon());
-        mLocationFloor = 2; //atlas.getFloor();
+        mLocationFloor = 2;
         if (mMarker == null) {
             if (mMap != null) {
                 mMarker = mMap.addMarker(new MarkerOptions().position(mLocation)
@@ -402,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             myserver.request(jsonList);
 
-            if (current_state == STATE_ENDED) {
+            if (myserver.user_name.equals("HOME")) {
                 ArrayList<StringPair> jsonList1 = new ArrayList<>();
                 jsonList.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_PATH_FINISHED));
                 myserver.request(jsonList1);
