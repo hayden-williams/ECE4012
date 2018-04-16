@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
 
 	counter = counter + 1
-	while(counter<10):
+	while(counter<1000000):
 		soundhandle.say('Emergency')
 		counter = counter + 1
 		
