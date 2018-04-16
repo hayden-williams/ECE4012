@@ -18,16 +18,14 @@ if __name__ == '__main__':
 	rospy.init_node('emergency', anonymous=False)
 	rate = rospy.Rate(10)
 
-	soundhandle = SoundClient()
+	self.soundhandle = SoundClient()
 	rospy.sleep(2)
 
-	while(1):
-		counter = counter + 1
-		if soundCounter%1000 == 0:
-			# Adjust the number so this says Emergency repeatedly
-			soundCounter = 0
-			soundhandle.say('Emergency')
-			soundhandle.stopSaying('Emergency')
-		soundCounter = soundCounter + 1
+
+	counter = counter + 1
+	
+	self.soundhandle.say('Emergency')
+		
+	soundCounter = soundCounter + 1
 
 	print('While loop ended')
