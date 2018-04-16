@@ -8,6 +8,8 @@ import rospy
 import roslib
 import sys
 from sound_play.libsoundplay import SoundClient
+from sound_play.msg import SoundRequest
+
 
 
 if __name__ == '__main__':
