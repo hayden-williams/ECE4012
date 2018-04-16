@@ -132,7 +132,7 @@ class selfNavigation():
 			# get info from server
 			if self.countQuery%1000 == 0:
 				#only check server occationally
-				re = requests.get('http://128.61.7.199:3000/rover').json()
+				re = requests.get('http://128.61.7.199:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				rospy.loginfo(re)
 
 				self.direction = re['direction'] # in degrees
@@ -206,7 +206,7 @@ class selfNavigation():
 						self.roverAtUser = 1
 						if goHome == 1:
 							# Tell Server rover is home
-							tellServer = requests.post('http://128.61.7.199:3000/home', {'gotHome': 1})
+							tellServer = requests.post('http://128.61.7.199:3000/home', {'gotHome': 1})  #<----------------SERVER IP ADDRESS HERE-------
 
 
 				elif (np.sum(self.ZoneList) == 0 and self.roverAtUser == 0):
@@ -518,7 +518,7 @@ class selfNavigation():
 				if self.savePic == 1:
 					cv2.imwrite("UserSnapshot.jpg",cv_image)
 					# send to server
-					url = 'http://128.61.7.199:3000/image'
+					url = 'http://128.61.7.199:3000/image'  #<-------------------SERVER IP ADDRESS HERE------------
 					files ={'image':open('UserSnapshot.jpg','rb')}
 					sender = requests.post(url, files=files)
 					self.savePic = 0
