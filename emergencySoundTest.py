@@ -23,8 +23,9 @@ if __name__ == '__main__':
 
 
 	counter = counter + 1
-	
-	soundhandle.say('Emergency')
+	while(counter<10):
+		soundhandle.say('Emergency')
+		counter = counter + 1
 		
 	soundCounter = soundCounter + 1
 
