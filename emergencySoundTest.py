@@ -5,10 +5,9 @@
 # This code created to test sound functionality on turtlebot
 
 import rospy
-import roslib
+import roslib; roslib.load_manifest('sound_play')
 import sys
 from sound_play.libsoundplay import SoundClient
-from sound_play.msg import SoundRequest
 
 
 
@@ -17,10 +16,10 @@ if __name__ == '__main__':
 	soundCounter = 0
 
 	rospy.init_node('emergency', anonymous=False)
-	ready = rospy.Subscriber("robotsound", SoundRequest, sound_ready)
 	rate = rospy.Rate(10)
 
 	soundhandle = SoundClient()
+	rospy.sleep(2)
 
 	while(counter < 999999):
 		counter = counter + 1
