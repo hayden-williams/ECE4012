@@ -27,7 +27,7 @@ if __name__ == '__main__':
 			# Adjust the number so this says Emergency repeatedly
 			soundCounter = 0
 			soundhandle.say('Emergency')
-			soundhandle.stopSaying(self, 'Emergency')
+			soundhandle.stopSaying('Emergency')
 		soundCounter = soundCounter + 1
 
 	print('While loop ended')
