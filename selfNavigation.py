@@ -14,11 +14,12 @@
 # On TurtleBot:
 # roslaunch turtlebot_bringup minimal.launch
 # roslaunch openni_launch openni.launch
+# roslaunch sound_play soundplay_node.launch
 # On work station:
 # python selfNavigation.py
 
 import rospy
-import roslib
+import roslib; roslib.load_manifest('sound_play')
 from geometry_msgs.msg import Twist#, Pose
 from nav_msgs.msg import Odometry
 from cmath import *
@@ -34,6 +35,7 @@ from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
+from sound_play.libsoundplay import SoundClient
 
 class selfNavigation():
 	thetaError = 0
@@ -71,6 +73,8 @@ class selfNavigation():
 	invalid_max = 2000
 	max_speed = 1
 
+	soundCounter = 0
+
 
 
 	def __init__(self):
@@ -93,6 +97,9 @@ class selfNavigation():
 		self.bridge = CvBridge()
 		# Subscribe to depth sensor and get raw image
 		self.depth_sub = rospy.Subscriber("/camera/depth/image_raw",Image,self.callback)
+		# Subscribe to sound 
+		self.soundhandle = SoundClient()
+
 
 		
 		# Create a publisher which can "talk" to TurtleBot and tell it to move
@@ -252,6 +259,14 @@ class selfNavigation():
 				# DO NOTHING
 				# The following code is in callback
 				rospy.loginfo("arrived = 1 yay")
+			elif emergency == 1:
+				# say emergency, do nothing except send pics
+				rospy.loginfo('emergency')
+				self.move_cmd.linear.x = 0.0
+				self.move_cmd.angular.z = 0
+				self.cmd_vel.publish(move_cmd)
+				self.soundhandle.say('Emergency')
+				rospy.sleep(2)
 			else:
 				# do nothing
 				rospy.loginfo('do nothing')
