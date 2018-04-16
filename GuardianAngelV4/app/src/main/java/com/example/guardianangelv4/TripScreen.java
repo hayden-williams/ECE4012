@@ -45,9 +45,6 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
     private GroundOverlay mGroundOverlay = null;
 
     private LatLng mLocation;
-    private LatLng mDestination;
-    private int mLocationFloor;
-    private int mDestinationFloor;
 
     private static final float HUE_IABLUE = 200.0f;
 
@@ -72,11 +69,6 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
-        //myserver.getRequest(this, ServerLink.MESSAGE_TYPE_ROVER, "", 1);
-
-        // for testing server
-        myserver.getRequest(CurrentActivity.getInstance().getCurrentActivity(), ServerLink.MESSAGE_TYPE_USER, "", 1);
-
         setupGroundOverlay(atlas.floorPlan_saved, atlas.bitmap_saved);
 
         runnableCode = new Runnable() {
@@ -97,15 +89,14 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
         jsonlist.add(new StringPair(ServerLink.LAT, Double.toString(atlas.getLat())));
         jsonlist.add(new StringPair(ServerLink.LON, Double.toString(atlas.getLon())));
         jsonlist.add(new StringPair(ServerLink.FLOOR, Integer.toString(atlas.getFloor())));
-        myserver.request(jsonlist, this);
-        //myserver.getRequest(this, ServerLink.MESSAGE_TYPE_ROVER, "", 1);
+        myserver.request(jsonlist);
     }
 
     public void clickEnd(View view) {
         ArrayList<StringPair> jsonlist = new ArrayList<>();
         jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_END_TRIP));
         jsonlist.add(new StringPair(ServerLink.NAME, user_name));
-        myserver.request(jsonlist, this);
+        myserver.request(jsonlist);
 
         handler.removeCallbacks(runnableCode);
 
@@ -117,7 +108,7 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
         ArrayList<StringPair> jsonlist = new ArrayList<>();
         jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_EMERGENCY));
         jsonlist.add(new StringPair(ServerLink.NAME, user_name));
-        myserver.request(jsonlist, this);
+        myserver.request(jsonlist);
 
         findViewById(R.id.button6).setBackgroundColor(Color.RED);
     }
@@ -173,7 +164,6 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
         Log.d("Map", "Updating map");
 
         mLocation = new LatLng(atlas.getLat(), atlas.getLon());
-        mLocationFloor = atlas.getFloor();
         if (mMarker == null) {
             if (mMap != null) {
                 mMarker = mMap.addMarker(new MarkerOptions().position(mLocation)
@@ -183,21 +173,6 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
             }
         } else {
             mMarker.setPosition(mLocation);
-        }
-
-        if (myserver.other_lat != 0 && myserver.other_lon != 0) {
-            mDestination = new LatLng(myserver.other_lat, myserver.other_lon);
-            mDestinationFloor = myserver.floor;
-            if (mMarkerOther == null) {
-                if (mMap != null) {
-                    mMarkerOther = mMap.addMarker(new MarkerOptions().position(mDestination)
-                            .icon(BitmapDescriptorFactory.defaultMarker(100))
-                            .title("Guardian Angel"));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDestination, 17.0f));
-                }
-            } else {
-                mMarkerOther.setPosition(mDestination);
-            }
         }
     }
 

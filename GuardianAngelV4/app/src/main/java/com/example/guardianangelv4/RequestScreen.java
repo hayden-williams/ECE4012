@@ -68,16 +68,6 @@ public class RequestScreen extends AppCompatActivity implements OnMapReadyCallba
         myserver = ServerLink.getInstance();
         atlas = IndoorAtlas.getInstance();
 
-        // Send server the user's name
-        /*ArrayList<StringPair> jsonList = new ArrayList<>();
-        jsonList.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_USER));
-        jsonList.add(new StringPair(ServerLink.NAME, user_name));
-        jsonList.add(new StringPair(ServerLink.LAT, Double.toString(atlas.getLat())));
-        jsonList.add(new StringPair(ServerLink.LON, Double.toString(atlas.getLon())));
-        jsonList.add(new StringPair(ServerLink.FLOOR, Integer.toString(atlas.getFloor())));
-        myserver.request(jsonList, this);*/
-        //myserver.getRequest(this, ServerLink.MESSAGE_TYPE_ROVER, "", 1);
-
         mMapView = findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
@@ -95,6 +85,14 @@ public class RequestScreen extends AppCompatActivity implements OnMapReadyCallba
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                atlas.lat = latLng.latitude;
+                atlas.lon = latLng.longitude;
+                updateMap();
+            }
+        });
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = new String[2];
             permissions[0] = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -105,7 +103,6 @@ public class RequestScreen extends AppCompatActivity implements OnMapReadyCallba
     }
 
     public void updateMap() {
-        //myserver.getRequest(this);
 
         if (mMap == null) {
             // location received before map is initialized, ignoring update here
@@ -125,21 +122,6 @@ public class RequestScreen extends AppCompatActivity implements OnMapReadyCallba
             }
         } else {
             mMarker.setPosition(mLocation);
-        }
-
-        if (myserver.other_lat != 0 && myserver.other_lon != 0) {
-            mDestination = new LatLng(myserver.other_lat, myserver.other_lon);
-            mDestinationFloor = myserver.floor;
-            if (mMarkerOther == null) {
-                if (mMap != null) {
-                    mMarkerOther = mMap.addMarker(new MarkerOptions().position(mDestination)
-                            .icon(BitmapDescriptorFactory.defaultMarker(100))
-                            .title("Guardian Angel"));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDestination, 17.0f));
-                }
-            } else {
-                mMarkerOther.setPosition(mDestination);
-            }
         }
     }
 

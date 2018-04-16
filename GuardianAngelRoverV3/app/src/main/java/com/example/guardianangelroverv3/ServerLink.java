@@ -1,12 +1,14 @@
 package com.example.guardianangelroverv3;
 
-import android.app.Activity;
 import android.util.Log;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -15,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -44,7 +47,7 @@ public class ServerLink {
     public static final String LON = "lon";
     public static final String FLOOR = "floor";
     public static final String DIRECTION = "direction";
-    public static final String LENGTH = "length";
+    public static final String LENGTH = "distance";
     public static final String BEARING = "bearing";
 
     public static final String MESSAGE_TYPE_ROVER = "0";
@@ -54,15 +57,18 @@ public class ServerLink {
     public static final String MESSAGE_TYPE_ROVER_ARRIVED = "4";
     public static final String MESSAGE_TYPE_WAYFINDING = "5";
 
+    public static final String DIR[] = {"direction1", "direction2", "direction3", "direction4", "direction5"};
+    public static final String LEN[] = {"distance1", "distance2", "distance3", "distance4", "distance5"};
 
-    private String ip_address = "128.61.114.24";
+
+    private String ip_address = "128.61.7.199";
     private String TAG = "ServerLink";
     private RequestQueue queue;
 
     public double other_lat = 0;
     public double other_lon = 0;
     public int floor = 0;
-    public String user_name = "";
+    public String user_name = "USER";
     public boolean emergency = false;
 
     protected ServerLink() {
@@ -74,7 +80,7 @@ public class ServerLink {
     }
 
     // Send JSON data to server
-    public void request(List<StringPair> jsonList, Activity act) {
+    public void request(List<StringPair> jsonList) {
         String url = "http://" + ip_address + ":3000/guardian-angel";
 
         Log.d(TAG, "Begin sending JSON data");
@@ -84,6 +90,7 @@ public class ServerLink {
             for (StringPair listItem : jsonList) {
                 jsonBody.put(listItem.getName(), listItem.getValue());
             }
+            Log.d(TAG, "Sending JSON: " + jsonBody.toString());
         } catch (JSONException e) {
             Log.d(TAG, "JSONException: " + e.toString());
         }
@@ -92,53 +99,10 @@ public class ServerLink {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "Response is: " + response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, "Message could not be sent");
-                    }
-                });
-        queue.add(request);
-    }
-
-    // Get JSON data from server
-    public void getRequest(Activity act, final String message_type, final String provided_name, int num_messages) {
-        String url;
-        if (provided_name == "") url = "http://" + ip_address + ":3000/guardian-angel?" + MESSAGE_TYPE + "=" + message_type + "&_limit=" + num_messages + "&_sort=id&_order=desc";
-        else url = "http://" + ip_address + ":3000/guardian-angel?" + MESSAGE_TYPE + "=" + message_type + "&_" + NAME + "=" + user_name + "&_limit=" + num_messages + "&_sort=id&_order=desc";
-
-        Log.d(TAG, "Begin requesting JSON data");
-
-        JsonArrayRequest request = new JsonArrayRequest(url,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d(TAG, "Response is: " + response.toString());
-                        if (message_type == MESSAGE_TYPE_USER || message_type == MESSAGE_TYPE_ROVER) {
-                            try {
-                                other_lat = ((JSONObject) response.get(0)).getDouble(LAT);
-                                other_lon = ((JSONObject) response.get(0)).getDouble(LON);
-                                floor = ((JSONObject) response.get(0)).getInt(FLOOR);
-                                user_name = ((JSONObject) response.get(0)).getString(NAME);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        } else if (message_type == MESSAGE_TYPE_EMERGENCY) {
-                            if (response.length() > 0) {
-                                for (int i = 0; i < response.length(); i++) {
-                                    try {
-                                        String temp_user = ((JSONObject) response.get(i)).getString(NAME);
-                                        if (temp_user == provided_name) emergency = true;
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            } else {
-                                emergency = false;
-                            }
+                        if (response == null) {
+                            Log.d(TAG, "Message sent, no response.");
+                        } else {
+                            Log.d(TAG, "Response is: " + response.toString());
                         }
                     }
                 },
@@ -147,35 +111,63 @@ public class ServerLink {
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "Message could not be sent: " + error.toString());
                     }
-                });
+                }) {
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String jsonString = new String(response.data,
+                            HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+
+                    JSONObject result = null;
+
+                    if (jsonString != null && jsonString.length() > 0)
+                        result = new JSONObject(jsonString);
+
+                    return Response.success(result,
+                            HttpHeaderParser.parseCacheHeaders(response));
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                } catch (JSONException je) {
+                    return Response.error(new ParseError(je));
+                }
+            }
+        };
         queue.add(request);
     }
+
+
 
     // Get JSON data from server
     public void getRequestUserCoords() {
-        String url = "http://" + ip_address + ":3000/usercoords";
+        String url = "http://" + ip_address + ":3000/usercoord";
 
         Log.d(TAG, "Begin requesting JSON data");
 
-        JsonArrayRequest request = new JsonArrayRequest(url,
-                new Response.Listener<JSONArray>() {
+        JsonObjectRequest request = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d(TAG, "Response is: " + response.toString());
-                        try {
-                            other_lat = ((JSONObject) (response.get(0))).getDouble(LAT);
-                            other_lon = ((JSONObject) response.get(0)).getDouble(LON);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    public void onResponse(JSONObject response) {
+                        if (response == null) {
+                            Log.d(TAG, "Message sent, no response.");
+                        } else {
+                            Log.d(TAG, "Response is: " + response.toString());
+                            try {
+                                other_lat = response.getDouble(LAT);
+                                other_lon = response.getDouble(LON);
+                                Log.d(TAG, "Successfully parsed response, lat is " + other_lat + " and lon is " + other_lon);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, "Message could not be sent: " + error.toString());
-                    }
-                });
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Message could not be sent: " + error.toString());
+                error.printStackTrace();
+            }
+        });
+
         queue.add(request);
     }
 

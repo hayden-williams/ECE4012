@@ -67,9 +67,11 @@ public class IndoorAtlas {
 
     private String TAG = "IndoorAtlas"; // for log
 
-    private double lat = 0;
-    private double lon = 0;
-    private int floor = 0;
+    public double lat = 0;
+    public double lon = 0;
+    public int floor = 0;
+
+    private boolean first_location_set[] = {false, false, false, false, false};
 
     protected IndoorAtlas() {
         // Initialize IndoorAtlas
@@ -83,31 +85,49 @@ public class IndoorAtlas {
         // Called when the location has changed.
         @Override
         public void onLocationChanged(IALocation location) {
-            Log.d(TAG, "Latitude: " + location.getLatitude());
-            lat = location.getLatitude();
-            Log.d(TAG, "Longitude: " + location.getLongitude());
-            lon = location.getLongitude();
-            Log.d(TAG, "Floor number: " + location.getFloorLevel());
-            floor = location.getFloorLevel();
-
-            AppCompatActivity app = CurrentActivity.getInstance().getCurrentActivity();
-            switch (CurrentActivity.getInstance().getCurrentActivityNum()) {
-                case 1:
-                    break;
-                case 2:
-                    ((RequestScreen)app).updateMap();
-                    break;
-                case 3:
-                    //((WaitScreen)app).updateServer();
-                    ((WaitScreen)app).updateMap();
-                    break;
-                case 4:
-                    //((TripScreen)app).updateServer();
-                    ((TripScreen)app).updateMap();
-                    break;
-                case 5:
-                    break;
-            }
+                AppCompatActivity app = CurrentActivity.getInstance().getCurrentActivity();
+                switch (CurrentActivity.getInstance().getCurrentActivityNum()) {
+                    case 1:
+                        break;
+                    case 2:
+                        if (!first_location_set[1]) {
+                            Log.d(TAG, "Latitude: " + location.getLatitude());
+                            lat = location.getLatitude();
+                            Log.d(TAG, "Longitude: " + location.getLongitude());
+                            lon = location.getLongitude();
+                            Log.d(TAG, "Floor number: " + location.getFloorLevel());
+                            floor = location.getFloorLevel();
+                            ((RequestScreen) app).updateMap();
+                        }
+                        first_location_set[1] = true;
+                        break;
+                    case 3:
+                        //((WaitScreen)app).updateServer();
+                        //((WaitScreen) app).updateMap();
+                        break;
+                    case 4:
+                        Log.d(TAG, "Latitude: " + location.getLatitude());
+                        lat = location.getLatitude();
+                        Log.d(TAG, "Longitude: " + location.getLongitude());
+                        lon = location.getLongitude();
+                        Log.d(TAG, "Floor number: " + location.getFloorLevel());
+                        floor = location.getFloorLevel();
+                        //((TripScreen)app).updateServer();
+                        ((TripScreen) app).updateMap();
+                        break;
+                    case 5:
+                        if (!first_location_set[4]) {
+                            Log.d(TAG, "Latitude: " + location.getLatitude());
+                            lat = location.getLatitude();
+                            Log.d(TAG, "Longitude: " + location.getLongitude());
+                            lon = location.getLongitude();
+                            Log.d(TAG, "Floor number: " + location.getFloorLevel());
+                            floor = location.getFloorLevel();
+                            //((EndScreen) app).updateMap();
+                        }
+                        first_location_set[4] = true;
+                        break;
+                }
         }
 
         @Override

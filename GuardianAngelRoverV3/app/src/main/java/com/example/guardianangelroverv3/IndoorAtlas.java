@@ -57,10 +57,14 @@ public class IndoorAtlas {
 
     private String TAG = "IndoorAtlas"; // for log
 
-    private double lat = 0;
-    private double lon = 0;
-    private int floor = 0;
+    public double lat = 33.77596903699503;
+    public double lon = -84.39690195434368;
+    private int floor = 2;
     private double bearing = 0;
+
+    private double bearing_offset = -10.0;
+
+    private boolean first_location_set = false;
 
     protected IndoorAtlas() {
         // Initialize IndoorAtlas
@@ -74,20 +78,24 @@ public class IndoorAtlas {
         // Called when the location has changed.
         @Override
         public void onLocationChanged(IALocation location) {
-            Log.d(TAG, "Latitude: " + location.getLatitude());
-            lat = location.getLatitude();
-            Log.d(TAG, "Longitude: " + location.getLongitude());
-            lon = location.getLongitude();
-            Log.d(TAG, "Floor number: " + location.getFloorLevel());
-            floor = location.getFloorLevel();
-            Log.d(TAG, "Bearing: " + location.getBearing());
-            bearing = location.getBearing();
 
             AppCompatActivity app = CurrentActivity.getInstance().getCurrentActivity();
             switch (CurrentActivity.getInstance().getCurrentActivityNum()) {
                 case 1:
-                    //((MainActivity)app).updateServer();
-                    ((MainActivity)app).updateMap();
+                    /*if (!first_location_set) {
+                        Log.d(TAG, "Latitude: " + location.getLatitude());
+                        lat = location.getLatitude();
+                        Log.d(TAG, "Longitude: " + location.getLongitude());
+                        lon = location.getLongitude();
+                        Log.d(TAG, "Floor number: " + location.getFloorLevel());
+                        floor = location.getFloorLevel();
+                        Log.d(TAG, "Bearing: " + location.getBearing() + bearing_offset);
+                        bearing = location.getBearing() + bearing_offset;
+
+                        //((MainActivity)app).updateServer();
+                        ((MainActivity) app).updateMap();
+                    }
+                    first_location_set = true;*/
                     break;
             }
         }

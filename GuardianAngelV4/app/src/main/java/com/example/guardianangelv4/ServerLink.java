@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -16,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -60,12 +64,6 @@ public class ServerLink {
     private String TAG = "ServerLink";
     private RequestQueue queue;
 
-    public double other_lat = 0;
-    public double other_lon = 0;
-    public int floor = 0;
-    public String user_name = "";
-    public boolean emergency = false;
-
     protected ServerLink() {
         queue = Volley.newRequestQueue(CurrentActivity.getInstance().getCurrentActivity());
     }
@@ -75,7 +73,7 @@ public class ServerLink {
     }
 
     // Send JSON data to server
-    public void request(List<StringPair> jsonList, Activity act) {
+    public void request(List<StringPair> jsonList) {
         String url = "http://" + ip_address + ":3000/guardian-angel";
 
         Log.d(TAG, "Begin sending JSON data");
@@ -88,64 +86,15 @@ public class ServerLink {
         } catch (JSONException e) {
             Log.d(TAG, "JSONException: " + e.toString());
         }
-        Log.d(TAG, "JSON object successfully created.");
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "Response is: " + response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, "Message could not be sent: " + error.toString());
-                    }
-                });
-        /*request.setRetryPolicy(new DefaultRetryPolicy(
-                30000,
-                0,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
-        queue.add(request);
-    }
-
-    // Get JSON data from server
-    public void getRequest(Activity act, final String message_type, final String provided_name, int num_messages) {
-        String url;
-        //if (provided_name == "") url = "http://" + ip_address + ":3000/guardian-angel?" + MESSAGE_TYPE + "=" + message_type + "&_limit=" + num_messages + "&_sort=id&_order=desc";
-        //else url = "http://" + ip_address + ":3000/guardian-angel?" + MESSAGE_TYPE + "=" + message_type + "&_" + NAME + "=" + user_name + "&_limit=" + num_messages + "&_sort=id&_order=desc";
-        url = "http://" + ip_address + ":3000/usercoord";
-
-        Log.d(TAG, "Begin requesting JSON data");
-
-        JsonArrayRequest request = new JsonArrayRequest(url,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d(TAG, "Response is: " + response.toString());
-                        if (message_type == MESSAGE_TYPE_USER || message_type == MESSAGE_TYPE_ROVER) {
-                            try {
-                                other_lat = ((JSONObject) response.get(0)).getDouble(LAT);
-                                other_lon = ((JSONObject) response.get(0)).getDouble(LON);
-                                //floor = ((JSONObject) response.get(0)).getInt(FLOOR);
-                                //user_name = ((JSONObject) response.get(0)).getString(NAME);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        } else if (message_type == MESSAGE_TYPE_EMERGENCY) {
-                            if (response.length() > 0) {
-                                for (int i = 0; i < response.length(); i++) {
-                                    try {
-                                        String temp_user = ((JSONObject) response.get(i)).getString(NAME);
-                                        if (temp_user == provided_name) emergency = true;
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            } else {
-                                emergency = false;
-                            }
+                        if (response == null) {
+                            Log.d(TAG, "Message sent, no response.");
+                        } else {
+                            Log.d(TAG, "Response is: " + response.toString());
                         }
                     }
                 },
@@ -154,10 +103,29 @@ public class ServerLink {
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "Message could not be sent: " + error.toString());
                     }
-                });
+                }) {
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String jsonString = new String(response.data,
+                            HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+
+                    JSONObject result = null;
+
+                    if (jsonString != null && jsonString.length() > 0)
+                        result = new JSONObject(jsonString);
+
+                    return Response.success(result,
+                            HttpHeaderParser.parseCacheHeaders(response));
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                } catch (JSONException je) {
+                    return Response.error(new ParseError(je));
+                }
+            }
+        };
         queue.add(request);
     }
-
 
 
 }

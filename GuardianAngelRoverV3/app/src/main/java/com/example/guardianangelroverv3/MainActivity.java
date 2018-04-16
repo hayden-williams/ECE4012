@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // name of rover and active user
     private String name = "ROVER";
-    private String user_to_follow = "";
 
     private TextView textView;
 
@@ -82,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     final Handler handler = new Handler();
     private Runnable runnableCode;
+
+    private final double home_location_lat = 33.77596903699503;
+    private final double home_location_lon = -84.39690195434368;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,15 +164,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             mWayfinder = IAWayfinder.create(this, graphJSON);
         }
 
-        runnableCode = new Runnable() {
+        /*runnableCode = new Runnable() {
             @Override
             public void run() {
                 Log.d("Handlers", "Called on main thread");
                 updateServer();
-                handler.postDelayed(this, 5000);
+                handler.postDelayed(this, 50);
             }
         };
-        handler.post(runnableCode);
+        handler.post(runnableCode);*/
     }
 
     // handle response from permissions request
@@ -201,12 +203,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         jsonlist.add(new StringPair(ServerLink.NAME, name));
         jsonlist.add(new StringPair(ServerLink.LAT, Double.toString(atlas.getLat())));
         jsonlist.add(new StringPair(ServerLink.LON, Double.toString(atlas.getLon())));
-        jsonlist.add(new StringPair(ServerLink.FLOOR, Integer.toString(atlas.getFloor())));
+        //jsonlist.add(new StringPair(ServerLink.FLOOR, Integer.toString(atlas.getFloor())));
         jsonlist.add(new StringPair(ServerLink.BEARING, Double.toString(atlas.getBearing())));
-        myserver.request(jsonlist, this);
+        myserver.request(jsonlist);
 
         // check server for user's location
-        //myserver.getRequest(this, ServerLink.MESSAGE_TYPE_USER, user_to_follow, 1);
         myserver.getRequestUserCoords();
 
         // check server if emergency is active
@@ -218,11 +219,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         Log.d("Map", "Map ready");
         mMap = googleMap;
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                atlas.lat = latLng.latitude;
+                atlas.lon = latLng.longitude;
+                updateMap();
+            }
+        });
+        updateServer();
+        updateMap();
     }
 
     // update the locations and route on the map, also check if an emergency is active
     public void updateMap() {
-        user_to_follow = myserver.user_name;
 
         if (mMap == null) {
             // location received before map is initialized, ignoring update here
@@ -232,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d("Map", "Updating map");
 
         mLocation = new LatLng(atlas.getLat(), atlas.getLon());
-        mLocationFloor = atlas.getFloor();
+        mLocationFloor = 2; //atlas.getFloor();
         if (mMarker == null) {
             if (mMap != null) {
                 mMarker = mMap.addMarker(new MarkerOptions().position(mLocation)
@@ -246,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (myserver.other_lat != 0 && myserver.other_lon != 0) {
             mDestination = new LatLng(myserver.other_lat, myserver.other_lon);
-            mDestinationFloor = mLocationFloor; //myserver.floor;
+            mDestinationFloor = mLocationFloor;
             if (mMarkerOther == null) {
                 if (mMap != null) {
                     mMarkerOther = mMap.addMarker(new MarkerOptions().position(mDestination)
@@ -329,30 +339,48 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mPath = mMap.addPolyline(opt);
         mPathCurrent = mMap.addPolyline(optCurrent);
 
-        // add in code to filter out very short lengths
-        //int leg = 0;
-        //while (legs[0].getLength() < 1 && leg < legs.length - 2) leg++;
+        IARoutingLeg new_legs[] = new IARoutingLeg[legs.length];
+        int j = 0;
 
-        //double relativeDirection = (legs[leg].getDirection()*180.0/3.14159265 - atlas.getBearing()*(-1) - 90);
-
-        textView.setText("Next leg: Direction: " + Double.toString(legs[0].getDirection()) + " Length: " + Double.toString(legs[0].getLength()));
-
-        // send wayfinding directions to server
-        ArrayList<StringPair> jsonlist = new ArrayList<>();
-        jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_WAYFINDING));
-        jsonlist.add(new StringPair(ServerLink.NAME, name));
-        jsonlist.add(new StringPair(ServerLink.DIRECTION, Double.toString(legs[0].getDirection())));
-        jsonlist.add(new StringPair(ServerLink.LENGTH, Double.toString(legs[0].getLength())));
-        myserver.request(jsonlist, this);
-
-        double totalDistance = 0.0;
-
-        for (IARoutingLeg l : legs) {
-            Log.d("Wayfinding_Legs", "Direction: " + Double.toString(l.getDirection()) + " Length: " + Double.toString(l.getLength()));
-            totalDistance += l.getLength();
+        for (int i = 0; i < legs.length; i++) {
+            if (legs[i].getLength() >= 2.0) {
+                double new_dir_i = 90 - legs[i].getDirection() * 180.0 / 3.14159265;
+                /*if (new_dir_i < 0) new_dir_i -= 360;
+                if (new_dir_i >= 315 || new_dir_i < 45) new_dir_i = 0;
+                else if (new_dir_i >= 45 || new_dir_i < 135) new_dir_i = 90;
+                else if (new_dir_i >= 135 || new_dir_i < 225) new_dir_i = 180;
+                else if (new_dir_i >= 225 || new_dir_i < 315) new_dir_i = 270;*/
+                new_dir_i = Math.round(new_dir_i);
+                new_legs[j] = new IARoutingLeg(null, null, legs[i].getLength(), new_dir_i, null);
+                j++;
+            }
         }
-        Log.d("Wayfinding_Legs", "Current bearing is: " + Double.toString(atlas.getBearing()));
-        Log.d("Wayfinding_Legs", "Total Distance: " + Double.toString(totalDistance));
+
+        if (new_legs.length > 0) {
+
+            textView.setText("First Leg: Direction: " + new_legs[0].getDirection() + " Length: " + new_legs[0].getLength());
+
+            // send wayfinding directions to server
+            for (int i = 0; i < legs.length; i++) {
+                Log.d("Wayfinding_Legs", "Original Direction Deg90-dir: " + (90 - (legs[i].getDirection() * 180.0 / 3.14159265))  + " Length: " + legs[i].getLength());
+            }
+
+            ArrayList<StringPair> jsonList = new ArrayList<>();
+            jsonList.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_WAYFINDING));
+            for (int i = 0; i < j; i++) {
+                Log.d("Wayfinding_Legs", "New Direction: " + new_legs[i].getDirection() + " Length: " + new_legs[i].getLength());
+
+                if (i < 5) {
+                    jsonList.add(new StringPair(ServerLink.DIR[i], Double.toString(new_legs[i].getDirection())));
+                    jsonList.add(new StringPair(ServerLink.LEN[i], Double.toString(new_legs[i].getLength())));
+                }
+            }
+            for (; j < 5; j++) {
+                jsonList.add(new StringPair(ServerLink.DIR[j], "0"));
+                jsonList.add(new StringPair(ServerLink.LEN[j], "0"));
+            }
+            myserver.request(jsonList);
+        }
     }
 
     /**
@@ -442,7 +470,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         ArrayList<StringPair> jsonlist = new ArrayList<>();
         jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_EMERGENCY));
         jsonlist.add(new StringPair(ServerLink.NAME, name));
-        myserver.request(jsonlist, this);
+        myserver.request(jsonlist);
 
         findViewById(R.id.button2).setBackgroundColor(Color.RED);
     }

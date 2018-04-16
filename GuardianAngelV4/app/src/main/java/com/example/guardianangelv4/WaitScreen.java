@@ -39,14 +39,10 @@ public class WaitScreen extends AppCompatActivity implements OnMapReadyCallback 
 
     private GoogleMap mMap;
     private Marker mMarker;
-    private Marker mMarkerOther;
     private MapView mMapView;
     private GroundOverlay mGroundOverlay = null;
 
     private LatLng mLocation;
-    private LatLng mDestination;
-    private int mLocationFloor;
-    private int mDestinationFloor;
 
     private static final float HUE_IABLUE = 200.0f;
 
@@ -71,11 +67,7 @@ public class WaitScreen extends AppCompatActivity implements OnMapReadyCallback 
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
-        //myserver.getRequest(this, ServerLink.MESSAGE_TYPE_ROVER, "", 1);
-
         setupGroundOverlay(atlas.floorPlan_saved, atlas.bitmap_saved);
-
-        updateServer();
 
         runnableCode = new Runnable() {
             @Override
@@ -94,16 +86,15 @@ public class WaitScreen extends AppCompatActivity implements OnMapReadyCallback 
         jsonlist.add(new StringPair(ServerLink.NAME, user_name));
         jsonlist.add(new StringPair(ServerLink.LAT, Double.toString(atlas.getLat())));
         jsonlist.add(new StringPair(ServerLink.LON, Double.toString(atlas.getLon())));
-        jsonlist.add(new StringPair(ServerLink.FLOOR, Integer.toString(atlas.getFloor())));
-        myserver.request(jsonlist, this);
-        //myserver.getRequest(this, ServerLink.MESSAGE_TYPE_ROVER, "", 1);
+        //jsonlist.add(new StringPair(ServerLink.FLOOR, Integer.toString(atlas.getFloor())));
+        myserver.request(jsonlist);
     }
 
     public void clickCancel(View view) {
         ArrayList<StringPair> jsonlist = new ArrayList<>();
         jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_END_TRIP));
         jsonlist.add(new StringPair(ServerLink.NAME, user_name));
-        myserver.request(jsonlist, this);
+        myserver.request(jsonlist);
 
         handler.removeCallbacks(runnableCode);
 
@@ -116,7 +107,7 @@ public class WaitScreen extends AppCompatActivity implements OnMapReadyCallback 
         ArrayList<StringPair> jsonlist = new ArrayList<>();
         jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_ROVER_ARRIVED));
         jsonlist.add(new StringPair(ServerLink.NAME, user_name));
-        myserver.request(jsonlist, this);
+        myserver.request(jsonlist);
 
         handler.removeCallbacks(runnableCode);
 
@@ -165,6 +156,7 @@ public class WaitScreen extends AppCompatActivity implements OnMapReadyCallback 
             ActivityCompat.requestPermissions(this, permissions, 0);
             return;
         }
+        updateMap();
     }
 
     public void updateMap() {
@@ -176,7 +168,6 @@ public class WaitScreen extends AppCompatActivity implements OnMapReadyCallback 
         Log.d("Map", "Updating map");
 
         mLocation = new LatLng(atlas.getLat(), atlas.getLon());
-        mLocationFloor = atlas.getFloor();
         if (mMarker == null) {
             if (mMap != null) {
                 mMarker = mMap.addMarker(new MarkerOptions().position(mLocation)
@@ -186,21 +177,6 @@ public class WaitScreen extends AppCompatActivity implements OnMapReadyCallback 
             }
         } else {
             mMarker.setPosition(mLocation);
-        }
-
-        if (myserver.other_lat != 0 && myserver.other_lon != 0) {
-            mDestination = new LatLng(myserver.other_lat, myserver.other_lon);
-            mDestinationFloor = myserver.floor;
-            if (mMarkerOther == null) {
-                if (mMap != null) {
-                    mMarkerOther = mMap.addMarker(new MarkerOptions().position(mDestination)
-                            .icon(BitmapDescriptorFactory.defaultMarker(100))
-                            .title("Guardian Angel"));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDestination, 17.0f));
-                }
-            } else {
-                mMarkerOther.setPosition(mDestination);
-            }
         }
     }
 
