@@ -70,6 +70,8 @@ class selfNavigation():
 	desired_upBound = 1050
 	invalid_max = 2000
 	max_speed = 1
+
+	move_cmd
 	
 
 	def __init__(self):
