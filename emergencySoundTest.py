@@ -21,7 +21,7 @@ if __name__ == '__main__':
 	soundhandle = SoundClient()
 	rospy.sleep(2)
 
-	while(true):
+	while(1):
 		counter = counter + 1
 		if soundCounter%1000 == 0:
 			# Adjust the number so this says Emergency repeatedly
