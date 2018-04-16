@@ -102,11 +102,11 @@ class selfNavigation():
 		self.r = rospy.Rate(10) #use to be 10
 
 		# Twist is a datatype for velocity
-		move_cmd = Twist()
+		self.move_cmd = Twist()
 		# let's go forward at 0.2 m/s
-		move_cmd.linear.x = 0.0
+		self.move_cmd.linear.x = 0.0
 		# let's turn at 0 radians/s
-		move_cmd.angular.z = 0
+		self.move_cmd.angular.z = 0
 
 		
 		# as long as you haven't ctrl + c keeping doing...
@@ -158,20 +158,20 @@ class selfNavigation():
 					rospy.loginfo(self.arrived)
 					if (self.direction[self.path] == 1000 or self.length[self.path] == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0 or self.path == 5):
 						rospy.loginfo('len = 0, dir = 1000')
-						move_cmd.linear.x = 0.0
-						move_cmd.angular.z = 0
+						self.move_cmd.linear.x = 0.0
+						self.move_cmd.angular.z = 0
 					elif (fabs(self.thetaError) < 1 and self.magnitude < self.length[self.path]):
 						rospy.loginfo('error < 0.05')
-						move_cmd.angular.z = self.kTurn*self.thetaError
-						move_cmd.linear.x = 0.2
+						self.move_cmd.angular.z = self.kTurn*self.thetaError
+						self.move_cmd.linear.x = 0.2
 					elif (fabs(self.thetaError) > 1 and self.magnitude < self.length[self.path]):
 						rospy.loginfo('error>0.05')
-						move_cmd.angular.z = self.kTurn*self.thetaError
-						move_cmd.linear.x = 0.0
+						self.move_cmd.angular.z = self.kTurn*self.thetaError
+						self.move_cmd.linear.x = 0.0
 					elif (self.magnitude >= self.length[self.path]):
 						rospy.loginfo('error>0.05')
-						move_cmd.angular.z = 0.0
-						move_cmd.linear.x = 0.0
+						self.move_cmd.angular.z = 0.0
+						self.move_cmd.linear.x = 0.0
 						# didItMakeIt function begins IF NEEDED
 
 						# didItMakeIt function ends
@@ -182,50 +182,50 @@ class selfNavigation():
 
 					else:
 						rospy.loginfo('else')
-						move_cmd.angular.z = 0.0
-						move_cmd.linear.x = 0.0
+						self.move_cmd.angular.z = 0.0
+						self.move_cmd.linear.x = 0.0
 
 
 				else:
 					if (self.ZoneList[0] == 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] != 0):
 						#rospy.loginfo("inside else")
 						#soft left
-						move_cmd.linear.x = 0.2
-						move_cmd.angular.z = 0.5
+						self.move_cmd.linear.x = 0.2
+						self.move_cmd.angular.z = 0.5
 					elif (self.ZoneList[0] != 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] == 0):
 						#soft right
-						move_cmd.linear.x = 0.2
-						move_cmd.angular.z = -0.5
+						self.move_cmd.linear.x = 0.2
+						self.move_cmd.angular.z = -0.5
 					elif (self.ZoneList[0] == 0 and self.ZoneList[1] != 0 and self.ZoneList[2] != 0 and self.ZoneList[3] == 0):
 						if (self.ZoneList[1] > self.ZoneList[2]):
 							#Hard Right
-							move_cmd.linear.x = 0.2
-							move_cmd.angular.z = -0.75
+							self.move_cmd.linear.x = 0.2
+							self.move_cmd.angular.z = -0.75
 						else:
-							move_cmd.linear.x = 0.2
-							move_cmd.angular.z = 0.7
+							self.move_cmd.linear.x = 0.2
+							self.move_cmd.angular.z = 0.7
 							#Hard Leff
 					elif((self.ZoneList[0]==0 and self.ZoneList[2] !=0) or (self.ZoneList[0] == 0 and self.ZoneList[1] !=0 and self.ZoneList[3] != 0)):
-						move_cmd.linear.x = 0.2
-						move_cmd.angular.z = 0.7
+						self.move_cmd.linear.x = 0.2
+						self.move_cmd.angular.z = 0.7
 					# Hard Left
 					elif((self.ZoneList[1] != 0 and self.ZoneList[3] ==0) or (self.ZoneList[0] != 0 and self.ZoneList[2] != 0 and self.ZoneList[3] == 0)):
-						move_cmd.linear.x = 0.2
-						move_cmd.angular.z = -0.75
+						self.move_cmd.linear.x = 0.2
+						self.move_cmd.angular.z = -0.75
 					else:
 						self.count = self.count + 1
 						if self.count == 1 :
-							move_cmd.linear.x = 0.0
-							move_cmd.angular.z = 0
+							self.move_cmd.linear.x = 0.0
+							self.move_cmd.angular.z = 0
 							self.cmd_vel.publish(move_cmd)
 							self.r.sleep()
 							while (np.sum(self.ZoneList) != 0 and np.absolute(self.thetaError) < 1.57):
-								move_cmd.angular.z = 0.5
+								self.move_cmd.angular.z = 0.5
 								self.cmd_vel.publish(move_cmd)
 								self.r.sleep()
 						elif self.count == 2 :
-							move_cmd.linear.x = 0.0
-							move_cmd.angular.z = 0
+							self.move_cmd.linear.x = 0.0
+							self.move_cmd.angular.z = 0
 							self.cmd_vel.publish(move_cmd)
 							self.r.sleep()
 							while (np.sum(self.ZoneList)!=0):
@@ -234,8 +234,8 @@ class selfNavigation():
 								self.r.sleep()
 						else:
 							rospy.loginfo("I cant make it around! Help Mommy")
-							move_cmd.linear.x = 0.0
-							move_cmd.angular.z = 0
+							self.move_cmd.linear.x = 0.0
+							self.move_cmd.angular.z = 0
 							self.path = self.path + 1
 							self.cmd_vel.publish(move_cmd)
 
@@ -254,8 +254,8 @@ class selfNavigation():
 			else:
 				# do nothing
 				rospy.loginfo('do nothing')
-				move_cmd.linear.x = 0.0
-				move_cmd.angular.z = 0
+				self.move_cmd.linear.x = 0.0
+				self.move_cmd.angular.z = 0
 				self.cmd_vel.publish(move_cmd)
 
 	def Orientation(self,data):
