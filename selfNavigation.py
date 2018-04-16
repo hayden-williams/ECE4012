@@ -80,6 +80,7 @@ class selfNavigation():
 	soundCounter = 0
 
 	savePic = 0
+	emergencyFirstTime = 0
 
 	roverAtUser = 0
 
@@ -105,7 +106,7 @@ class selfNavigation():
 		# Subscribe to depth sensor and get raw image
 		self.depth_sub = rospy.Subscriber("/camera/depth/image_raw",Image,self.callback)
 		# Color camera subscriber
-		self.image_sub = rospy.Subscriber("/camera/rgb/image_color",Image,self.callbackImage)
+		#self.image_sub = rospy.Subscriber("/camera/rgb/image_color",Image,self.callbackImage)
 		# Subscribe to sound 
 		self.soundhandle = SoundClient()
 
@@ -209,7 +210,7 @@ class selfNavigation():
 							tellServer = requests.post('http://128.61.7.199:3000/home', {'gotHome': 1})  #<----------------SERVER IP ADDRESS HERE-------
 
 
-				elif (np.sum(self.ZoneList) == 0 and self.roverAtUser == 0):
+				elif (np.sum(self.ZoneList) != 0 and self.roverAtUser == 0):
 					if (self.ZoneList[0] == 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] != 0):
 						#rospy.loginfo("inside else")
 						#soft left
@@ -283,6 +284,10 @@ class selfNavigation():
 			elif self.emergency == 1:
 				# say emergency, do nothing except send pics
 				rospy.loginfo('emergency')
+				if self.emergencyFirstTime == 0:
+					self.image_sub = rospy.Subscriber("/camera/rgb/image_color",Image,self.callbackImage)
+					self.emergencyFirstTime = 1
+					rospy.sleep(2)
 				self.move_cmd.linear.x = 0.0
 				self.move_cmd.angular.z = 0
 				self.cmd_vel.publish(self.move_cmd)
