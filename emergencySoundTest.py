@@ -21,12 +21,13 @@ if __name__ == '__main__':
 	soundhandle = SoundClient()
 	rospy.sleep(2)
 
-	while(counter < 999999):
+	while(true):
 		counter = counter + 1
 		if soundCounter%1000 == 0:
 			# Adjust the number so this says Emergency repeatedly
 			soundCounter = 0
 			soundhandle.say('Emergency')
+			soundhandle.stopSaying()
 		soundCounter = soundCounter + 1
 
 	print('While loop ended')
