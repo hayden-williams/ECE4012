@@ -71,8 +71,7 @@ class selfNavigation():
 	invalid_max = 2000
 	max_speed = 1
 
-	move_cmd
-	
+
 
 	def __init__(self):
 		# initiliaze
@@ -164,8 +163,8 @@ class selfNavigation():
 						self.move_cmd.angular.z = 0
 					elif (fabs(self.thetaError) < 1 and self.magnitude < self.length[self.path]):
 						rospy.loginfo('error < 0.05')
-						self.move_cmd.angular.z = self.kTurn*self.thetaError
-						self.move_cmd.linear.x = 0.2
+						move_cmd.angular.z = self.kTurn*self.thetaError
+						move_cmd.linear.x = 0.2
 					elif (fabs(self.thetaError) > 1 and self.magnitude < self.length[self.path]):
 						rospy.loginfo('error>0.05')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
