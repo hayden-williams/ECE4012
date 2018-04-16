@@ -37,6 +37,7 @@ from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 from sound_play.libsoundplay import SoundClient
 
+
 class selfNavigation():
 	thetaError = 0
 	kTurn = 1.5
@@ -47,6 +48,9 @@ class selfNavigation():
 	countQuery = 0
 	arrived = 0
 	goToUser = 0
+	emergency = 0
+	goHome = 0
+
 
 	odomBearing = 0
 	zeroAngle = 1000
@@ -75,6 +79,9 @@ class selfNavigation():
 
 	soundCounter = 0
 
+	savePic = 0
+
+	roverAtUser = 0
 
 
 	def __init__(self):
@@ -97,6 +104,8 @@ class selfNavigation():
 		self.bridge = CvBridge()
 		# Subscribe to depth sensor and get raw image
 		self.depth_sub = rospy.Subscriber("/camera/depth/image_raw",Image,self.callback)
+		# Color camera subscriber
+		self.image_sub = rospy.Subscriber("/camera/rgb/image_color",Image,self.callbackImage)
 		# Subscribe to sound 
 		self.soundhandle = SoundClient()
 
@@ -128,17 +137,19 @@ class selfNavigation():
 
 				self.direction = re['direction'] # in degrees
 				self.length = re['len']
-				self.bearing = re['bearing']
-				emergency = re['emergency']
-				end = re['ended'] # user ended trip
+				#self.bearing = re['bearing']
+				self.emergency = re['emergency']
+				endAndWait = re['ended'] # user ended trip
 				self.arrived = re['arrived']
-				home = re['gotHome'] # rover is home
+				#home = re['gotHome'] # rover is home
 				self.goToUser = re['goToUser']
+				self.goHome = re['goHome']
 
 
 			self.countQuery = self.countQuery + 1
 
-			if self.goToUser==1:
+			if self.goToUser==1 or self.goHome == 1:
+				# endAneWait is still 1, but ignored
 				# put navigation code here
 				# do error corrections
 				rospy.loginfo('entered goToUser')
@@ -164,20 +175,20 @@ class selfNavigation():
 					rospy.loginfo(self.path)
 					rospy.loginfo(self.goToUser)
 					rospy.loginfo(self.arrived)
-					if (self.direction[self.path] == 1000 or self.length[self.path] == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0 or self.path == 5):
+					if (self.direction[self.path] == 1000 or self.length[self.path] == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
 						rospy.loginfo('len = 0, dir = 1000')
 						self.move_cmd.linear.x = 0.0
 						self.move_cmd.angular.z = 0
-					elif (fabs(self.thetaError) < 1 and self.magnitude < self.length[self.path]):
+					elif (fabs(self.thetaError) < 1 and self.magnitude < self.length[self.path] and self.path < 5):
 						rospy.loginfo('error < 0.05')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.2
-					elif (fabs(self.thetaError) > 1 and self.magnitude < self.length[self.path]):
+					elif (fabs(self.thetaError) > 1 and self.magnitude < self.length[self.path] and self.path < 5):
 						rospy.loginfo('error>0.05')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.0
-					elif (self.magnitude >= self.length[self.path]):
-						rospy.loginfo('error>0.05')
+					elif (self.magnitude >= self.length[self.path] and self.path < 5):
+						rospy.loginfo('mag>length')
 						self.move_cmd.angular.z = 0.0
 						self.move_cmd.linear.x = 0.0
 						# didItMakeIt function begins IF NEEDED
@@ -192,9 +203,13 @@ class selfNavigation():
 						rospy.loginfo('else')
 						self.move_cmd.angular.z = 0.0
 						self.move_cmd.linear.x = 0.0
+						self.roverAtUser = 1
+						if goHome == 1:
+							# Tell Server rover is home
+							tellServer = requests.post('http://128.61.7.199:3000/home', {'gotHome': 1})
 
 
-				else:
+				elif (np.sum(self.ZoneList) == 0 and self.roverAtUser == 0):
 					if (self.ZoneList[0] == 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] != 0):
 						#rospy.loginfo("inside else")
 						#soft left
@@ -246,6 +261,12 @@ class selfNavigation():
 							self.move_cmd.angular.z = 0
 							self.path = self.path + 1
 							self.cmd_vel.publish(self.move_cmd)
+				else:
+					# no cases met 
+					rospy.loginfo('Error with goToUser/goHome')
+					self.move_cmd.linear.x = 0.0
+					self.move_cmd.angular.z = 0
+					self.cmd_vel.publish(self.move_cmd)
 
 
 				# publish the velocity
@@ -259,14 +280,20 @@ class selfNavigation():
 				# DO NOTHING
 				# The following code is in callback
 				rospy.loginfo("arrived = 1 yay")
-			elif emergency == 1:
+			elif self.emergency == 1:
 				# say emergency, do nothing except send pics
 				rospy.loginfo('emergency')
 				self.move_cmd.linear.x = 0.0
 				self.move_cmd.angular.z = 0
 				self.cmd_vel.publish(self.move_cmd)
 				self.soundhandle.say('Emergency')
+				if self.savePic == 0: self.savePic = 1
 				rospy.sleep(2)
+			elif endAndWait == 1:
+				# user's trip ended, wait for user to tell the rover where it is
+				self.move_cmd.linear.x = 0.0
+				self.move_cmd.angular.z = 0
+				self.cmd_vel.publish(self.move_cmd)
 			else:
 				# do nothing
 				rospy.loginfo('do nothing')
@@ -376,6 +403,10 @@ class selfNavigation():
 				# Kx is for movment in z direction forward backwards
 				Kx = .0005
 
+				# Will need these to be reset during following code
+				self.roverAtUser = 0
+				self.path = 0
+
 				# Get Image and find size of image
 				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
 				rows, col, channels = self.depth_image.shape #grey scale channel is 1, rgb is 3
@@ -475,6 +506,24 @@ class selfNavigation():
 			self.r.sleep()
 
 
+
+		except CvBridgeError, e:
+			print e
+
+	def callbackImage(self,data):
+		try:
+			if self.emergency == 1:
+				cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+				#cv2.imshow("color_camera_msg.jpg", cv_image)
+				if self.savePic == 1:
+					cv2.imwrite("UserSnapshot.jpg",cv_image)
+					# send to server
+					url = 'http://128.61.7.199:3000/image'
+					files ={'image':open('UserSnapshot.jpg','rb')}
+					sender = requests.post(url, files=files)
+					self.savePic = 0
+				#cv2.waitKey(5000)
+				#rospy.loginfo(imgName)
 
 		except CvBridgeError, e:
 			print e
