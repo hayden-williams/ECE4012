@@ -12,6 +12,8 @@ from sound_play.libsoundplay import SoundClient
 counter = 0
 soundCounter = 0
 
+rospy.init_node('emergency', anonymous=False)
+
 soundhandle = SoundClient()
 
 while(counter < 999999):
