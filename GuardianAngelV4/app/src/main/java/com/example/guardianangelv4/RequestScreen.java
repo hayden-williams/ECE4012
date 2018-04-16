@@ -43,14 +43,10 @@ public class RequestScreen extends AppCompatActivity implements OnMapReadyCallba
 
     private GoogleMap mMap;
     private Marker mMarker;
-    private Marker mMarkerOther;
     private MapView mMapView;
     private GroundOverlay mGroundOverlay = null;
 
     private LatLng mLocation;
-    private LatLng mDestination;
-    private int mLocationFloor;
-    private int mDestinationFloor;
 
     private static final float HUE_IABLUE = 200.0f;
 
@@ -112,7 +108,6 @@ public class RequestScreen extends AppCompatActivity implements OnMapReadyCallba
         Log.d("Map", "Updating map");
 
         mLocation = new LatLng(atlas.getLat(), atlas.getLon());
-        mLocationFloor = atlas.getFloor();
         if (mMarker == null) {
             if (mMap != null) {
                 mMarker = mMap.addMarker(new MarkerOptions().position(mLocation)

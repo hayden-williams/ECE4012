@@ -123,7 +123,7 @@ public class IndoorAtlas {
                             lon = location.getLongitude();
                             Log.d(TAG, "Floor number: " + location.getFloorLevel());
                             floor = location.getFloorLevel();
-                            //((EndScreen) app).updateMap();
+                            ((EndScreen) app).updateMap();
                         }
                         first_location_set[4] = true;
                         break;
@@ -273,6 +273,7 @@ public class IndoorAtlas {
                             ((TripScreen)app).setupGroundOverlay(floorPlan, bitmap);
                             break;
                         case 5:
+                            ((EndScreen)app).setupGroundOverlay(floorPlan, bitmap);
                             break;
                     }
                 }

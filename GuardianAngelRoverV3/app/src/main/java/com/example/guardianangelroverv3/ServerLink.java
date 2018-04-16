@@ -56,6 +56,7 @@ public class ServerLink {
     public static final String MESSAGE_TYPE_EMERGENCY = "3";
     public static final String MESSAGE_TYPE_ROVER_ARRIVED = "4";
     public static final String MESSAGE_TYPE_WAYFINDING = "5";
+    public static final String MESSAGE_TYPE_PATH_FINISHED = "6";
 
     public static final String DIR[] = {"direction1", "direction2", "direction3", "direction4", "direction5"};
     public static final String LEN[] = {"distance1", "distance2", "distance3", "distance4", "distance5"};
@@ -67,12 +68,17 @@ public class ServerLink {
 
     public double other_lat = 0;
     public double other_lon = 0;
+    public double rover_lat = 0;
+    public double rover_lon = 0;
+
 
     public String user_name = "USER";
 
     public boolean emergency = false;
     public boolean arrived = false;
     public boolean ended = false;
+    public boolean gotHome = false;
+    public boolean requested = false;
 
     protected ServerLink() {
         queue = Volley.newRequestQueue(CurrentActivity.getInstance().getCurrentActivity());
@@ -192,6 +198,42 @@ public class ServerLink {
                                 emergency = response.getInt("emergency") == 1;
                                 arrived = response.getInt("arrived") == 1;
                                 ended = response.getInt("ended") == 1;
+                                requested = response.getInt("goToUser") == 1;
+                                //gotHome = response.getInt("gotHome") == 1;
+                                Log.d(TAG, "Successfully parsed response, lat is " + other_lat + " and lon is " + other_lon);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Message could not be sent: " + error.toString());
+                error.printStackTrace();
+            }
+        });
+
+        queue.add(request);
+    }
+
+    // Get JSON data from server
+    public void getRequestRoverCoords() {
+        String url = "http://" + ip_address + ":3000/rovercoord";
+
+        Log.d(TAG, "Begin requesting JSON data");
+
+        JsonObjectRequest request = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response == null) {
+                            Log.d(TAG, "Message sent, no response.");
+                        } else {
+                            Log.d(TAG, "Response is: " + response.toString());
+                            try {
+                                rover_lat = response.getDouble(LAT);
+                                rover_lon = response.getDouble(LON);
                                 Log.d(TAG, "Successfully parsed response, lat is " + other_lat + " and lon is " + other_lon);
                             } catch (JSONException e) {
                                 e.printStackTrace();

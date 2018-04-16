@@ -44,11 +44,8 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
 
     private GoogleMap mMap;
     private Marker mMarker;
-    private Marker mMarkerOther;
     private MapView mMapView;
     private GroundOverlay mGroundOverlay = null;
-
-    private LatLng mLocation;
 
     private static final float HUE_IABLUE = 200.0f;
 
@@ -74,7 +71,6 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
         mMapView.getMapAsync(this);
 
         setupGroundOverlay(atlas.floorPlan_saved, atlas.bitmap_saved);
-
 
         findViewById(R.id.button6).setOnTouchListener(new View.OnTouchListener() {
             long emergencyPressTime = 0;
@@ -114,14 +110,15 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
     }
 
     public void clickEnd(View view) {
-        ArrayList<StringPair> jsonlist = new ArrayList<>();
+        /*ArrayList<StringPair> jsonlist = new ArrayList<>();
         jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_END_TRIP));
         jsonlist.add(new StringPair(ServerLink.NAME, user_name));
-        myserver.request(jsonlist);
+        myserver.request(jsonlist);*/
 
         handler.removeCallbacks(runnableCode);
 
         Intent intent = new Intent(this, EndScreen.class);
+        intent.putExtra(LoginScreen.EXTRA_MESSAGE, user_name);
         startActivity(intent);
     }
 
@@ -168,35 +165,6 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-        atlas.resume();
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-        atlas.pause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        handler.removeCallbacks(runnableCode);
-        mMapView.onDestroy();
-        atlas.destroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
-    }
-
-    @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -217,7 +185,7 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
 
         Log.d("Map", "Updating map");
 
-        mLocation = new LatLng(atlas.getLat(), atlas.getLon());
+        LatLng mLocation = new LatLng(atlas.getLat(), atlas.getLon());
         if (mMarker == null) {
             if (mMap != null) {
                 mMarker = mMap.addMarker(new MarkerOptions().position(mLocation)
@@ -255,6 +223,36 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
 
             mGroundOverlay = mMap.addGroundOverlay(fpOverlay);
         }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+        atlas.resume();
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+        atlas.pause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(runnableCode);
+        mMapView.onDestroy();
+        atlas.destroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
     }
 
 }

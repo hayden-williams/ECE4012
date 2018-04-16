@@ -57,12 +57,8 @@ public class IndoorAtlas {
 
     private String TAG = "IndoorAtlas"; // for log
 
-    public double lat = 33.77596903699503;
-    public double lon = -84.39690195434368;
-    private int floor = 2;
-    private double bearing = 0;
-
-    private double bearing_offset = -10.0;
+    public double lat = 0;
+    public double lon = 0;
 
     private boolean first_location_set = false;
 
@@ -82,20 +78,16 @@ public class IndoorAtlas {
             AppCompatActivity app = CurrentActivity.getInstance().getCurrentActivity();
             switch (CurrentActivity.getInstance().getCurrentActivityNum()) {
                 case 1:
-                    /*if (!first_location_set) {
+                    if (!first_location_set) {
                         Log.d(TAG, "Latitude: " + location.getLatitude());
                         lat = location.getLatitude();
                         Log.d(TAG, "Longitude: " + location.getLongitude());
                         lon = location.getLongitude();
-                        Log.d(TAG, "Floor number: " + location.getFloorLevel());
-                        floor = location.getFloorLevel();
-                        Log.d(TAG, "Bearing: " + location.getBearing() + bearing_offset);
-                        bearing = location.getBearing() + bearing_offset;
 
                         //((MainActivity)app).updateServer();
                         ((MainActivity) app).updateMap();
                     }
-                    first_location_set = true;*/
+                    first_location_set = true;
                     break;
             }
         }
@@ -130,9 +122,7 @@ public class IndoorAtlas {
                 } else {
                     mGroundOverlay.setTransparency(0.0f);
                 }
-
             }
-
         }
 
         @Override
@@ -152,12 +142,6 @@ public class IndoorAtlas {
     public double getLon() {
         return lon;
     }
-
-    public int getFloor() {
-        return floor;
-    }
-
-    public double getBearing() { return bearing; }
 
     public void destroy() {
         mIALocationManager.destroy();

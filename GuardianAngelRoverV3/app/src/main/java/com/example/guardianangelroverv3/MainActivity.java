@@ -72,8 +72,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Polyline mPathCurrent;
     private IARoutingLeg[] mCurrentRoute;
 
-    // to play alarm sound
-    private MediaPlayer mp;
+    // TODO: set home_lat and home_lon
+    private double home_lat = 1;
+    private double home_lon = 1;
 
     private static final float HUE_IABLUE = 200.0f;
 
@@ -81,6 +82,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     final Handler handler = new Handler();
     private Runnable runnableCode;
+
+    public final int STATE_REST_HOME = 0;
+    public final int STATE_REQUEST = 1;
+    public final int STATE_ARRIVED = 2;
+    public final int STATE_ENDED = 3;
+    public final int STATE_EMERGENCY = 4;
+
+    private int current_state = STATE_REST_HOME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,11 +121,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         findViewById(android.R.id.content).setKeepScreenOn(true);
 
         textView = findViewById(R.id.textView2);
-
-        // load audio alarm sound
-        Resources res = getResources();
-        int resourceIdentifier = res.getIdentifier("siren", "raw", this.getPackageName());
-        mp = MediaPlayer.create(getApplicationContext(), resourceIdentifier);
 
         // Check location permissions
         String[] neededPermissions = {
@@ -166,8 +170,39 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void run() {
                 Log.d("Handlers", "Called on main thread");
-                myserver.getRequestState();
-                handler.postDelayed(this, 1000);
+                if (myserver.other_lat == 0 && myserver.other_lon == 0) {
+                    current_state = STATE_REST_HOME;
+                    myserver.getRequestUserCoords();
+                } else {
+                    myserver.getRequestState();
+                    if (myserver.requested) {
+                        Log.d(TAG, "requested");
+                        current_state = STATE_REQUEST;
+                        updateMap();
+                    }
+                    if (myserver.emergency) {
+                        Log.d(TAG, "emergency");
+                        current_state = STATE_EMERGENCY;
+                        findViewById(R.id.button2).setBackgroundColor(Color.RED);
+                    }
+                    if (myserver.arrived) {
+                        Log.d(TAG, "arrived");
+                        current_state = STATE_ARRIVED;
+                        // don't need to do anything?
+                    }
+                    if (myserver.ended) {
+                        Log.d(TAG, "ended");
+                        current_state = STATE_ENDED;
+                        // send rover back home using location specified by user
+                        atlas.lat = myserver.rover_lat;
+                        atlas.lon = myserver.rover_lon;
+                        myserver.other_lat = home_lat;
+                        myserver.other_lon = home_lon;
+                        myserver.user_name = "HOME";
+                        updateMap();
+                    }
+                }
+                handler.postDelayed(this, 5000);
             }
         };
         handler.post(runnableCode);
@@ -223,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 updateMap();
             }
         });
-        updateServer();
+        //updateServer();
         updateMap();
     }
 
@@ -257,11 +292,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (mMap != null) {
                     mMarkerOther = mMap.addMarker(new MarkerOptions().position(mDestination)
                             .icon(BitmapDescriptorFactory.defaultMarker(100))
-                            .title("User: " + myserver.user_name));
+                            .title(myserver.user_name));
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDestination, 17.0f));
                 }
             } else {
-                mMarkerOther.setTitle("User: " + myserver.user_name);
+                mMarkerOther.setTitle(myserver.user_name);
                 mMarkerOther.setPosition(mDestination);
             }
 
@@ -272,11 +307,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             updateRoute();
         }
-
-        if (myserver.emergency) {
-            mp.start();
-        }
-
     }
 
     private void updateRoute() {
@@ -341,11 +371,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         for (int i = 0; i < legs.length; i++) {
             if (legs[i].getLength() >= 2.0) {
                 double new_dir_i = 90 - legs[i].getDirection() * 180.0 / 3.14159265;
-                /*if (new_dir_i < 0) new_dir_i -= 360;
-                if (new_dir_i >= 315 || new_dir_i < 45) new_dir_i = 0;
-                else if (new_dir_i >= 45 || new_dir_i < 135) new_dir_i = 90;
-                else if (new_dir_i >= 135 || new_dir_i < 225) new_dir_i = 180;
-                else if (new_dir_i >= 225 || new_dir_i < 315) new_dir_i = 270;*/
                 new_dir_i = Math.round(new_dir_i);
                 new_legs[j] = new IARoutingLeg(null, null, legs[i].getLength(), new_dir_i, null);
                 j++;
@@ -376,6 +401,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 jsonList.add(new StringPair(ServerLink.LEN[j], "0"));
             }
             myserver.request(jsonList);
+
+            if (current_state == STATE_ENDED) {
+                ArrayList<StringPair> jsonList1 = new ArrayList<>();
+                jsonList.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_PATH_FINISHED));
+                myserver.request(jsonList1);
+            }
         }
     }
 
