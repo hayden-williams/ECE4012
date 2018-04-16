@@ -165,7 +165,6 @@ class selfNavigation():
 						rospy.loginfo('error < 0.05')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.2
-						rospy.loginfo(self.move_cmd)
 					elif (fabs(self.thetaError) > 1 and self.magnitude < self.length[self.path]):
 						rospy.loginfo('error>0.05')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
@@ -219,32 +218,32 @@ class selfNavigation():
 						if self.count == 1 :
 							self.move_cmd.linear.x = 0.0
 							self.move_cmd.angular.z = 0
-							self.cmd_vel.publish(move_cmd)
+							self.cmd_vel.publish(self.move_cmd)
 							self.r.sleep()
 							while (np.sum(self.ZoneList) != 0 and np.absolute(self.thetaError) < 1.57):
 								self.move_cmd.angular.z = 0.5
-								self.cmd_vel.publish(move_cmd)
+								self.cmd_vel.publish(self.move_cmd)
 								self.r.sleep()
 						elif self.count == 2 :
 							self.move_cmd.linear.x = 0.0
 							self.move_cmd.angular.z = 0
-							self.cmd_vel.publish(move_cmd)
+							self.cmd_vel.publish(self.move_cmd)
 							self.r.sleep()
 							while (np.sum(self.ZoneList)!=0):
 								move_cmd.angular.z = -0.5
-								self.cmd_vel.publish(move_cmd)
+								self.cmd_vel.publish(self.move_cmd)
 								self.r.sleep()
 						else:
 							rospy.loginfo("I cant make it around! Help Mommy")
 							self.move_cmd.linear.x = 0.0
 							self.move_cmd.angular.z = 0
 							self.path = self.path + 1
-							self.cmd_vel.publish(move_cmd)
+							self.cmd_vel.publish(self.move_cmd)
 
 
 				# publish the velocity
 				rospy.loginfo('publish')
-				self.cmd_vel.publish(move_cmd)
+				self.cmd_vel.publish(self.move_cmd)
 
 
 				# wait for 0.1 seconds (10 HZ) and publish again
