@@ -266,7 +266,7 @@ class selfNavigation():
 				self.move_cmd.angular.z = 0
 				self.cmd_vel.publish(move_cmd)
 				self.soundhandle.say('Emergency')
-				rospy.sleep(2)
+				#rospy.sleep(2)
 			else:
 				# do nothing
 				rospy.loginfo('do nothing')
