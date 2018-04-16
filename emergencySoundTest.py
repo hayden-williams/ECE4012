@@ -10,7 +10,7 @@ import sys
 from sound_play.libsoundplay import SoundClient
 
 
-if __name__ == '__main__'
+if __name__ == '__main__':
 	counter = 0
 	soundCounter = 0
 
