@@ -67,9 +67,12 @@ public class ServerLink {
 
     public double other_lat = 0;
     public double other_lon = 0;
-    public int floor = 0;
+
     public String user_name = "USER";
+
     public boolean emergency = false;
+    public boolean arrived = false;
+    public boolean ended = false;
 
     protected ServerLink() {
         queue = Volley.newRequestQueue(CurrentActivity.getInstance().getCurrentActivity());
@@ -154,6 +157,41 @@ public class ServerLink {
                             try {
                                 other_lat = response.getDouble(LAT);
                                 other_lon = response.getDouble(LON);
+                                Log.d(TAG, "Successfully parsed response, lat is " + other_lat + " and lon is " + other_lon);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Message could not be sent: " + error.toString());
+                error.printStackTrace();
+            }
+        });
+
+        queue.add(request);
+    }
+
+    // Get JSON data from server
+    public void getRequestState() {
+        String url = "http://" + ip_address + ":3000/rover";
+
+        Log.d(TAG, "Begin requesting JSON data");
+
+        JsonObjectRequest request = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response == null) {
+                            Log.d(TAG, "Message sent, no response.");
+                        } else {
+                            Log.d(TAG, "Response is: " + response.toString());
+                            try {
+                                emergency = response.getInt("emergency") == 1;
+                                arrived = response.getInt("arrived") == 1;
+                                ended = response.getInt("ended") == 1;
                                 Log.d(TAG, "Successfully parsed response, lat is " + other_lat + " and lon is " + other_lon);
                             } catch (JSONException e) {
                                 e.printStackTrace();

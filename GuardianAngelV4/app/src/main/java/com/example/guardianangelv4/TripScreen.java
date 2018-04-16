@@ -1,5 +1,7 @@
 package com.example.guardianangelv4;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,8 +11,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -71,6 +75,23 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
 
         setupGroundOverlay(atlas.floorPlan_saved, atlas.bitmap_saved);
 
+
+        findViewById(R.id.button6).setOnTouchListener(new View.OnTouchListener() {
+            long emergencyPressTime = 0;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    emergencyPressTime = event.getEventTime();
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getEventTime() - emergencyPressTime > 4000) {
+                        Log.d(TAG, "Emergency triggered");
+                        clickEmergency(v);
+                    }
+                }
+                return true;
+            }
+        });
+
         runnableCode = new Runnable() {
             @Override
             public void run() {
@@ -105,12 +126,45 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
     }
 
     public void clickEmergency(View view) {
-        ArrayList<StringPair> jsonlist = new ArrayList<>();
-        jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_EMERGENCY));
-        jsonlist.add(new StringPair(ServerLink.NAME, user_name));
-        myserver.request(jsonlist);
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.emergency_dialog);
+        dialog.setTitle("Emergency");
 
-        findViewById(R.id.button6).setBackgroundColor(Color.RED);
+        Button button = dialog.findViewById(R.id.embutton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+        // Hide after some seconds
+        final Handler handler  = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (dialog.isShowing()) {
+                    // dialog still showing after timeout
+                    // trigger emergency
+                    ArrayList<StringPair> jsonlist = new ArrayList<>();
+                    jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_EMERGENCY));
+                    jsonlist.add(new StringPair(ServerLink.NAME, user_name));
+                    myserver.request(jsonlist);
+
+                    findViewById(R.id.button6).setBackgroundColor(Color.RED);
+
+                    dialog.dismiss();
+                }
+            }
+        };
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                handler.removeCallbacks(runnable);
+            }
+        });
+        handler.postDelayed(runnable, 5000);
     }
 
     @Override

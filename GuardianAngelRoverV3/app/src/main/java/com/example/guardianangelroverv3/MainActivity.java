@@ -82,9 +82,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     final Handler handler = new Handler();
     private Runnable runnableCode;
 
-    private final double home_location_lat = 33.77596903699503;
-    private final double home_location_lon = -84.39690195434368;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,15 +161,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             mWayfinder = IAWayfinder.create(this, graphJSON);
         }
 
-        /*runnableCode = new Runnable() {
+        // check state from server every second
+        runnableCode = new Runnable() {
             @Override
             public void run() {
                 Log.d("Handlers", "Called on main thread");
-                updateServer();
-                handler.postDelayed(this, 50);
+                myserver.getRequestState();
+                handler.postDelayed(this, 1000);
             }
         };
-        handler.post(runnableCode);*/
+        handler.post(runnableCode);
     }
 
     // handle response from permissions request
@@ -203,15 +201,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         jsonlist.add(new StringPair(ServerLink.NAME, name));
         jsonlist.add(new StringPair(ServerLink.LAT, Double.toString(atlas.getLat())));
         jsonlist.add(new StringPair(ServerLink.LON, Double.toString(atlas.getLon())));
-        //jsonlist.add(new StringPair(ServerLink.FLOOR, Integer.toString(atlas.getFloor())));
-        jsonlist.add(new StringPair(ServerLink.BEARING, Double.toString(atlas.getBearing())));
         myserver.request(jsonlist);
 
         // check server for user's location
         myserver.getRequestUserCoords();
 
         // check server if emergency is active
-        //myserver.getRequest(this, ServerLink.MESSAGE_TYPE_EMERGENCY, user_to_follow, 5);
+        myserver.getRequestState();
     }
 
     // set up map
