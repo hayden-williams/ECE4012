@@ -50,6 +50,7 @@ class selfNavigation():
 	goToUser = 0
 	emergency = 0
 	goHome = 0
+	endAndWait = 0
 
 
 	odomBearing = 0
@@ -140,7 +141,7 @@ class selfNavigation():
 				self.length = re['len']
 				#self.bearing = re['bearing']
 				self.emergency = re['emergency']
-				endAndWait = re['ended'] # user ended trip
+				self.endAndWait = re['ended'] # user ended trip
 				self.arrived = re['arrived']
 				#home = re['gotHome'] # rover is home
 				self.goToUser = re['goToUser']
@@ -296,7 +297,7 @@ class selfNavigation():
 				self.soundhandle.say('Emergency')
 				if self.savePic == 0: self.savePic = 1
 				rospy.sleep(2)
-			elif endAndWait == 1:
+			elif self.endAndWait == 1:
 				# user's trip ended, wait for user to tell the rover where it is
 				rospy.loginfo('endAndWait')
 				self.move_cmd.linear.x = 0.0
