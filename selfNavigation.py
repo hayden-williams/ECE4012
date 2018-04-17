@@ -86,6 +86,7 @@ class selfNavigation():
 	roverAtUser = 0
 
 	directionHolder = 1000
+	lengthHolder = 0
 
 
 	def __init__(self):
@@ -163,6 +164,7 @@ class selfNavigation():
 				if self.path < 5:
 					self.desiredAngle = (360-self.direction[self.path])*3.14159265359/180 # input degree convert to rad
 					self.directionHolder = self.direction[self.path]
+					self.lengthHolder = self.length[self.path]
 
 				# using odometry for bearing
 				# IndoorAtlus East is 90, Odometry West is 90, Need to account for this
@@ -188,15 +190,15 @@ class selfNavigation():
 						rospy.loginfo('len = 0, dir = 1000')
 						self.move_cmd.linear.x = 0.0
 						self.move_cmd.angular.z = 0
-					elif (fabs(self.thetaError) < 1 and self.magnitude <= self.length[self.path] and self.path < 5):
+					elif (fabs(self.thetaError) < 1 and self.magnitude <= self.lengthHolder and self.path < 5):
 						rospy.loginfo('forward and turn')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.2
-					elif (fabs(self.thetaError) > 1 and self.magnitude <= self.length[self.path] and self.path < 5):
+					elif (fabs(self.thetaError) > 1 and self.magnitude <= self.lengthHolder and self.path < 5):
 						rospy.loginfo('turn')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.0
-					elif (self.magnitude >= self.length[self.path] and self.path < 5):
+					elif (self.magnitude >= self.lengthHolder and self.path < 5):
 						rospy.loginfo('changing path')
 						self.move_cmd.angular.z = 0.0
 						self.move_cmd.linear.x = 0.0
