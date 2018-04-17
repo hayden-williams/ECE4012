@@ -184,11 +184,11 @@ class selfNavigation():
 						#rospy.loginfo('len = 0, dir = 1000')
 						self.move_cmd.linear.x = 0.0
 						self.move_cmd.angular.z = 0
-					elif (fabs(self.thetaError) < 1 and self.magnitude < self.length[self.path] and self.path < 5):
+					elif (fabs(self.thetaError) < 1 and self.magnitude <= self.length[self.path] and self.path < 5):
 						rospy.loginfo('forward and turn')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.2
-					elif (fabs(self.thetaError) > 1 and self.magnitude < self.length[self.path] and self.path < 5):
+					elif (fabs(self.thetaError) > 1 and self.magnitude <= self.length[self.path] and self.path < 5):
 						rospy.loginfo('turn')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.0
