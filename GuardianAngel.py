@@ -116,19 +116,19 @@ class following_final2():
 		try:
 			self.countQuery = self.countQuery + 1
 			if (self.countQuery == 10):
-			re = requests.get('http://128.61.14.57:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
-			#rospy.loginfo(re)
+				re = requests.get('http://128.61.14.57:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
+				#rospy.loginfo(re)
 
-			self.direction = re['direction'] # in degrees
-			self.length = re['len']
-			#self.bearing = re['bearing']
-			self.emergency = re['emergency']
-			self.end = re['ended'] # user ended trip
-			self.arrived = re['arrived']
-			#home = re['gotHome'] # rover is home
-			self.goToUser = re['goToUser']
-			#self.goHome = re['goHome']
-			self.countQuery = 0
+				self.direction = re['direction'] # in degrees
+				self.length = re['len']
+				#self.bearing = re['bearing']
+				self.emergency = re['emergency']
+				self.end = re['ended'] # user ended trip
+				self.arrived = re['arrived']
+				#home = re['gotHome'] # rover is home
+				self.goToUser = re['goToUser']
+				#self.goHome = re['goHome']
+				self.countQuery = 0
 
 			if (self.self.goToUser == 1 or self.end == 1):
 				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
