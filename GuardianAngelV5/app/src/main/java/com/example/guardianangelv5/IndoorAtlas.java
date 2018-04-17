@@ -196,7 +196,11 @@ public class IndoorAtlas {
 
     public void pause() {
         if (mIALocationManager != null) {
-            mIALocationManager.removeLocationUpdates(mIALocationListener);
+            try {
+                mIALocationManager.removeLocationUpdates(mIALocationListener);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
         }
     }
 

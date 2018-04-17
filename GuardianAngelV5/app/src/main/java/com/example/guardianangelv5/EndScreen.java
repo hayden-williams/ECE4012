@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -76,12 +77,7 @@ public class EndScreen extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     public void clickConfirm(View view) {
-        /*ArrayList<StringPair> jsonlist = new ArrayList<>();
-        jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_ROVER));
-        jsonlist.add(new StringPair(ServerLink.LAT, Double.toString(atlas.getLat())));
-        jsonlist.add(new StringPair(ServerLink.LON, Double.toString(atlas.getLon())));
-        myserver.request(jsonlist);*/
-
+        // send server path home
         Helper.createPathToHome(atlas, myserver);
 
         // send "end trip" message
@@ -89,6 +85,9 @@ public class EndScreen extends AppCompatActivity implements OnMapReadyCallback {
         jsonlist2.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_END_TRIP));
         jsonlist2.add(new StringPair(ServerLink.NAME, user_name));
         myserver.request(jsonlist2);
+
+        findViewById(R.id.button7).setEnabled(false);
+        ((Button)findViewById(R.id.button7)).setText("Thank you for using Guardian Angel");
     }
 
     @Override

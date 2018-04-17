@@ -159,6 +159,12 @@ public class Helper {
                 ArrayList<StringPair> jsonList = new ArrayList<>();
                 jsonList.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_WAYFINDING));
                 for (int i = 0; i < j; i++) {
+                    if (i == j-1 && end_lat == IndoorAtlas.home_lat) {
+                        if (new_legs[i].getLength() > 2.0) {
+                            new_legs[i] = new IARoutingLeg(null, null, new_legs[i].getLength() - 2.0, new_legs[i].getDirection(), null);
+                        }
+                    }
+
                     Log.d("Wayfinding_Legs", "Direction: " + new_legs[i].getDirection() + " Length: " + new_legs[i].getLength());
 
                     if (i < 5) {
