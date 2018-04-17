@@ -365,7 +365,8 @@ class following_final2():
 				self.r.sleep()
 			else:
 				# do nothing
-				#rospy.loginfo('do nothing')
+				rospy.loginfo('do nothing')
+
 				self.move_cmd.linear.x = 0.0
 				self.move_cmd.angular.z = 0
 				self.cmd_vel.publish(self.move_cmd)
