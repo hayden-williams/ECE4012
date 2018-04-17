@@ -44,6 +44,7 @@ public class RequestScreen extends AppCompatActivity implements OnMapReadyCallba
 
         myserver = ServerLink.getInstance();
         atlas = IndoorAtlas.getInstance();
+        atlas.fetchFloorPlan("f97a76f2-ffd1-4038-b7e6-870dba48c8b5");
 
         mMapView = findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);

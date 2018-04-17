@@ -145,7 +145,7 @@ public class IndoorAtlas {
 
         @Override
         public void onEnterRegion(IARegion region) {
-            if (region.getType() == IARegion.TYPE_FLOOR_PLAN) {
+            /*if (region.getType() == IARegion.TYPE_FLOOR_PLAN) {
                 Log.d(TAG, "Entered " + region.getName());
                 Log.d(TAG, "floor plan ID: " + region.getId());
                 //mCurrentFloorPlan = region;
@@ -164,17 +164,17 @@ public class IndoorAtlas {
                     mGroundOverlay.setTransparency(0.0f);
                 }
 
-            }
+            }*/
 
         }
 
         @Override
         public void onExitRegion(IARegion region) {
-            if (mGroundOverlay != null) {
+            /*if (mGroundOverlay != null) {
                 // Indicate we left this floor plan but leave it there for reference
                 // If we enter another floor plan, this one will be removed and another one loaded
                 mGroundOverlay.setTransparency(0.5f);
-            }
+            }*/
         }
     };
 
@@ -212,7 +212,7 @@ public class IndoorAtlas {
     /**
      * Fetches floor plan data from IndoorAtlas server.
      */
-    private void fetchFloorPlan(String id) {
+    public void fetchFloorPlan(String id) {
 
         if (mResourceManager == null) {
             return;

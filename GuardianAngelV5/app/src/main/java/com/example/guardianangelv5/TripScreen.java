@@ -58,6 +58,7 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
 
         myserver = ServerLink.getInstance();
         atlas = IndoorAtlas.getInstance();
+        atlas.fetchFloorPlan("f97a76f2-ffd1-4038-b7e6-870dba48c8b5");
 
         mMapView = findViewById(R.id.mapView3);
         mMapView.onCreate(savedInstanceState);
