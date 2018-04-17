@@ -157,7 +157,9 @@ class selfNavigation():
 				# do error corrections
 				#rospy.loginfo('entered goToUser')
 				
-				self.desiredAngle = (360-self.direction[self.path])*3.14159265359/180 # input degree convert to rad
+				if self.path < 5:
+					self.desiredAngle = (360-self.direction[self.path])*3.14159265359/180 # input degree convert to rad
+
 				# using odometry for bearing
 				# IndoorAtlus East is 90, Odometry West is 90, Need to account for this
 				
