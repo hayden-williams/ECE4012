@@ -157,6 +157,7 @@ class selfNavigation():
 				# do error corrections
 				#rospy.loginfo('entered goToUser')
 				
+
 				if self.path < 5:
 					self.desiredAngle = (360-self.direction[self.path])*3.14159265359/180 # input degree convert to rad
 
@@ -215,7 +216,6 @@ class selfNavigation():
 							rospy.loginfo('at home location')
 							tellServer = requests.post('http://128.61.14.57:3000/home', {'gotHome': 1})  #<----------------SERVER IP ADDRESS HERE-------
 					self.cmd_vel.publish(self.move_cmd)
-					self.r.sleep()
 
 				elif (np.sum(self.ZoneList) != 0 and self.roverAtUser == 0):
 					rospy.loginfo('Obstacle detected')
