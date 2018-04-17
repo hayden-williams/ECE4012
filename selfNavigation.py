@@ -154,7 +154,7 @@ class selfNavigation():
 				# endAneWait is still 1, but ignored
 				# put navigation code here
 				# do error corrections
-				rospy.loginfo('entered goToUser')
+				#rospy.loginfo('entered goToUser')
 				
 				self.desiredAngle = (360-self.direction[self.path])*3.14159265359/180 # input degree convert to rad
 				# using odometry for bearing
@@ -182,22 +182,22 @@ class selfNavigation():
 						self.move_cmd.linear.x = 0.0
 						self.move_cmd.angular.z = 0
 					elif (fabs(self.thetaError) < 1 and self.magnitude < self.length[self.path] and self.path < 5):
-						#rospy.loginfo('error < 0.05')
+						rospy.loginfo('forward and turn')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.2
 					elif (fabs(self.thetaError) > 1 and self.magnitude < self.length[self.path] and self.path < 5):
-						#rospy.loginfo('error>0.05')
+						rospy.loginfo('turn')
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.0
 					elif (self.magnitude >= self.length[self.path] and self.path < 5):
-						#rospy.loginfo('mag>length')
+						rospy.loginfo('changing path')
 						self.move_cmd.angular.z = 0.0
 						self.move_cmd.linear.x = 0.0
 						# didItMakeIt function begins IF NEEDED
 
 						# didItMakeIt function ends
 						self.path = self.path + 1
-						rospy.loginfo(self.path)
+						#rospy.loginfo(self.path)
 						self.xstart = self.x + self.xstart
 						self.ystart = self.y + self.ystart
 						self.magnitude = 0
@@ -209,11 +209,13 @@ class selfNavigation():
 						self.roverAtUser = 1
 						if self.end == 1:
 							# Tell Server rover is home
-							rospy.loginfo('roverAtUser and at home location')
+							rospy.loginfo('at home location')
 							tellServer = requests.post('http://128.61.14.57:3000/home', {'gotHome': 1})  #<----------------SERVER IP ADDRESS HERE-------
-
+					self.cmd_vel.publish(self.move_cmd)
+					self.r.sleep()
 
 				elif (np.sum(self.ZoneList) != 0 and self.roverAtUser == 0):
+					rospy.loginfo('Obstacle detected')
 					if (self.ZoneList[0] == 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] != 0):
 						#rospy.loginfo("inside else")
 						#soft left
@@ -241,41 +243,44 @@ class selfNavigation():
 						self.move_cmd.angular.z = -0.75
 					else:
 						self.count = self.count + 1
+						rospy.loginfo("Bitch ass situation")
 						if self.count == 1 :
 							self.move_cmd.linear.x = 0.0
 							self.move_cmd.angular.z = 0
 							self.cmd_vel.publish(self.move_cmd)
-							#self.r.sleep()
+							self.r.sleep()
 							while (np.sum(self.ZoneList) != 0 and np.absolute(self.thetaError) < 1.57):
 								self.move_cmd.angular.z = 0.5
 								self.cmd_vel.publish(self.move_cmd)
-								#self.r.sleep()
+								self.r.sleep()
 						elif self.count == 2 :
 							self.move_cmd.linear.x = 0.0
 							self.move_cmd.angular.z = 0
 							self.cmd_vel.publish(self.move_cmd)
-							#self.r.sleep()
+							self.r.sleep()
 							while (np.sum(self.ZoneList)!=0):
 								move_cmd.angular.z = -0.5
 								self.cmd_vel.publish(self.move_cmd)
-								#self.r.sleep()
+								self.r.sleep()
 						else:
 							rospy.loginfo("I cant make it around! Help Mommy")
 							self.move_cmd.linear.x = 0.0
 							self.move_cmd.angular.z = 0
 							self.path = self.path + 1
-							self.cmd_vel.publish(self.move_cmd)
+					self.cmd_vel.publish(self.move_cmd)
+					self.r.sleep()
 				else:
 					# no cases met 
 					rospy.loginfo('Error with goToUser/goHome')
 					self.move_cmd.linear.x = 0.0
 					self.move_cmd.angular.z = 0
 					self.cmd_vel.publish(self.move_cmd)
+					self.r.sleep()
 
 
 				# publish the velocity
 				#rospy.loginfo('publish')
-				self.cmd_vel.publish(self.move_cmd)
+				#self.cmd_vel.publish(self.move_cmd)
 
 
 				# wait for 0.1 seconds (10 HZ) and publish again
@@ -334,7 +339,7 @@ class selfNavigation():
 	def callback(self,data):
 		try:
 			
-			if self.goToUser == 1 or self.goHome == 1:
+			if self.goToUser == 1 or self.end == 1:
 
 				# Get Image and find size of image
 				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
@@ -416,6 +421,7 @@ class selfNavigation():
 
 				# Will need these to be reset during following code
 				self.roverAtUser = 0
+
 				self.path = 0
 
 				# Get Image and find size of image
@@ -469,7 +475,7 @@ class selfNavigation():
 					dx = cx - col/2 # +ve move left, -ve move right?
 					dy = cy - rows/2
 					depth = np.median(image)
-					rospy.loginfo('depth is '+ str(depth))
+					#rospy.loginfo('depth is '+ str(depth))
 
 					#dz range can go from 1100
 					dz = depth - self.desired_thresh
