@@ -78,7 +78,7 @@ class obstacle_detect():
 			#rospy.loginfo("sum of Zone2 is " + str(sumZone2))
 			sumZone3 = np.sum(self.mask3[0:rows,np.round(col/2)+1:cC+np.round(col/4)] / 255)
 			#rospy.loginfo("sum of Zone3 is " + str(sumZone3))
-			sumZone4 = np.sum(self.mask4[0:rows,cC+np.round(col/4)+1:col] / 255)
+			sumZone4 = np.sum(self.mask3[0:rows,cC+np.round(col/4)+1:col] / 255)
 			#rospy.loginfo("sum of Zone4 is " + str(sumZone4))
 
 
