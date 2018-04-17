@@ -114,8 +114,10 @@ class following_final2():
 
 	def callback(self,data):
 		try:
+			rospy.loginfo('Callback')
 			self.countQuery = self.countQuery + 1
 			if (self.countQuery == 10):
+				rospy.loginfo('requesting stuff')
 				re = requests.get('http://128.61.14.57:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				#rospy.loginfo(re)
 
