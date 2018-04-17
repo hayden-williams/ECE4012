@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">GuardianAngelV5</string>
+    <string name="welcome">Welcome to Guardian Angel! Type in your name to get started.</string>
+    <string name="name">Name:</string>
+    <string name="submit">Submit</string>
+    <string name="request_info">Click on the map to confirm your current location, then press below to request a Guardian Angel.</string>
+    <string name="request_button">Request Guardian Angel</string>
+    <string name="wait_info">Your Guardian Angel is on its way. Press below to cancel your request, or to show that the rover has arrived.</string>
+    <string name="cancel">Cancel Request</string>
+    <string name="arrived">Guardian Angel has Arrived</string>
+    <string name="trip_info">You are currently on your trip with Guardian Angel! Press End Trip to send your Guardian Angel back to its hub. Press emergency to contact the police due to an incident.</string>
+    <string name="end_trip">End Trip</string>
+    <string name="emergency">Emergency</string>
+    <string name="end">Thank you for using Guardian Angel! Your trip has ended. Please click on the map below to confirm your drop-off location.</string>
+</resources>
