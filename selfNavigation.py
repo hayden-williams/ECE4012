@@ -50,7 +50,7 @@ class selfNavigation():
 	goToUser = 0
 	emergency = 0
 	goHome = 0
-	endAndWait = 0
+	end = 0
 
 
 	odomBearing = 0
@@ -141,16 +141,16 @@ class selfNavigation():
 				self.length = re['len']
 				#self.bearing = re['bearing']
 				self.emergency = re['emergency']
-				self.endAndWait = re['ended'] # user ended trip
+				self.end = re['ended'] # user ended trip
 				self.arrived = re['arrived']
 				#home = re['gotHome'] # rover is home
 				self.goToUser = re['goToUser']
-				self.goHome = re['goHome']
+				#self.goHome = re['goHome']
 
 
 			self.countQuery = self.countQuery + 1
 
-			if self.goToUser==1 or self.goHome == 1:
+			if self.goToUser==1 or self.end == 1:
 				# endAneWait is still 1, but ignored
 				# put navigation code here
 				# do error corrections
@@ -207,7 +207,7 @@ class selfNavigation():
 						self.move_cmd.angular.z = 0.0
 						self.move_cmd.linear.x = 0.0
 						self.roverAtUser = 1
-						if goHome == 1:
+						if self.end == 1:
 							# Tell Server rover is home
 							rospy.loginfo('roverAtUser and at home location')
 							tellServer = requests.post('http://128.61.7.199:3000/home', {'gotHome': 1})  #<----------------SERVER IP ADDRESS HERE-------
@@ -297,12 +297,14 @@ class selfNavigation():
 				self.soundhandle.say('Emergency')
 				if self.savePic == 0: self.savePic = 1
 				rospy.sleep(2)
+				'''
 			elif self.endAndWait == 1:
 				# user's trip ended, wait for user to tell the rover where it is
 				rospy.loginfo('endAndWait')
 				self.move_cmd.linear.x = 0.0
 				self.move_cmd.angular.z = 0
 				self.cmd_vel.publish(self.move_cmd)
+			'''
 			else:
 				# do nothing
 				rospy.loginfo('do nothing')
