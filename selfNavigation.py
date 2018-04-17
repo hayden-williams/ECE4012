@@ -85,6 +85,8 @@ class selfNavigation():
 
 	roverAtUser = 0
 
+	directionHolder = 1000
+
 
 	def __init__(self):
 		# initiliaze
@@ -160,6 +162,7 @@ class selfNavigation():
 
 				if self.path < 5:
 					self.desiredAngle = (360-self.direction[self.path])*3.14159265359/180 # input degree convert to rad
+					self.directionHolder = self.direction[self.path]
 
 				# using odometry for bearing
 				# IndoorAtlus East is 90, Odometry West is 90, Need to account for this
@@ -181,7 +184,7 @@ class selfNavigation():
 					#rospy.loginfo(self.path)
 					#rospy.loginfo(self.goToUser)
 					#rospy.loginfo(self.arrived)
-					if (self.direction[self.path] == 1000 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
+					if (self.directionHolder == 1000 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
 						rospy.loginfo('len = 0, dir = 1000')
 						self.move_cmd.linear.x = 0.0
 						self.move_cmd.angular.z = 0
