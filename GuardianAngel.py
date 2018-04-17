@@ -36,54 +36,52 @@ from sound_play.libsoundplay import SoundClient
 
 class following_final2():
 	# Distance in mm
-  thetaError = 0
-  kTurn = 1.5
+	thetaError = 0
+	kTurn = 1.5
 
-  direction = 1000
-  bearing = 1000
-  length = 0
-  countQuery = 0
-  arrived = 0
-  goToUser = 0
-  emergency = 0
-  goHome = 0
-  end = 0
+	direction = 1000
+	bearing = 1000
+	length = 0
+	countQuery = 0
+	arrived = 0
+	goToUser = 0
+	emergency = 0
+	goHome = 0
+	end = 0
 
 
-  odomBearing = 0
-  zeroAngle = 1000
-  desiredAngle = 0
+	odomBearing = 0
+	zeroAngle = 1000
+	desiredAngle = 0
+ 	xstart = 0
+	ystart = 0
+	magnitude = 9999999.0
 
-  xstart = 0
-  ystart = 0
-  magnitude = 9999999.0
+	z_thresh = 800
+	z_threshCorner = z_thresh
+	ZoneList = np.array([0,0,0,0,0,0])
+	count = 0
 
-  z_thresh = 800
-  z_threshCorner = z_thresh
-  ZoneList = np.array([0,0,0,0,0,0])
-  count = 0
+	path = 0
+	x = 0
+	y = 0
 
-  path = 0
-  x = 0
-  y = 0
+	  # Distance in mm
+	invalid_thresh = 300
+	desired_thresh = 1000
+	desired_lowBound = 950
+	desired_upBound = 1050
+	invalid_max = 2000
+	max_speed = 1
+	soundCounter = 0
 
-  # Distance in mm
-  invalid_thresh = 300
-  desired_thresh = 1000
-  desired_lowBound = 950
-  desired_upBound = 1050
-  invalid_max = 2000
-  max_speed = 1
+	savePic = 0
+	emergencyFirstTime = 0
 
-  soundCounter = 0
+	roverAtUser = 0
 
-  savePic = 0
-  emergencyFirstTime = 0
-
-  roverAtUser = 0
-
-  directionHolder = 1000
-  lengthHolder = 0
+	directionHolder = 1000
+	lengthHolder = 0
 
 
 	def __init__(self):
