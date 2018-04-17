@@ -146,7 +146,6 @@ class selfNavigation():
 				#home = re['gotHome'] # rover is home
 				self.goToUser = re['goToUser']
 				#self.goHome = re['goHome']
-				self.countQuery = 1
 
 
 			self.countQuery = self.countQuery + 1
