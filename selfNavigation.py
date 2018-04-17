@@ -176,7 +176,7 @@ class selfNavigation():
 					self.count = 0
 			
 				#rospy.loginfo("obstacle " + str(self.ZoneList))
-				if (np.sum(self.ZoneList) == 0):
+				if (np.sum(self.ZoneList) == 0 or self.thetaError > 1):
 
 					#no obstacle, move code goes here
 					#rospy.loginfo("after desiredAngle")
