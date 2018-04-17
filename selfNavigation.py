@@ -132,7 +132,7 @@ class selfNavigation():
 		while not rospy.is_shutdown():
 
 			# get info from server
-			if self.countQuery%1000 == 0:
+			if self.countQuery%10 == 0:
 				#only check server occationally
 				re = requests.get('http://128.61.14.57:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				#rospy.loginfo(re)
@@ -147,7 +147,8 @@ class selfNavigation():
 				self.goToUser = re['goToUser']
 				#self.goHome = re['goHome']
 
-
+				if self.countQuery == 9000:
+					self.countQuery = 0
 			self.countQuery = self.countQuery + 1
 
 			if self.goToUser==1 or self.end == 1:
@@ -177,7 +178,7 @@ class selfNavigation():
 					#rospy.loginfo(self.path)
 					#rospy.loginfo(self.goToUser)
 					#rospy.loginfo(self.arrived)
-					if (self.direction[self.path] == 1000 or self.length[self.path] == 0.0 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
+					if (self.direction[self.path] == 1000 or self.zeroAngle == 1000 or self.magnitude == 9999999.0):
 						#rospy.loginfo('len = 0, dir = 1000')
 						self.move_cmd.linear.x = 0.0
 						self.move_cmd.angular.z = 0
