@@ -213,7 +213,7 @@ class selfNavigation():
 							rospy.loginfo('at home location')
 							tellServer = requests.post('http://128.61.14.57:3000/home', {'gotHome': 1})  #<----------------SERVER IP ADDRESS HERE-------
 					self.cmd_vel.publish(self.move_cmd)
-					#self.r.sleep()
+					self.r.sleep()
 
 				elif (np.sum(self.ZoneList) != 0 and self.roverAtUser == 0):
 					rospy.loginfo('Obstacle detected')
@@ -269,7 +269,7 @@ class selfNavigation():
 							self.move_cmd.angular.z = 0
 							self.path = self.path + 1
 					self.cmd_vel.publish(self.move_cmd)
-					#self.r.sleep()
+					self.r.sleep()
 				else:
 					# no cases met 
 					rospy.loginfo('Error with goToUser/goHome')
