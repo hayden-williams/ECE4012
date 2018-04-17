@@ -130,7 +130,7 @@ class following_final2():
 				#self.goHome = re['goHome']
 				self.countQuery = 0
 
-			if (self.self.goToUser == 1 or self.end == 1):
+			if (self.goToUser == 1 or self.end == 1):
 				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
 				rows, col, channels = self.depth_image.shape #grey scale channel is 1, rgb is 3
 
