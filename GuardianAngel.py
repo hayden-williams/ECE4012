@@ -263,7 +263,7 @@ class following_final2():
 
 			elif (self.arrived == 1):
 			# Gain Values for movement
-			rospy.loginfo('Tracking Mode')
+				rospy.loginfo('Tracking Mode')
 			# X gain rotation
 				K = 0.0035
 				# Kx is for movment in z direction forward backwards
