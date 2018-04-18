@@ -41,7 +41,7 @@ class following_final2():
 
 	direction = np.array([0,0,0,0,0])
 	bearing = 1000
-	length = np.array([5,0,0,0,0])
+	length = np.array([10,0,0,0,0])
 	countQuery = 0
 	arrived = 0
 	goToUser = 1
