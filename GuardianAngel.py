@@ -56,7 +56,7 @@ class following_final2():
 	ystart = 0
 	magnitude = 9999999.0
 
-	z_thresh = 950
+	z_thresh = 910
 	z_threshCorner = z_thresh
 	ZoneList = np.array([0,0,0,0,0,0])
 	count = 0
@@ -199,7 +199,7 @@ class following_final2():
 						self.xstart = self.x + self.xstart
 						self.ystart = self.y + self.ystart
 						self.magnitude = 0
-				elif (np.sum(self.ZoneList) != 0 and self.roverAtUser == 0 and self.thetaError < 0.6):
+				elif (np.sum(self.ZoneList) != 0 and self.roverAtUser == 0):
 					if (self.ZoneList[0] == 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] != 0):
 						self.move_cmd.linear.x = 0.2
 						self.move_cmd.angular.z = 0.5
@@ -241,7 +241,7 @@ class following_final2():
 								self.cmd_vel.publish(self.move_cmd)
 								self.r.sleep()
 							self.count = self.count +1
-							rospy.loginfo('self.count')
+							rospy.loginfo(self.count)
 						else:
 							rospy.loginfo("Im stuck")
 							self.move_cmd.angular.z = 0.0
