@@ -130,7 +130,7 @@ class following_final2():
 				self.goToUser = re['goToUser']
 				#self.goHome = re['goHome']
 				self.countQuery = 0
-			if (self.countQuery > 20):
+			if (self.countQuery > 25):
 				self.countQuery = 0
 
 
