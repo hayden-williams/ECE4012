@@ -190,6 +190,7 @@ class following_final2():
 						self.roverAtUser = 1
 						if (self.end == 1):
 							tellServer = requests.post('http://128.61.11.235:3000/home', {'gotHome': 1})
+							self.path = 0
 
 					elif (fabs(self.thetaError) < 1.75 and self.magnitude <= self.length[self.path] ):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
