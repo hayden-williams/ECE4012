@@ -136,6 +136,7 @@ class selfNavigation():
 			
 			# get info from server
 			if self.countQuery%20 == 0:
+				rospy.loginfo('request')
 				#only check server occationally
 				re = requests.get('http://128.61.14.57:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				#rospy.loginfo(re)
