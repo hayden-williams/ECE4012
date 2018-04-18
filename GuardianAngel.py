@@ -43,7 +43,7 @@ class following_final2():
 	bearing = 1000
 	length = np.array([0,0,0,0,0])
 	countQuery = 0
-	arrived = 0
+	arrived = 1
 	goToUser = 0
 	emergency = 0
 	goHome = 0
@@ -114,7 +114,7 @@ class following_final2():
 	def callback(self,data):
 		try:
 			#rospy.loginfo('Callback')
-			
+			"""
 			self.countQuery = self.countQuery + 1
 			if (self.countQuery == 10):
 				rospy.loginfo('requesting stuff')
@@ -131,7 +131,7 @@ class following_final2():
 				self.goToUser = re['goToUser']
 				#self.goHome = re['goHome']
 				self.countQuery = 0
-
+			"""
 			if (self.goToUser == 1 or self.end == 1):
 				rospy.loginfo('Autonomous')
 				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
