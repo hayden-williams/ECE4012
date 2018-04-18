@@ -179,6 +179,7 @@ class following_final2():
 						self.desiredAngle = (360-self.direction[self.path])*3.1416/180
 					if (self.path > 4):
 						#Rover at user
+						rospy.loginfo('end of paths')
 						self.move_cmd.angular.z = 0.0
 						self.move_cmd.linear.x = 0.0
 						self.roverAtUser = 1
