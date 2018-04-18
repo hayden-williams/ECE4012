@@ -43,9 +43,9 @@ class following_final2():
 	bearing = 1000
 	length = np.array([0,0,0,0,0])
 	countQuery = 0
-	arrived = 1
+	arrived = 0
 	goToUser = 0
-	emergency = 0
+	emergency = 1
 	goHome = 0
 	end = 0
 
