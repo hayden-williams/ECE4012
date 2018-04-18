@@ -37,7 +37,7 @@ from sound_play.libsoundplay import SoundClient
 class following_final2():
 	# Distance in mm
 	thetaError = 0
-	kTurn = 1.5
+	kTurn = 1.25
 
 	direction = np.array([0,90,0,0,0])
 	bearing = 1000
@@ -134,6 +134,7 @@ class following_final2():
 				self.countQuery = 0
 """
 			if (self.goToUser == 1 or self.end == 1):
+				rospy.loginfo('Autonomous')
 				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
 				rows, col, channels = self.depth_image.shape #grey scale channel is 1, rgb is 3
 
@@ -168,7 +169,7 @@ class following_final2():
 
 				self.ZoneList = np.array([sumZone1, sumZone2, sumZone3, sumZone4])
 
-				if (np.sum(self.ZoneList) == 0):
+				if (np.sum(self.ZoneList) == 0 or self.magnitude < 0.2):
 
 					if (self.path < 4):
 						self.desiredAngle = (360-self.direction[self.path])*3.1416/180
@@ -180,10 +181,10 @@ class following_final2():
 						if (self.end == 1):
 							tellServer = requests.post('http://128.61.14.57:3000/home', {'gotHome': 1})
 
-					elif (fabs(self.thetaError) < 1.9 and self.magnitude <= self.length[self.path] ):
+					elif (fabs(self.thetaError) < 1.65 and self.magnitude <= self.length[self.path] ):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.2
-					elif (fabs(self.thetaError) > 1.9 and self.magnitude <= self.length[self.path]):
+					elif (fabs(self.thetaError) > 1.65 and self.magnitude <= self.length[self.path]):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.0
 					elif (self.magnitude >= self.length[self.path]):
@@ -237,34 +238,6 @@ class following_final2():
 						self.move_cmd.linear.x = 0.0
 
 
-						
-						"""
-						self.count = self.count + 1
-						#rospy.loginfo("Bitch ass situation")
-						if self.count == 1 :
-							self.move_cmd.linear.x = 0.0
-							self.move_cmd.angular.z = 0
-							self.cmd_vel.publish(self.move_cmd)
-							self.r.sleep()
-							while (np.sum(self.ZoneList) != 0 and np.absolute(self.thetaError) < 1.57):
-								self.move_cmd.angular.z = 0.5
-								self.cmd_vel.publish(self.move_cmd)
-								self.r.sleep()
-						elif self.count == 2 :
-							self.move_cmd.linear.x = 0.0
-							self.move_cmd.angular.z = 0
-							self.cmd_vel.publish(self.move_cmd)
-							self.r.sleep()
-							while (np.sum(self.ZoneList)!=0):
-								move_cmd.angular.z = -0.5
-								self.cmd_vel.publish(self.move_cmd)
-								self.r.sleep()
-						else:
-							#rospy.loginfo("I cant make it around! Help Mommy")
-							self.move_cmd.linear.x = 0.0
-							self.move_cmd.angular.z = 0
-							self.path = self.path + 1
-						"""
 				else:
 					self.move_cmd.linear.x = 0.0
 					self.move_cmd.angular.z = 0
@@ -274,7 +247,7 @@ class following_final2():
 			
 			elif self.emergency == 1:
 				# say emergency, do nothing except send pics
-				#rospy.loginfo('emergency')
+				rospy.loginfo('emergency')
 				
 				self.move_cmd.linear.x = 0.0
 				self.move_cmd.angular.z = 0
@@ -286,7 +259,7 @@ class following_final2():
 
 			elif (self.arrived == 1):
 			# Gain Values for movement
-
+			rospy.loginfo('Tracking Mode')
 			# X gain rotation
 				K = 0.0035
 				# Kx is for movment in z direction forward backwards
