@@ -220,12 +220,14 @@ class following_final2():
 					elif (self.ZoneList[0] != 0 and self.ZoneList[3] != 0 and self.count<1):
 						while (np.absolute(self.thetaError) < 1.57):
 							self.move_cmd.angular.z = 0.3
+							self.move_cmd.linear.x = 0
 							self.cmd_vel.publish(self.move_cmd)
 							self.r.sleep()
 						self.count = self.count + 1
 					elif (self.ZoneList[0] != 0 and self.ZoneList[3] != 0 and self.count<2):
 						while (np.absolute(self.thetaError) < 1.57):
 							self.move_cmd.angular.z = -0.3
+							self.move_cmd.linear.x = 0
 							self.cmd_vel.publish(self.move_cmd)
 							self.r.sleep()
 					elif(self.count == 2):
