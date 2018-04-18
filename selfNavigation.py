@@ -176,13 +176,12 @@ class selfNavigation():
 					self.count = 0
 			
 				#rospy.loginfo("obstacle " + str(self.ZoneList))
-				if (np.sum(self.ZoneList) == 0 or self.thetaError > 1):
+				if (np.sum(self.ZoneList) == 0 or self.magnitude < 0.2):
 
 					#no obstacle, move code goes here
 					#rospy.loginfo("after desiredAngle")
 					#rospy.loginfo(self.magnitude)
-					#rospy.loginfo(self.lengthHolder)
-					rospy.loginfo("MAG: %f, LENGTH: %f"%(self.magnitude, self.lengthHolder))
+					#rospy.loginfo(self.length)
 					#rospy.loginfo(self.direction)
 					#rospy.loginfo(self.path)
 					#rospy.loginfo(self.goToUser)
@@ -340,7 +339,7 @@ class selfNavigation():
 		else:
 			Angle = self.zeroAngle*(cos(self.desiredAngle)+sin(self.desiredAngle)*1j)
 			error = Angle/(current**2)
-			self.thetaError = phase(error) # radians from 0, -pi to pi	
+			self.thetaError = phase(error) # radians from 0, -pi to pi  
 
 		self.x = data.pose.pose.position.x - self.xstart
 		self.y = data.pose.pose.position.y - self.ystart
