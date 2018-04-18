@@ -181,7 +181,8 @@ class selfNavigation():
 					#no obstacle, move code goes here
 					#rospy.loginfo("after desiredAngle")
 					#rospy.loginfo(self.magnitude)
-					#rospy.loginfo(self.length)
+					#rospy.loginfo(self.lengthHolder)
+					rospy.loginfo("MAG: %f, LENGTH: %f"%(self.magnitude, self.lengthHolder))
 					#rospy.loginfo(self.direction)
 					#rospy.loginfo(self.path)
 					#rospy.loginfo(self.goToUser)
