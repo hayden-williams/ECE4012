@@ -118,7 +118,7 @@ class following_final2():
 			self.countQuery = self.countQuery + 1
 			if (self.countQuery == 200):
 				rospy.loginfo('requesting stuff')
-				re = requests.get('http://128.61.14.57:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
+				re = requests.get('http://128.61.11.235:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				#rospy.loginfo(re)
 
 				self.direction = re['direction'] # in degrees
@@ -184,7 +184,7 @@ class following_final2():
 						self.move_cmd.linear.x = 0.0
 						self.roverAtUser = 1
 						if (self.end == 1):
-							tellServer = requests.post('http://128.61.14.57:3000/home', {'gotHome': 1})
+							tellServer = requests.post('http://128.61.11.235:3000/home', {'gotHome': 1})
 
 					elif (fabs(self.thetaError) < 1.75 and self.magnitude <= self.length[self.path] ):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
