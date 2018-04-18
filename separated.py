@@ -200,10 +200,10 @@ class following_final2():
 					elif (fabs(self.thetaError) < 1.75 and self.magnitude <= self.length[self.path] ):
 						if (self.magnitude <= self.length[self.path] - 2):
 							self.move_cmd.linear.x = 0.5
-						elif(self.magnitude <= self.length[self.path] - 0.5):
+						elif(self.magnitude <= self.length[self.path] - 1):
 							self.move_cmd.linear.x = 0.2
 						else:
-							self.move_cmd.linear.x = 0.7
+							self.move_cmd.linear.x = 1
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						
 					elif (fabs(self.thetaError) > 1.75 and self.magnitude <= self.length[self.path]):
