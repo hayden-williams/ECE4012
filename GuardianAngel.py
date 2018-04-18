@@ -114,7 +114,7 @@ class following_final2():
 
 	def callback(self,data):
 		try:
-			rospy.loginfo('Callback')
+			#rospy.loginfo('Callback')
 			"""
 			self.countQuery = self.countQuery + 1
 			if (self.countQuery == 10):
@@ -180,10 +180,10 @@ class following_final2():
 						if (self.end == 1):
 							tellServer = requests.post('http://128.61.14.57:3000/home', {'gotHome': 1})
 
-					elif (fabs(self.thetaError) < 0.5 and self.magnitude <= self.length[self.path] ):
+					elif (fabs(self.thetaError) < 0.6 and self.magnitude <= self.length[self.path] ):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.2
-					elif (fabs(self.thetaError) > 0.5 and self.magnitude <= self.length[self.path]):
+					elif (fabs(self.thetaError) > 0.6 and self.magnitude <= self.length[self.path]):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.0
 					elif (self.magnitude >= self.length[self.path]):
@@ -193,7 +193,7 @@ class following_final2():
 						self.xstart = self.x + self.xstart
 						self.ystart = self.y + self.ystart
 						self.magnitude = 0
-				elif (np.sum(self.ZoneList) != 0 and self.roverAtUser == 0):
+				elif (np.sum(self.ZoneList) != 0 and self.roverAtUser == 0 and self.thetaError < 0.6):
 					if (self.ZoneList[0] == 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] != 0):
 						self.move_cmd.linear.x = 0.2
 						self.move_cmd.angular.z = 0.5
@@ -218,6 +218,77 @@ class following_final2():
 						self.move_cmd.linear.x = 0.2
 						self.move_cmd.angular.z = -0.75
 					else:
+						while (self.count < 2):
+							if (self.count == 0):
+								self.move_cmd.linear.x = 0
+								self.move_cmd,angular.z = 0
+								self.cmd_vel.publish(self.move_cmd)
+								self.r.sleep()
+								while (np.sum(self.ZoneList)!= 0 and np.absolute(self.thetaError)<1.57):
+									self.move_cmd.angular.z = 0.5
+									self.cmd_vel.publish(self.move_cmd)
+									self.r.sleep()
+								if (np.sum(self.ZoneList[3]) == 0):
+									move_cmd.linear.x = 0.2
+									move_cmd.angular.z = -0.5
+									self.cmd_vel.publish(self.move_cmd)
+									self.r.sleep()
+								elif (np.sum(self.ZoneList[3]) != 0 and np.sum(self.ZoneList[0]) == 0):
+									self.move_cmd.linear.x = 0.2
+									self.move_cmd,angular.z = 0.5
+									self.cmd_vel.publish(self.move_cmd)
+									self.r.sleep()
+								else:
+									self.count = self.count + 1
+									self.move_cmd.linear.x = 0
+									self.move_cmd,angular.z = 0
+									self.cmd_vel.publish(self.move_cmd)
+									self.r.sleep()
+							elif(self.count == 1):
+								self.move_cmd.linear.x = 0
+								self.move_cmd,angular.z = 0
+								self.cmd_vel.publish(self.move_cmd)
+								self.r.sleep()
+								while (np.sum(self.ZoneList)!= 0 and np.absolute(self.thetaError)<1.57):
+									self.move_cmd.angular.z = -0.5
+									self.cmd_vel.publish(self.move_cmd)
+									self.r.sleep()
+								if (np.sum(self.ZoneList[0]) == 0):
+									move_cmd.linear.x = 0.2
+									move_cmd.angular.z = 0.5
+									self.cmd_vel.publish(self.move_cmd)
+									self.r.sleep()
+								elif (np.sum(self.ZoneList[0]) != 0 and np.sum(self.ZoneList[3]) == 0):
+									self.move_cmd.linear.x = 0.2
+									self.move_cmd,angular.z = -0.5
+									self.cmd_vel.publish(self.move_cmd)
+									self.r.sleep()
+								else:
+									self.count = self.count + 1
+									self.move_cmd.linear.x = 0
+									self.move_cmd,angular.z = 0
+									self.cmd_vel.publish(self.move_cmd)
+									self.r.sleep()
+							if (np.absolute(self.thetaError) < 0.25):
+								self.count = 3
+
+						if (self.count == 2):
+							rospy.loginfo('Im stuck')
+							self.move_cmd.linear.x = 0
+							self.move_cmd,angular.z = 0
+							self.cmd_vel.publish(self.move_cmd)
+							self.r.sleep()
+						else:
+							self.count = 0
+
+
+
+
+
+
+
+
+						"""
 						self.count = self.count + 1
 						#rospy.loginfo("Bitch ass situation")
 						if self.count == 1 :
@@ -243,6 +314,7 @@ class following_final2():
 							self.move_cmd.linear.x = 0.0
 							self.move_cmd.angular.z = 0
 							self.path = self.path + 1
+						"""
 				else:
 					self.move_cmd.linear.x = 0.0
 					self.move_cmd.angular.z = 0
