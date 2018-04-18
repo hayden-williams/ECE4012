@@ -230,7 +230,7 @@ class following_final2():
 						self.move_cmd.linear.x = 0.0
 						
 					"""
-					elif (self.ZoneList[0] != 0 and self.ZoneList[1] != 0 and self.ZoneList[2] != 0 and self.ZoneList[3] != 0 and self.count<1):
+				elif (self.ZoneList[0] != 0 and self.ZoneList[1] != 0 and self.ZoneList[2] != 0 and self.ZoneList[3] != 0 and self.count < 1):
 						while (np.absolute(self.thetaError) < 1.57):
 							self.move_cmd.angular.z = 0.3
 							self.move_cmd.linear.x = 0
