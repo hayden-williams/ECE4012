@@ -37,7 +37,7 @@ from sound_play.libsoundplay import SoundClient
 class following_final2():
 	# Distance in mm
 	thetaError = 0
-	kTurn = 1.05
+	kTurn = 1.00
 
 	direction = np.array([0,90,0,0,0])
 	bearing = 1000
@@ -56,7 +56,7 @@ class following_final2():
 	ystart = 0
 	magnitude = 9999999.0
 
-	z_thresh = 800
+	z_thresh = 950
 	z_threshCorner = z_thresh
 	ZoneList = np.array([0,0,0,0,0,0])
 	count = 0
@@ -227,7 +227,7 @@ class following_final2():
 						if (self.count < 1):
 							rospy.loginfo('turn left')
 							while (np.absolute(self.thetaError) < 1.57):
-								self.move_cmd.angular.z = 0.2
+								self.move_cmd.angular.z = 0.15
 								self.move_cmd.linear.x = 0
 								self.cmd_vel.publish(self.move_cmd)
 								self.r.sleep()
@@ -236,7 +236,7 @@ class following_final2():
 						elif (self.count < 2):
 							rospy.loginfo('turn right')
 							while (np.absolute(self.thetaError) < 1.65):
-								self.move_cmd.angular.z = -0.2
+								self.move_cmd.angular.z = -0.15
 								self.move_cmd.linear.x = 0
 								self.cmd_vel.publish(self.move_cmd)
 								self.r.sleep()
