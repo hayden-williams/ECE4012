@@ -39,9 +39,9 @@ class following_final2():
 	thetaError = 0
 	kTurn = 1.25
 
-	direction = np.array([10,2,0,0,0])
+	direction = np.array([0,90,0,0,0])
 	bearing = 1000
-	length = np.array([0,90,0,0,0])
+	length = np.array([10,2,0,0,0])
 	countQuery = 0
 	arrived = 0
 	goToUser = 1
@@ -223,6 +223,13 @@ class following_final2():
 					elif((self.ZoneList[1] != 0 and self.ZoneList[3] ==0) or (self.ZoneList[0] != 0 and self.ZoneList[2] != 0 and self.ZoneList[3] == 0)):
 						self.move_cmd.linear.x = 0.2
 						self.move_cmd.angular.z = -0.75
+						
+					else:
+						rospy.loginfo('situation')
+						self.move_cmd.angular.z = 0.0
+						self.move_cmd.linear.x = 0.0
+						"""
+
 					elif (self.ZoneList[0] != 0 and self.ZoneList[3] != 0 and self.count<1):
 						while (np.absolute(self.thetaError) < 1.57):
 							self.move_cmd.angular.z = 0.3
@@ -241,6 +248,7 @@ class following_final2():
 						rospy.loginfo("Im stuck")
 						self.move_cmd.angular.z = 0.0
 						self.move_cmd.linear.x = 0.0
+						"""
 
 
 				else:
