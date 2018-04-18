@@ -170,6 +170,9 @@ class following_final2():
 
 				rospy.loginfo(self.magnitude)
 
+				if (np.absolute(self.thetaError) < 0.3):
+					self.count = 0
+
 				if (np.sum(self.ZoneList) == 0 or self.magnitude < 0.15):
 
 					if (self.path < 4):
