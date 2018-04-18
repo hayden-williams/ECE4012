@@ -124,10 +124,13 @@ class following_final2():
 				#self.bearing = re['bearing']
 				self.emergency = re['emergency']
 				self.end = re['ended'] # user ended trip
+				rospy.loginfo('end is ' + str(self.end))
 				self.arrived = re['arrived']
 				#home = re['gotHome'] # rover is home
 				self.goToUser = re['goToUser']
 				#self.goHome = re['goHome']
+				self.countQuery = 0
+			if (self.countQuery > 20):
 				self.countQuery = 0
 
 
@@ -419,7 +422,8 @@ class following_final2():
 	def callbackImage(self,data):
 		try:
 		  if self.emergency == 1:
-			cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+		  	rospy.loginfo('in callBack')
+				cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
 			#cv2.imshow("color_camera_msg.jpg", cv_image)
 			if self.savePic == 1:
 			  cv2.imwrite("UserSnapshot.jpg",cv_image)
