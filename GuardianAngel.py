@@ -110,13 +110,11 @@ class following_final2():
 		# let's turn at 0 radians/s
 		self.move_cmd.angular.z = 0
 
-
-	def callback(self,data):
-		try:
-			#rospy.loginfo('Callback')
+		while not rospy.is_shutdown():
 			
+			# get info from server
 			self.countQuery = self.countQuery + 1
-			if (self.countQuery == 20):
+			if (self.countQuery == 25):
 				rospy.loginfo('requesting stuff')
 				re = requests.get('http://128.61.11.235:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				#rospy.loginfo(re)
@@ -126,11 +124,19 @@ class following_final2():
 				#self.bearing = re['bearing']
 				self.emergency = re['emergency']
 				self.end = re['ended'] # user ended trip
+				#rospy.loginfo('end is ' + str(self.end))
 				self.arrived = re['arrived']
 				#home = re['gotHome'] # rover is home
 				self.goToUser = re['goToUser']
 				#self.goHome = re['goHome']
 				self.countQuery = 0
+			if (self.countQuery > 25):
+				self.countQuery = 0
+
+
+	def callback(self,data):
+		try:
+			#rospy.loginfo('Callback')r
 			
 			if (self.goToUser == 1 or self.end == 1):
 				rospy.loginfo('Autonomous')
@@ -175,6 +181,8 @@ class following_final2():
 
 				if (np.sum(self.ZoneList) == 0 or self.magnitude < 0.15):
 
+
+
 					if (self.path < 4):
 						self.desiredAngle = (360-self.direction[self.path])*3.1416/180
 					if (self.path > 4):
@@ -185,6 +193,9 @@ class following_final2():
 						self.roverAtUser = 1
 						if (self.end == 1):
 							tellServer = requests.post('http://128.61.11.235:3000/home', {'gotHome': 1})
+							self.path = 0
+							self.xstart = self.x + self.xstart
+							self.ystart = self.y + self.ystart
 
 					elif (fabs(self.thetaError) < 1.75 and self.magnitude <= self.length[self.path] ):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
@@ -262,7 +273,7 @@ class following_final2():
 				self.move_cmd.linear.x = 0.0
 				self.move_cmd.angular.z = 0
 				self.cmd_vel.publish(self.move_cmd)
-				self.r.sleep()
+				rospy.sleep(2)
 				self.soundhandle.say('Emergency')
 				if self.savePic == 0: self.savePic = 1
 				rospy.sleep(2)
@@ -270,6 +281,13 @@ class following_final2():
 			elif (self.arrived == 1):
 			# Gain Values for movement
 				rospy.loginfo('Tracking Mode')
+
+				self.roverAtUser = 0
+
+				self.path = 0
+
+				self.xstart = self.x + self.xstart
+				self.ystart = self.y + self.ystart
 			# X gain rotation
 				K = 0.0035
 				# Kx is for movment in z direction forward backwards
@@ -406,12 +424,13 @@ class following_final2():
 	def callbackImage(self,data):
 		try:
 		  if self.emergency == 1:
-			cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+		  	rospy.loginfo('in callBack')
+		  	cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
 			#cv2.imshow("color_camera_msg.jpg", cv_image)
 			if self.savePic == 1:
 			  cv2.imwrite("UserSnapshot.jpg",cv_image)
 			  # send to server
-			  url = 'http://128.61.14.57:3000/image'  #<-------------------SERVER IP ADDRESS HERE------------
+			  url = 'http://128.61.11.235:3000/image'  #<-------------------SERVER IP ADDRESS HERE------------
 			  files ={'image':open('UserSnapshot.jpg','rb')}
 			  sender = requests.post(url, files=files)
 			  self.savePic = 0
