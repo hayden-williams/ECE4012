@@ -186,10 +186,10 @@ class following_final2():
 						if (self.end == 1):
 							tellServer = requests.post('http://128.61.14.57:3000/home', {'gotHome': 1})
 
-					elif (fabs(self.thetaError) < 1.65 and self.magnitude <= self.length[self.path] ):
+					elif (fabs(self.thetaError) < 1.75 and self.magnitude <= self.length[self.path] ):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.2
-					elif (fabs(self.thetaError) > 1.65 and self.magnitude <= self.length[self.path]):
+					elif (fabs(self.thetaError) > 1.75 and self.magnitude <= self.length[self.path]):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.0
 					elif (self.magnitude >= self.length[self.path]):
@@ -235,7 +235,7 @@ class following_final2():
 							rospy.loginfo(self.count)
 						elif (self.count < 2):
 							rospy.loginfo('turn right')
-							while (np.absolute(self.thetaError) < 1.60):
+							while (np.absolute(self.thetaError) < 1.65):
 								self.move_cmd.angular.z = -0.2
 								self.move_cmd.linear.x = 0
 								self.cmd_vel.publish(self.move_cmd)
