@@ -63,7 +63,8 @@ public class Helper {
                 mMarker = mMap.addMarker(new MarkerOptions().position(mLocation)
                         .icon(BitmapDescriptorFactory.defaultMarker(HUE_IABLUE))
                         .title("Your Location"));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 17.0f));
+                //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 17.0f));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 17.0f));
                 return mMarker;
             }
         } else {
@@ -163,6 +164,8 @@ public class Helper {
                         if (new_legs[i].getLength() > 4.0) {
                             Log.d("Wayfinding", "Subtracting 5 from last leg!");
                             new_legs[i] = new IARoutingLeg(null, null, new_legs[i].getLength() - 4.0, new_legs[i].getDirection(), null);
+                        } else {
+                            new_legs[i] = new IARoutingLeg(null, null, 0, 0, null);
                         }
                     }
 

@@ -19,6 +19,9 @@ public class LoginScreen extends AppCompatActivity {
     // IndoorAtlas
     private static IndoorAtlas atlas;
 
+    // floor plan ID
+    private static final String FLOOR_PLAN_ID = "f97a76f2-ffd1-4038-b7e6-870dba48c8b5";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,7 @@ public class LoginScreen extends AppCompatActivity {
 
         // Initialize IndoorAtlas
         atlas = IndoorAtlas.getInstance();
+        atlas.fetchFloorPlan(FLOOR_PLAN_ID);
     }
 
     // Called when user presses submit

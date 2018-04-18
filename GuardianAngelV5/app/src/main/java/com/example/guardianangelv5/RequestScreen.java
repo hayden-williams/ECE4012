@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -44,13 +45,10 @@ public class RequestScreen extends AppCompatActivity implements OnMapReadyCallba
 
         myserver = ServerLink.getInstance();
         atlas = IndoorAtlas.getInstance();
-        atlas.fetchFloorPlan("f97a76f2-ffd1-4038-b7e6-870dba48c8b5");
 
         mMapView = findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
-
-        mGroundOverlay = Helper.setupGroundOverlay(atlas.floorPlan_saved, atlas.bitmap_saved, mGroundOverlay, mMap);
     }
 
     public void clickRequest(View view) {
@@ -71,6 +69,7 @@ public class RequestScreen extends AppCompatActivity implements OnMapReadyCallba
                 mMarker = Helper.updateMap(mMap, mMarker, atlas);
             }
         });
+        mGroundOverlay = Helper.setupGroundOverlay(atlas.floorPlan_saved, atlas.bitmap_saved, mGroundOverlay, mMap);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = new String[2];
             permissions[0] = android.Manifest.permission.ACCESS_FINE_LOCATION;

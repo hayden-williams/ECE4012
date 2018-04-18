@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
@@ -51,13 +53,10 @@ public class WaitScreen extends AppCompatActivity implements OnMapReadyCallback 
 
         myserver = ServerLink.getInstance();
         atlas = IndoorAtlas.getInstance();
-        atlas.fetchFloorPlan("f97a76f2-ffd1-4038-b7e6-870dba48c8b5");
 
         mMapView = findViewById(R.id.mapView2);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
-
-        mGroundOverlay = Helper.setupGroundOverlay(atlas.floorPlan_saved, atlas.bitmap_saved, mGroundOverlay, mMap);
 
         runnableCode = new Runnable() {
             @Override
@@ -77,6 +76,8 @@ public class WaitScreen extends AppCompatActivity implements OnMapReadyCallback 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mGroundOverlay = Helper.setupGroundOverlay(atlas.floorPlan_saved, atlas.bitmap_saved, mGroundOverlay, mMap);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(atlas.lat, atlas.lon), 17.0f));
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = new String[2];
             permissions[0] = android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -86,20 +87,6 @@ public class WaitScreen extends AppCompatActivity implements OnMapReadyCallback 
         }
         mMarker = Helper.updateMap(mMap, mMarker, atlas);
     }
-
-    /*public void clickCancel(View view) {
-        ArrayList<StringPair> jsonlist = new ArrayList<>();
-        jsonlist.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_END_TRIP));
-        jsonlist.add(new StringPair(ServerLink.NAME, user_name));
-        myserver.request(jsonlist);
-
-        handler.removeCallbacks(runnableCode);
-
-        Intent intent = new Intent(this, RequestScreen.class);
-        intent.putExtra(LoginScreen.EXTRA_MESSAGE, user_name);
-        startActivity(intent);
-        ProcessPhoenix.triggerRebirth(this);
-    }*/
 
     public void clickArrived(View view) {
         ArrayList<StringPair> jsonlist = new ArrayList<>();
