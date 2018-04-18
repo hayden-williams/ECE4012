@@ -271,7 +271,7 @@ class following_final2():
 				self.move_cmd.linear.x = 0.0
 				self.move_cmd.angular.z = 0
 				self.cmd_vel.publish(self.move_cmd)
-				self.r.sleep()
+				self.r.sleep(2)
 				self.soundhandle.say('Emergency')
 				if self.savePic == 0: self.savePic = 1
 				rospy.sleep(2)
