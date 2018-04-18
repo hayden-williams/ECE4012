@@ -116,7 +116,7 @@ class following_final2():
 			#rospy.loginfo('Callback')
 			
 			self.countQuery = self.countQuery + 1
-			if (self.countQuery == 20):
+			if (self.countQuery == 200):
 				rospy.loginfo('requesting stuff')
 				re = requests.get('http://128.61.14.57:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				#rospy.loginfo(re)
