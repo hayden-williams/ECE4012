@@ -273,10 +273,10 @@ class following_final2():
 				self.move_cmd.linear.x = 0.0
 				self.move_cmd.angular.z = 0
 				self.cmd_vel.publish(self.move_cmd)
-				rospy.sleep(2)
+				rospy.sleep(1)
 				self.soundhandle.say('Emergency')
 				if self.savePic == 0: self.savePic = 1
-				rospy.sleep(2)
+				rospy.sleep(1)
 
 			elif (self.arrived == 1):
 			# Gain Values for movement
