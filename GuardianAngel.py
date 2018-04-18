@@ -39,12 +39,12 @@ class following_final2():
 	thetaError = 0
 	kTurn = 1.5
 
-	direction = 1000
+	direction = np.array([0,0,0,0,0])
 	bearing = 1000
-	length = 0
+	length = np.array([5,0,0,0,0])
 	countQuery = 0
 	arrived = 0
-	goToUser = 0
+	goToUser = 1
 	emergency = 0
 	goHome = 0
 	end = 0
@@ -169,6 +169,9 @@ class following_final2():
 				self.ZoneList = np.array([sumZone1, sumZone2, sumZone3, sumZone4])
 
 				if (np.sum(self.ZoneList) == 0):
+
+					if (self.path < 4):
+						self.desiredAngle = (360-self.direction[self.path])*3.1416/180
 					if (self.path > 4):
 						#Rover at user
 						self.move_cmd.angular.z = 0.0
