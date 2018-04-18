@@ -46,8 +46,8 @@ class following_final2():
 	arrived = 0
 	goToUser = 0
 	emergency = 0
-	goHome = 1
-	end = 0
+	goHome = 0
+	end = 1
 
 	odomBearing = 0
 	zeroAngle = 1000
