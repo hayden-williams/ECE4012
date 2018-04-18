@@ -49,7 +49,6 @@ class following_final2():
 	goHome = 0
 	end = 0
 
-
 	odomBearing = 0
 	zeroAngle = 1000
 	desiredAngle = 0
@@ -168,6 +167,8 @@ class following_final2():
 
 
 				self.ZoneList = np.array([sumZone1, sumZone2, sumZone3, sumZone4])
+
+				rospy.loginfo(self.magnitude)
 
 				if (np.sum(self.ZoneList) == 0 or self.magnitude < 0.15):
 
