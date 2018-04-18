@@ -257,7 +257,7 @@ class following_final2():
 								self.move_cmd.angular.z = 0
 								self.cmd_vel.publish(self.move_cmd)
 								self.r.sleep()
-								while (np.sum(self.ZoneList)!= 0 and np.absolute(self.thetaError)<1.57):
+								while (np.sum(self.ZoneList)!= 0 and np.absolute(self.thetaError)<1.65):
 									rospy.loginfo('inside while in count = 1')
 									self.move_cmd.angular.z = -0.5
 									self.cmd_vel.publish(self.move_cmd)
