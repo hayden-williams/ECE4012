@@ -219,57 +219,69 @@ class following_final2():
 						self.move_cmd.angular.z = -0.75
 					else:
 						while (self.count < 2):
+							rospy.loginfo('inside while')
 							if (self.count == 0):
+								rospy.loginfo('inside count = 0')
 								self.move_cmd.linear.x = 0
 								self.move_cmd,angular.z = 0
 								self.cmd_vel.publish(self.move_cmd)
 								self.r.sleep()
 								while (np.sum(self.ZoneList)!= 0 and np.absolute(self.thetaError)<1.57):
+									rospy.loginfo('inside while in count = 0')
 									self.move_cmd.angular.z = 0.5
 									self.cmd_vel.publish(self.move_cmd)
 									self.r.sleep()
 								if (np.sum(self.ZoneList[3]) == 0):
+									rospy.loginfo('inside zone3 is empty')
 									move_cmd.linear.x = 0.2
 									move_cmd.angular.z = -0.5
 									self.cmd_vel.publish(self.move_cmd)
 									self.r.sleep()
 								elif (np.sum(self.ZoneList[3]) != 0 and np.sum(self.ZoneList[0]) == 0):
+									rospy.loginfo('inside zone 3 not empty')
 									self.move_cmd.linear.x = 0.2
 									self.move_cmd,angular.z = 0.5
 									self.cmd_vel.publish(self.move_cmd)
 									self.r.sleep()
 								else:
+									rospy.loginfo('inside else in count = 0')
 									self.count = self.count + 1
 									self.move_cmd.linear.x = 0
 									self.move_cmd,angular.z = 0
 									self.cmd_vel.publish(self.move_cmd)
 									self.r.sleep()
 							elif(self.count == 1):
+								rospy.loginfo('inside count = 1')
 								self.move_cmd.linear.x = 0
 								self.move_cmd,angular.z = 0
 								self.cmd_vel.publish(self.move_cmd)
 								self.r.sleep()
 								while (np.sum(self.ZoneList)!= 0 and np.absolute(self.thetaError)<1.57):
+									rospy.loginfo('inside while in count = 1')
 									self.move_cmd.angular.z = -0.5
 									self.cmd_vel.publish(self.move_cmd)
 									self.r.sleep()
 								if (np.sum(self.ZoneList[0]) == 0):
+									rospy.loginfo('inside zone 0 is empty')
 									move_cmd.linear.x = 0.2
 									move_cmd.angular.z = 0.5
 									self.cmd_vel.publish(self.move_cmd)
 									self.r.sleep()
 								elif (np.sum(self.ZoneList[0]) != 0 and np.sum(self.ZoneList[3]) == 0):
+									rospy.loginfo('inside zone 0 is not empty')
 									self.move_cmd.linear.x = 0.2
 									self.move_cmd,angular.z = -0.5
 									self.cmd_vel.publish(self.move_cmd)
 									self.r.sleep()
 								else:
+									rospy.loginfo('inside else in count = 1')
 									self.count = self.count + 1
 									self.move_cmd.linear.x = 0
 									self.move_cmd,angular.z = 0
 									self.cmd_vel.publish(self.move_cmd)
 									self.r.sleep()
 							if (np.absolute(self.thetaError) < 0.25):
+								rospy.loginfo('insidee error')
 								self.count = 3
 
 						if (self.count == 2):
@@ -279,6 +291,7 @@ class following_final2():
 							self.cmd_vel.publish(self.move_cmd)
 							self.r.sleep()
 						else:
+							rospy.loginfo('reset count')
 							self.count = 0
 
 
