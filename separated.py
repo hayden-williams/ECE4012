@@ -114,7 +114,7 @@ class following_final2():
 			
 			# get info from server
 			self.countQuery = self.countQuery + 1
-			if (self.countQuery == 20):
+			if (self.countQuery == 25):
 				rospy.loginfo('requesting stuff')
 				re = requests.get('http://128.61.11.235:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				#rospy.loginfo(re)
@@ -124,7 +124,7 @@ class following_final2():
 				#self.bearing = re['bearing']
 				self.emergency = re['emergency']
 				self.end = re['ended'] # user ended trip
-				rospy.loginfo('end is ' + str(self.end))
+				#rospy.loginfo('end is ' + str(self.end))
 				self.arrived = re['arrived']
 				#home = re['gotHome'] # rover is home
 				self.goToUser = re['goToUser']
@@ -194,6 +194,8 @@ class following_final2():
 						if (self.end == 1):
 							tellServer = requests.post('http://128.61.11.235:3000/home', {'gotHome': 1})
 							self.path = 0
+							self.xstart = self.x + self.xstart
+							self.ystart = self.y + self.ystart
 
 					elif (fabs(self.thetaError) < 1.75 and self.magnitude <= self.length[self.path] ):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
