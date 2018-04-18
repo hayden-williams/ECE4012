@@ -44,7 +44,7 @@ class following_final2():
 	length = np.array([0,0,0,0,0])
 	countQuery = 0
 	arrived = 0
-	goToUser = 1
+	goToUser = 0
 	emergency = 0
 	goHome = 0
 	end = 0
