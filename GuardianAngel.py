@@ -39,12 +39,12 @@ class following_final2():
 	thetaError = 0
 	kTurn = 1.25
 
-	direction = np.array([0,90,0,0,0])
+	direction = np.array([0,0,0,0,0])
 	bearing = 1000
-	length = np.array([10,2,0,0,0])
+	length = np.array([0,0,0,0,0])
 	countQuery = 0
 	arrived = 0
-	goToUser = 1
+	goToUser = 0
 	emergency = 0
 	goHome = 0
 	end = 0
@@ -115,7 +115,7 @@ class following_final2():
 	def callback(self,data):
 		try:
 			#rospy.loginfo('Callback')
-			"""
+			
 			self.countQuery = self.countQuery + 1
 			if (self.countQuery == 10):
 				rospy.loginfo('requesting stuff')
@@ -132,7 +132,7 @@ class following_final2():
 				self.goToUser = re['goToUser']
 				#self.goHome = re['goHome']
 				self.countQuery = 0
-"""
+
 			if (self.goToUser == 1 or self.end == 1):
 				rospy.loginfo('Autonomous')
 				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
@@ -169,7 +169,7 @@ class following_final2():
 
 				self.ZoneList = np.array([sumZone1, sumZone2, sumZone3, sumZone4])
 
-				if (np.sum(self.ZoneList) == 0 or self.magnitude < 0.2):
+				if (np.sum(self.ZoneList) == 0 or self.magnitude < 0.15):
 
 					if (self.path < 4):
 						self.desiredAngle = (360-self.direction[self.path])*3.1416/180
