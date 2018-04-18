@@ -56,7 +56,7 @@ class following_final2():
 	ystart = 0
 	magnitude = 9999999.0
 
-	z_thresh = 910
+	z_thresh = 1000
 	z_threshCorner = z_thresh
 	ZoneList = np.array([0,0,0,0,0,0])
 	count = 0
