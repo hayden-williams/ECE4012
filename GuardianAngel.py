@@ -45,8 +45,8 @@ class following_final2():
 	countQuery = 0
 	arrived = 0
 	goToUser = 0
-	emergency = 1
-	goHome = 0
+	emergency = 0
+	goHome = 1
 	end = 0
 
 	odomBearing = 0
@@ -260,7 +260,7 @@ class following_final2():
 				self.r.sleep()
 				self.soundhandle.say('Emergency')
 				if self.savePic == 0: self.savePic = 1
-				rospy.sleep(1)
+				rospy.sleep(2)
 
 			elif (self.arrived == 1):
 			# Gain Values for movement
