@@ -42,9 +42,9 @@ class selfNavigation():
 	thetaError = 0
 	kTurn = 1.5
 
-	direction = np.array([0,90,0,0,0])
+	direction = np.array([0,0,0,0,0])
 	bearing = 1000
-	length = np.array([10,2,0,0,0])
+	length = np.array([0,0,0,0,0])
 	countQuery = 0
 	arrived = 0
 	goToUser = 1
@@ -133,9 +133,9 @@ class selfNavigation():
 		
 		# as long as you haven't ctrl + c keeping doing...
 		while not rospy.is_shutdown():
-			"""
+			
 			# get info from server
-			if self.countQuery%10 == 0:
+			if self.countQuery%20 == 0:
 				#only check server occationally
 				re = requests.get('http://128.61.14.57:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				#rospy.loginfo(re)
@@ -150,10 +150,10 @@ class selfNavigation():
 				self.goToUser = re['goToUser']
 				#self.goHome = re['goHome']
 
-				if self.countQuery == 9000:
+				if self.countQuery == 100:
 					self.countQuery = 0
 			self.countQuery = self.countQuery + 1
-			"""
+			
 
 			if self.goToUser==1 or self.end == 1:
 				# endAneWait is still 1, but ignored

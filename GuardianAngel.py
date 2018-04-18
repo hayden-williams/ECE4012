@@ -39,9 +39,9 @@ class following_final2():
 	thetaError = 0
 	kTurn = 1.00
 
-	direction = np.array([0,90,0,0,0])
+	direction = np.array([0,0,0,0,0])
 	bearing = 1000
-	length = np.array([10,2,0,0,0])
+	length = np.array([0,0,0,0,0])
 	countQuery = 0
 	arrived = 0
 	goToUser = 1
@@ -114,9 +114,9 @@ class following_final2():
 	def callback(self,data):
 		try:
 			#rospy.loginfo('Callback')
-			"""
+			
 			self.countQuery = self.countQuery + 1
-			if (self.countQuery == 10):
+			if (self.countQuery == 20):
 				rospy.loginfo('requesting stuff')
 				re = requests.get('http://128.61.14.57:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				#rospy.loginfo(re)
@@ -131,7 +131,7 @@ class following_final2():
 				self.goToUser = re['goToUser']
 				#self.goHome = re['goHome']
 				self.countQuery = 0
-			"""
+			
 			if (self.goToUser == 1 or self.end == 1):
 				rospy.loginfo('Autonomous')
 				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
