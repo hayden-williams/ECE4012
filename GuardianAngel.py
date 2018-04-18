@@ -228,7 +228,7 @@ class following_final2():
 							self.move_cmd.angular.z = -0.3
 							self.cmd_vel.publish(self.move_cmd)
 							self.r.sleep()
-					elif(self.count == 2)
+					elif(self.count == 2):
 						rospy.loginfo("Im stuck")
 						self.move_cmd.angular.z = 0.0
 						self.move_cmd.linear.x = 0.0
