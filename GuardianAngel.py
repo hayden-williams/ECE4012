@@ -37,7 +37,7 @@ from sound_play.libsoundplay import SoundClient
 class following_final2():
 	# Distance in mm
 	thetaError = 0
-	kTurn = 1.25
+	kTurn = 1.05
 
 	direction = np.array([0,90,0,0,0])
 	bearing = 1000
