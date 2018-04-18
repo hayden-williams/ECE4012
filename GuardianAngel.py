@@ -227,7 +227,7 @@ class following_final2():
 						if (self.count < 1):
 							rospy.loginfo('turn left')
 							while (np.absolute(self.thetaError) < 1.57):
-								self.move_cmd.angular.z = 0.3
+								self.move_cmd.angular.z = 0.2
 								self.move_cmd.linear.x = 0
 								self.cmd_vel.publish(self.move_cmd)
 								self.r.sleep()
@@ -235,8 +235,8 @@ class following_final2():
 							rospy.loginfo(self.count)
 						elif (self.count < 2):
 							rospy.loginfo('turn right')
-							while (np.absolute(self.thetaError) < 1.57):
-								self.move_cmd.angular.z = -0.3
+							while (np.absolute(self.thetaError) < 1.60):
+								self.move_cmd.angular.z = -0.2
 								self.move_cmd.linear.x = 0
 								self.cmd_vel.publish(self.move_cmd)
 								self.r.sleep()
