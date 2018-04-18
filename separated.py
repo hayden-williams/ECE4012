@@ -71,7 +71,7 @@ class following_final2():
 	desired_lowBound = 950
 	desired_upBound = 1050
 	invalid_max = 2000
-	max_speed = 1
+	max_speed = 1.5
 	soundCounter = 0
 
 	savePic = 0
@@ -198,8 +198,14 @@ class following_final2():
 							self.ystart = self.y + self.ystart
 
 					elif (fabs(self.thetaError) < 1.75 and self.magnitude <= self.length[self.path] ):
+						if (self.magnitude <= self.length[self.path] - 2):
+							self.move_cmd.linear.x = 0.5
+						elif(self.magnitude <= self.length[self.path] - 0.5):
+							self.move_cmd.linear.x = 0.2
+						else:
+							self.move_cmd.linear.x = 0.7
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
-						self.move_cmd.linear.x = 0.2
+						
 					elif (fabs(self.thetaError) > 1.75 and self.magnitude <= self.length[self.path]):
 						self.move_cmd.angular.z = self.kTurn*self.thetaError
 						self.move_cmd.linear.x = 0.0
@@ -291,7 +297,7 @@ class following_final2():
 			# X gain rotation
 				K = 0.0035
 				# Kx is for movment in z direction forward backwards
-				Kx = .0005
+				Kx = .001
 
 				# Get Image and find size of image
 				self.depth_image = self.bridge.imgmsg_to_cv2(data, "passthrough")
