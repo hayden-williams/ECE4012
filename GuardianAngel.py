@@ -39,9 +39,9 @@ class following_final2():
 	thetaError = 0
 	kTurn = 1.5
 
-	direction = np.array([0,0,0,0,0])
+	direction = np.array([0,90,0,0,0])
 	bearing = 1000
-	length = np.array([10,0,0,0,0])
+	length = np.array([10,2,0,0,0])
 	countQuery = 0
 	arrived = 0
 	goToUser = 1
@@ -230,6 +230,7 @@ class following_final2():
 							self.move_cmd.linear.x = 0
 							self.cmd_vel.publish(self.move_cmd)
 							self.r.sleep()
+						self.count = self.count +1
 					elif(self.count == 2):
 						rospy.loginfo("Im stuck")
 						self.move_cmd.angular.z = 0.0
