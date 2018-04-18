@@ -178,6 +178,8 @@ class following_final2():
 
 				if (np.sum(self.ZoneList) == 0 or self.magnitude < 0.15):
 
+
+
 					if (self.path < 4):
 						self.desiredAngle = (360-self.direction[self.path])*3.1416/180
 					if (self.path > 4):
@@ -273,6 +275,13 @@ class following_final2():
 			elif (self.arrived == 1):
 			# Gain Values for movement
 				rospy.loginfo('Tracking Mode')
+
+				self.roverAtUser = 0
+
+				self.path = 0
+
+				self.xstart = self.x + self.xstart
+				self.ystart = self.y + self.ystart
 			# X gain rotation
 				K = 0.0035
 				# Kx is for movment in z direction forward backwards
