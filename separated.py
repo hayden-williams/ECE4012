@@ -428,7 +428,7 @@ class following_final2():
 			if self.savePic == 1:
 			  cv2.imwrite("UserSnapshot.jpg",cv_image)
 			  # send to server
-			  url = 'http://128.61.14.57:3000/image'  #<-------------------SERVER IP ADDRESS HERE------------
+			  url = 'http://128.61.11.235:3000/image'  #<-------------------SERVER IP ADDRESS HERE------------
 			  files ={'image':open('UserSnapshot.jpg','rb')}
 			  sender = requests.post(url, files=files)
 			  self.savePic = 0
