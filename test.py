@@ -133,7 +133,7 @@ class selfNavigation():
 		
 		# as long as you haven't ctrl + c keeping doing...
 		while not rospy.is_shutdown():
-"""
+			"""
 			# get info from server
 			if self.countQuery%10 == 0:
 				#only check server occationally
