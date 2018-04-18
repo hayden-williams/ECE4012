@@ -218,6 +218,7 @@ class following_final2():
 						self.move_cmd.linear.x = 0.2
 						self.move_cmd.angular.z = -0.75
 					else:
+						rospy.loginfo('inside else')
 						while (self.count < 2):
 							rospy.loginfo('inside while')
 							if (self.count == 0):
