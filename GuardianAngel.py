@@ -116,7 +116,7 @@ class following_final2():
 			self.countQuery = self.countQuery + 1
 			if (self.countQuery == 25):
 				rospy.loginfo('requesting stuff')
-				re = requests.get('http://128.61.11.235:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
+				re = requests.get('http://128.61.1.153:3000/rover').json()  #<-------------------SERVER IP ADDRESS HERE------------
 				#rospy.loginfo(re)
 
 				self.direction = re['direction'] # in degrees
@@ -192,7 +192,7 @@ class following_final2():
 						self.move_cmd.linear.x = 0.0
 						self.roverAtUser = 1
 						if (self.end == 1):
-							tellServer = requests.post('http://128.61.11.235:3000/home', {'gotHome': 1})
+							tellServer = requests.post('http://128.61.1.153:3000/home', {'gotHome': 1})
 							self.path = 0
 							self.xstart = self.x + self.xstart
 							self.ystart = self.y + self.ystart
@@ -430,7 +430,7 @@ class following_final2():
 			if self.savePic == 1:
 			  cv2.imwrite("UserSnapshot.jpg",cv_image)
 			  # send to server
-			  url = 'http://128.61.11.235:3000/image'  #<-------------------SERVER IP ADDRESS HERE------------
+			  url = 'http://128.61.1.153:3000/image'  #<-------------------SERVER IP ADDRESS HERE------------
 			  files ={'image':open('UserSnapshot.jpg','rb')}
 			  sender = requests.post(url, files=files)
 			  self.savePic = 0
