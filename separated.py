@@ -218,27 +218,27 @@ class following_final2():
 						self.magnitude = 0
 				elif (np.sum(self.ZoneList) != 0 and self.roverAtUser == 0):
 					if (self.ZoneList[0] == 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] != 0):
-						self.move_cmd.linear.x = 0.2
+						self.move_cmd.linear.x = 0.4
 						self.move_cmd.angular.z = 0.5
 					elif (self.ZoneList[0] != 0 and self.ZoneList[1] == 0 and self.ZoneList[2] == 0 and self.ZoneList[3] == 0):
 						#soft right
-						self.move_cmd.linear.x = 0.2
+						self.move_cmd.linear.x = 0.4
 						self.move_cmd.angular.z = -0.5
 					elif (self.ZoneList[0] == 0 and self.ZoneList[1] != 0 and self.ZoneList[2] != 0 and self.ZoneList[3] == 0):
 						if (self.ZoneList[1] > self.ZoneList[2]):
 						  #Hard Right
-						  self.move_cmd.linear.x = 0.2
+						  self.move_cmd.linear.x = 0.4
 						  self.move_cmd.angular.z = -0.75
 						else:
-						  self.move_cmd.linear.x = 0.2
+						  self.move_cmd.linear.x = 0.4
 						  self.move_cmd.angular.z = 0.7
 						  #Hard Leff
 					elif((self.ZoneList[0]==0 and self.ZoneList[2] !=0) or (self.ZoneList[0] == 0 and self.ZoneList[1] !=0 and self.ZoneList[3] != 0)):
-						self.move_cmd.linear.x = 0.2
+						self.move_cmd.linear.x = 0.4
 						self.move_cmd.angular.z = 0.7
 					  # Hard Left
 					elif((self.ZoneList[1] != 0 and self.ZoneList[3] ==0) or (self.ZoneList[0] != 0 and self.ZoneList[2] != 0 and self.ZoneList[3] == 0)):
-						self.move_cmd.linear.x = 0.2
+						self.move_cmd.linear.x = 0.4
 						self.move_cmd.angular.z = -0.75
 					else:
 						if (self.count < 1):
