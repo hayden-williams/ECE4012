@@ -74,10 +74,10 @@ public class TripScreen extends AppCompatActivity implements OnMapReadyCallback 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     emergencyPressTime = event.getEventTime();
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getEventTime() - emergencyPressTime > 4000) {
+                    //if (event.getEventTime() - emergencyPressTime > 1000) {
                         Log.d(TAG, "Emergency triggered");
                         clickEmergency(v);
-                    }
+                    //}
                 }
                 return true;
             }

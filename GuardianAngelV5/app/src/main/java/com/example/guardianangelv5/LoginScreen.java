@@ -20,7 +20,8 @@ public class LoginScreen extends AppCompatActivity {
     private static IndoorAtlas atlas;
 
     // floor plan ID
-    private static final String FLOOR_PLAN_ID = "f97a76f2-ffd1-4038-b7e6-870dba48c8b5";
+    //private static final String FLOOR_PLAN_ID = "f97a76f2-ffd1-4038-b7e6-870dba48c8b5"; // second floor
+    private static final String FLOOR_PLAN_ID = "d039ddaa-6813-4412-83dd-705d5904f352"; // third floor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

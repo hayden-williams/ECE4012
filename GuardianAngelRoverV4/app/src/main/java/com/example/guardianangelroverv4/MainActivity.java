@@ -2,8 +2,10 @@ package com.example.guardianangelroverv4;
 
 import android.app.Dialog;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +13,10 @@ import android.widget.EditText;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    // threading
+    final Handler handler = new Handler();
+    private Runnable runnableCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +26,16 @@ public class MainActivity extends AppCompatActivity {
         CurrentActivity.getInstance().setCurrentActivity(0, this);
 
         createIPDialog(ServerLink.getInstance());
+
+        /*runnableCode = new Runnable() {
+            @Override
+            public void run() {
+                Log.d("Handlers", "Called on main thread");
+                // check server for emergency
+                handler.postDelayed(this, 5000);
+            }
+        };
+        handler.post(runnableCode);*/
     }
 
     public void clickEmergency(View view) {
@@ -29,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         ServerLink.getInstance().request(jsonlist);
 
         findViewById(R.id.button).setBackgroundColor(Color.RED);
+
+
     }
 
     public static void createIPDialog(final ServerLink myserver) {

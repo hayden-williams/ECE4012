@@ -133,8 +133,8 @@ public class Helper {
                     "resources folder. Cannot do wayfinding.");
         } else {
             mWayfinder = IAWayfinder.create(CurrentActivity.getInstance().getCurrentActivity(), graphJSON);
-            mWayfinder.setLocation(start_lat, start_lon, 2);
-            mWayfinder.setDestination(end_lat, end_lon, 2);
+            mWayfinder.setLocation(start_lat, start_lon, 3);
+            mWayfinder.setDestination(end_lat, end_lon, 3);
 
             IARoutingLeg[] legs = mWayfinder.getRoute();
             if (legs == null || legs.length == 0) {
@@ -160,15 +160,6 @@ public class Helper {
                 ArrayList<StringPair> jsonList = new ArrayList<>();
                 jsonList.add(new StringPair(ServerLink.MESSAGE_TYPE, ServerLink.MESSAGE_TYPE_WAYFINDING));
                 for (int i = 0; i < j; i++) {
-                    if (i == j-1 && end_lat == IndoorAtlas.home_lat) {
-                        if (new_legs[i].getLength() > 4.0) {
-                            Log.d("Wayfinding", "Subtracting 5 from last leg!");
-                            new_legs[i] = new IARoutingLeg(null, null, new_legs[i].getLength() - 4.0, new_legs[i].getDirection(), null);
-                        } else {
-                            new_legs[i] = new IARoutingLeg(null, null, 0, 0, null);
-                        }
-                    }
-
                     Log.d("Wayfinding_Legs", "Direction: " + new_legs[i].getDirection() + " Length: " + new_legs[i].getLength());
 
                     if (i < 5) {
