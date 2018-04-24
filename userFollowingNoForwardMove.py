@@ -57,7 +57,7 @@ class following_final2():
 			# Gain Values for movement
 
 			# X gain rotation
-			K = 0.0075
+			K = 0.01
 			# Kx is for movment in z direction forward backwards
 			Kx = .0005
 
