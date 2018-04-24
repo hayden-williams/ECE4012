@@ -33,7 +33,7 @@ class following_final2():
 	desired_thresh = 1000
 	desired_lowBound = 950
 	desired_upBound = 1050
-	invalid_max = 2000
+	invalid_max = 1300
 	max_speed = 1
 
 
