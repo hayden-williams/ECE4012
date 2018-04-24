@@ -82,7 +82,7 @@ class following_final2():
 
 			# Mask to get values of specific box in z direction only interested in our object/person
 			min_z= np.array(500, dtype = "uint16") #bgr
-			max_z= np.array(2000, dtype = "uint16")
+			max_z= np.array(1500, dtype = "uint16")
 			self.mask = cv2.inRange(self.depth_image, min_z, max_z)
 			
 			#Combination of masks
